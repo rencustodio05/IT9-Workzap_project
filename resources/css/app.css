@@ -257,3 +257,22 @@
         width: 100%;
     }
 }
+
+.salary-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.salary-row input {
+    flex: 1;
+    height: 42px;
+    /* same height para pantay */
+}
+
+.salary-row span {
+    min-width: 20px;
+    text-align: center;
+    color: #666;
+    font-weight: 600;
+}

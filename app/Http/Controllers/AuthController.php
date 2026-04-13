@@ -25,7 +25,16 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->route('dashboard');
+
+            $user = Auth::user();
+
+            if ($user->role === 'employer') {
+                return redirect()->route('employer.dashboard');
+            } elseif ($user->role === 'admin') {
+                return redirect()->route('admin.dashboard');
+            } elseif ($user->role === 'jobseeker') {
+                return redirect()->route('jobseeker.dashboard');
+            }
         }
 
         return back()->withErrors(['email' => 'Invalid credentials.'])->withInput();
@@ -43,6 +52,7 @@ class AuthController extends Controller
             'last_name'  => 'required|string|max:255',
             'email'    => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
+            'role'       => 'required|in:jobseeker,employer',
         ]);
 
         $user = User::create([
@@ -50,10 +60,8 @@ class AuthController extends Controller
             'last_name'  => $request->last_name,
             'email'      => $request->email,
             'password'   => Hash::make($request->password),
-            'role'       => 'jobseeker', // default role
+            'role' => $request->role,
         ]);
-
-        Auth::login($user);
 
         return redirect()->route('login');
     }

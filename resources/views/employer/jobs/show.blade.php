@@ -1,6 +1,7 @@
 @extends('layouts.employer')
 
 @section('title', 'Job Details')
+@section('subtitle', 'Review job post information and performance.')
 
 @vite(['resources/css/employer.css', 'resources/js/app.js'])
 
@@ -24,7 +25,7 @@
         <p><strong>Location:</strong> {{ $job->location }}</p>
 
         <p><strong>Salary:</strong>
-            {{ $job->salary ? '₱' . number_format($job->salary, 2) : 'Not specified' }}
+            {{ $job->salary_min || $job->salary_max ? '₱' . number_format($job->salary_min ?? 0, 2) . ' - ₱' . number_format($job->salary_max ?? 0, 2) : 'Not specified' }}
         </p>
 
         <p><strong>Status:</strong> {{ ucfirst($job->status) }}</p>

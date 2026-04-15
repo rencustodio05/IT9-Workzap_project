@@ -1,6 +1,7 @@
 @extends('layouts.employer')
 
 @section('title', 'Edit Job')
+@section('subtitle', 'Update job details and publishing status.')
 
 @section('content')
 <div class="max-w-2xl mx-auto">
@@ -34,14 +35,42 @@
                 required>
         </div>
 
-        {{-- SALARY --}}
+        {{-- SALARY RANGE --}}
         <div>
-            <label class="block mb-2 font-medium">Salary</label>
-            <input type="number"
-                step="0.01"
-                name="salary"
-                value="{{ old('salary', $job->salary) }}"
-                class="w-full border px-4 py-2 rounded">
+            <label class="block mb-2 font-medium">Salary Range</label>
+            <div class="grid grid-cols-2 gap-3">
+                <input type="number"
+                    step="0.01"
+                    name="salary_min"
+                    value="{{ old('salary_min', $job->salary_min) }}"
+                    class="w-full border px-4 py-2 rounded"
+                    placeholder="Minimum salary">
+
+                <input type="number"
+                    step="0.01"
+                    name="salary_max"
+                    value="{{ old('salary_max', $job->salary_max) }}"
+                    class="w-full border px-4 py-2 rounded"
+                    placeholder="Maximum salary">
+            </div>
+        </div>
+
+        @php
+        $selectedTypes = explode(',', old('type', $job->type ?? ''));
+        @endphp
+
+        <div>
+            <label class="block mb-2 font-medium">Job Type</label>
+            <div class="flex gap-4">
+                <label>
+                    <input type="checkbox" name="type[]" value="full-time" {{ in_array('full-time', $selectedTypes) ? 'checked' : '' }}>
+                    Full Time
+                </label>
+                <label>
+                    <input type="checkbox" name="type[]" value="part-time" {{ in_array('part-time', $selectedTypes) ? 'checked' : '' }}>
+                    Part Time
+                </label>
+            </div>
         </div>
 
         {{-- DESCRIPTION --}}
@@ -76,7 +105,7 @@
                     Active
                 </option>
 
-                <option value="closed" {{ isset($job) && $job->status == 'closed' ? 'selected' : '' }}>
+                <option value="closed" {{ isset($job) && ($job->status == 'inactive' || $job->status == 'closed') ? 'selected' : '' }}>
                     Closed
                 </option>
             </select>

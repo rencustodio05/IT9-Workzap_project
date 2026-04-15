@@ -20,7 +20,8 @@ class JobController extends Controller
 
         // 🟢 STATUS FILTER (ACTIVE / CLOSED / ALL)
         if ($request->filled('status')) {
-            $query->where('status', $request->status);
+            $status = $request->status === 'closed' ? 'inactive' : $request->status;
+            $query->where('status', $status);
         }
 
         // 📅 DATE SORT
@@ -39,7 +40,7 @@ class JobController extends Controller
 
         $allCount = (clone $base)->count();
         $activeCount = (clone $base)->where('status', 'active')->count();
-        $closedCount = (clone $base)->where('status', 'closed')->count();
+        $closedCount = (clone $base)->where('status', 'inactive')->count();
 
         return view('employer.jobs.index', compact(
             'jobs',
@@ -62,9 +63,11 @@ class JobController extends Controller
             'location' => 'required',
             'salary_min' => 'nullable|numeric',
             'salary_max' => 'nullable|numeric|gte:salary_min',
-            'status' => 'required|in:active,inactive',
+            'status' => 'required|in:active,inactive,closed',
             'type' => 'nullable|array'
         ]);
+
+        $status = $request->status === 'closed' ? 'inactive' : $request->status;
 
         Job::create([
             'user_id' => Auth::id(),
@@ -73,7 +76,7 @@ class JobController extends Controller
             'location' => $request->location,
             'salary_min' => $request->salary_min,
             'salary_max' => $request->salary_max,
-            'status' => $request->status,
+            'status' => $status,
             'type' => $request->type ? implode(',', $request->type) : null,
         ]);
 
@@ -113,8 +116,11 @@ class JobController extends Controller
             'location' => 'required',
             'salary_min' => 'nullable|numeric',
             'salary_max' => 'nullable|numeric|gte:salary_min',
-            'status' => 'required|in:active,closed',
+            'status' => 'required|in:active,inactive,closed',
+            'type' => 'nullable|array',
         ]);
+
+        $status = $request->status === 'closed' ? 'inactive' : $request->status;
 
         $job->update([
             'title' => $request->title,
@@ -122,7 +128,8 @@ class JobController extends Controller
             'location' => $request->location,
             'salary_min' => $request->salary_min,
             'salary_max' => $request->salary_max,
-            'status' => $request->status,
+            'status' => $status,
+            'type' => $request->type ? implode(',', $request->type) : null,
         ]);
 
         return redirect()->route('jobs.index')
@@ -139,18 +146,5 @@ class JobController extends Controller
 
         return redirect()->route('jobs.index')
             ->with('success', 'Job deleted successfully!');
-    }
-
-    // 🔍 AUTOCOMPLETE SUGGESTIONS
-    public function suggest(Request $request)
-    {
-        $search = $request->input('query', '');
-
-        $jobs = Job::where('user_id', Auth::id())
-            ->where('title', 'like', '%' . $search . '%')
-            ->limit(5)
-            ->pluck('title');
-
-        return response()->json($jobs);
     }
 }

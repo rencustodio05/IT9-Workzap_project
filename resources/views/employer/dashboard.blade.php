@@ -1,6 +1,7 @@
 @extends('layouts.employer')
 
 @section('title', 'Employer Dashboard')
+@section('subtitle', 'Manage your postings, applicants, and interviews.')
 
 @section('content')
 <div class="max-w-7xl mx-auto">
@@ -20,18 +21,18 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
         <div class="bg-white rounded-lg shadow p-6 flex flex-col items-start">
             <div class="text-gray-500 mb-1">My Job Postings</div>
-            <div class="text-2xl font-extrabold text-gray-900">6</div>
-            <div class="text-green-600 font-semibold">4 active</div>
+            <div class="text-2xl font-extrabold text-gray-900">{{ $totalJobs ?? 0 }}</div>
+            <div class="text-green-600 font-semibold">{{ $activeJobs ?? 0 }} active</div>
         </div>
         <div class="bg-white rounded-lg shadow p-6 flex flex-col items-start">
             <div class="text-gray-500 mb-1">Total Applicants</div>
-            <div class="text-2xl font-extrabold text-gray-900">34</div>
-            <div class="text-blue-600 font-semibold">+5 today</div>
+            <div class="text-2xl font-extrabold text-gray-900">{{ $totalApplicants ?? 0 }}</div>
+            <div class="text-blue-600 font-semibold">+{{ $applicantsToday ?? 0 }} today</div>
         </div>
         <div class="bg-white rounded-lg shadow p-6 flex flex-col items-start">
             <div class="text-gray-500 mb-1">Interviews Today</div>
-            <div class="text-2xl font-extrabold text-gray-900">3</div>
-            <div class="text-yellow-600 font-semibold">1 pending</div>
+            <div class="text-2xl font-extrabold text-gray-900">{{ $interviewsToday ?? 0 }}</div>
+            <div class="text-yellow-600 font-semibold">Scheduled today</div>
         </div>
     </div>
 
@@ -44,20 +45,17 @@
                 <a href="{{ route('applications.index') }}" class="text-blue-600 hover:underline font-medium">View all</a>
             </div>
             <div class="space-y-4">
+                @forelse(($recentApplicants ?? collect()) as $application)
                 <div class="flex justify-between items-center p-3 border rounded">
                     <div>
-                        <div class="font-bold text-gray-800">Maria Reyes</div>
-                        <div class="text-gray-500 text-sm">Sales Associate</div>
+                        <div class="font-bold text-gray-800">{{ $application->jobseeker->name ?? 'N/A' }}</div>
+                        <div class="text-gray-500 text-sm">{{ $application->job->title ?? 'N/A' }}</div>
                     </div>
-                    <span class="px-3 py-1 rounded-full text-xs bg-blue-100 text-blue-800 font-semibold">Interview</span>
+                    <span class="px-3 py-1 rounded-full text-xs bg-blue-100 text-blue-800 font-semibold">{{ ucfirst($application->status) }}</span>
                 </div>
-                <div class="flex justify-between items-center p-3 border rounded">
-                    <div>
-                        <div class="font-bold text-gray-800">Ben Torres</div>
-                        <div class="text-gray-500 text-sm">Warehouse Staff</div>
-                    </div>
-                    <span class="px-3 py-1 rounded-full text-xs bg-green-100 text-green-800 font-semibold">Screening</span>
-                </div>
+                @empty
+                <div class="text-sm text-gray-500">No recent applicants yet.</div>
+                @endforelse
             </div>
         </div>
 
@@ -68,20 +66,17 @@
                 <a href="{{ route('jobs.index') }}" class="text-blue-600 hover:underline font-medium">View all</a>
             </div>
             <div class="space-y-4">
+                @forelse(($latestJobs ?? collect()) as $job)
                 <div class="flex justify-between items-center p-3 border rounded">
                     <div>
-                        <div class="font-bold text-gray-800">Sales Associate</div>
-                        <div class="text-gray-500 text-sm">14 applicants</div>
+                        <div class="font-bold text-gray-800">{{ $job->title }}</div>
+                        <div class="text-gray-500 text-sm">{{ $job->applications()->count() }} applicants</div>
                     </div>
-                    <span class="px-3 py-1 rounded-full text-xs bg-green-100 text-green-800 font-semibold">Active</span>
+                    <span class="px-3 py-1 rounded-full text-xs bg-green-100 text-green-800 font-semibold">{{ ucfirst($job->status) }}</span>
                 </div>
-                <div class="flex justify-between items-center p-3 border rounded">
-                    <div>
-                        <div class="font-bold text-gray-800">Cashier</div>
-                        <div class="text-gray-500 text-sm">21 applicants</div>
-                    </div>
-                    <span class="px-3 py-1 rounded-full text-xs bg-yellow-100 text-yellow-800 font-semibold">Closing soon</span>
-                </div>
+                @empty
+                <div class="text-sm text-gray-500">No jobs posted yet.</div>
+                @endforelse
             </div>
         </div>
     </div>

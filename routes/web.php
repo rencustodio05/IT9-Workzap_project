@@ -3,15 +3,30 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\AdminUserController;
+use App\Http\Controllers\Admin\AdminJobController;
+use App\Http\Controllers\Admin\AdminEmployerController;
+use App\Http\Controllers\Admin\AdminArchiveController;
+use App\Http\Controllers\Admin\AdminSettingsController;
 use App\Http\Controllers\Employer\JobController as EmployerJobController;
 use App\Http\Controllers\Jobseeker\JobController as JobseekerJobController;
 use App\Http\Controllers\Employer\ApplicationController;
+use App\Http\Controllers\Employer\InterviewController;
+use App\Http\Controllers\Employer\DashboardController as EmployerDashboardController;
+use App\Http\Controllers\Employer\ProfileController as EmployerProfileController;
+use App\Http\Controllers\Jobseeker\ApplicationController as JobseekerApplicationController;
+use App\Http\Controllers\Jobseeker\DashboardController as JobseekerDashboardController;
+use App\Http\Controllers\Jobseeker\ProfileController as JobseekerProfileController;
+use App\Http\Controllers\Jobseeker\SavedJobController;
 
 /*
 |--------------------------------------------------------------------------
 | GUEST ROUTES
 |--------------------------------------------------------------------------
 */
+
+Route::get('/', fn() => view('welcome'));
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -28,9 +43,35 @@ Route::middleware('guest')->group(function () {
 Route::get('/admin', [AdminController::class, 'showLogin'])->name('admin.login');
 Route::post('/admin', [AdminController::class, 'login'])->name('admin.login.post');
 
-Route::middleware('auth')->prefix('admin')->group(function () {
-    Route::get('/dashboard', fn() => view('admin.dashboard'))->name('admin.dashboard');
-    Route::post('/logout', [AdminController::class, 'logout'])->name('admin.logout');
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+
+    Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
+    Route::get('/users/create', [AdminUserController::class, 'create'])->name('users.create');
+    Route::post('/users', [AdminUserController::class, 'store'])->name('users.store');
+    Route::get('/users/{user}', [AdminUserController::class, 'show'])->name('users.show');
+    Route::get('/users/{user}/edit', [AdminUserController::class, 'edit'])->name('users.edit');
+    Route::put('/users/{user}', [AdminUserController::class, 'update'])->name('users.update');
+    Route::delete('/users/{user}', [AdminUserController::class, 'destroy'])->name('users.destroy');
+
+    Route::resource('jobs', AdminJobController::class)->except(['destroy']);
+    Route::delete('/jobs/{job}', [AdminJobController::class, 'destroy'])->name('jobs.destroy');
+
+    Route::get('/employers', [AdminEmployerController::class, 'index'])->name('employers.index');
+    Route::get('/employers/{employer}', [AdminEmployerController::class, 'show'])->name('employers.show');
+    Route::patch('/employers/{employer}/toggle-status', [AdminEmployerController::class, 'toggleStatus'])->name('employers.toggle-status');
+
+    Route::get('/archive', [AdminArchiveController::class, 'index'])->name('archive.index');
+    Route::post('/archive/users/{id}/restore', [AdminArchiveController::class, 'restoreUser'])->name('archive.users.restore');
+    Route::post('/archive/jobs/{id}/restore', [AdminArchiveController::class, 'restoreJob'])->name('archive.jobs.restore');
+    Route::delete('/archive/users/{id}/force-delete', [AdminArchiveController::class, 'forceDeleteUser'])->name('archive.users.force-delete');
+    Route::delete('/archive/jobs/{id}/force-delete', [AdminArchiveController::class, 'forceDeleteJob'])->name('archive.jobs.force-delete');
+
+    Route::get('/profile', [AdminSettingsController::class, 'profile'])->name('profile');
+    Route::put('/profile', [AdminSettingsController::class, 'updateProfile'])->name('profile.update');
+    Route::put('/profile/password', [AdminSettingsController::class, 'updatePassword'])->name('profile.password.update');
+
+    Route::post('/logout', [AdminController::class, 'logout'])->name('logout');
 });
 
 /*
@@ -40,6 +81,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
 */
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', fn() => view('dashboard'))->name('dashboard');
+    Route::get('/applications/history', [JobseekerApplicationController::class, 'history'])->name('jobseeker.applications.history');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 
@@ -50,9 +92,7 @@ Route::middleware('auth')->group(function () {
 */
 Route::middleware('auth')->prefix('employer')->group(function () {
 
-    Route::get('/dashboard', fn() => view('employer.dashboard'))->name('employer.dashboard');
-
-    Route::get('/jobs/suggestions', [EmployerJobController::class, 'suggest'])->name('jobs.suggest');
+    Route::get('/dashboard', [EmployerDashboardController::class, 'index'])->name('employer.dashboard');
 
     Route::resource('jobs', EmployerJobController::class);
 
@@ -62,12 +102,17 @@ Route::middleware('auth')->prefix('employer')->group(function () {
     Route::get('/applications/{id}', [ApplicationController::class, 'show'])
         ->name('applications.show');
 
-    Route::put('/applications/{id}', [ApplicationController::class, 'update'])
+    Route::match(['put', 'patch'], '/applications/{id}', [ApplicationController::class, 'update'])
         ->name('applications.update');
 
-    Route::get('/interviews', fn() => view('employer.interviews.index'))->name('interviews.index');
+    Route::get('/interviews', [InterviewController::class, 'index'])->name('interviews.index');
+    Route::post('/interviews', [InterviewController::class, 'store'])->name('interviews.store');
+    Route::get('/interviews/{interview}', [InterviewController::class, 'show'])->name('interviews.show');
+    Route::put('/interviews/{interview}', [InterviewController::class, 'update'])->name('interviews.update');
 
-    Route::get('/profile', fn() => view('employer.profile'))->name('employer.profile');
+    Route::get('/profile', [EmployerProfileController::class, 'edit'])->name('employer.profile');
+    Route::put('/profile', [EmployerProfileController::class, 'update'])->name('employer.profile.update');
+    Route::put('/profile/password', [EmployerProfileController::class, 'updatePassword'])->name('employer.profile.password');
 });
 
 /*
@@ -77,7 +122,7 @@ Route::middleware('auth')->prefix('employer')->group(function () {
 */
 Route::middleware('auth')->prefix('jobseeker')->group(function () {
 
-    Route::get('/dashboard', fn() => view('jobseeker.dashboard'))->name('jobseeker.dashboard');
+    Route::get('/dashboard', [JobseekerDashboardController::class, 'index'])->name('jobseeker.dashboard');
 
     // ✅ USE CONTROLLER (NO MORE STATIC VIEW)
     Route::get('/jobs', [JobseekerJobController::class, 'index'])->name('jobseeker.jobs.index');
@@ -87,12 +132,18 @@ Route::middleware('auth')->prefix('jobseeker')->group(function () {
     Route::post('/jobs/{id}/apply', [JobseekerJobController::class, 'apply'])
         ->name('jobseeker.apply');
 
-    Route::get('/jobs/suggest', [JobseekerJobController::class, 'suggest'])
-        ->name('jobseeker.jobs.suggest');
+    Route::get('/applications', [JobseekerApplicationController::class, 'index'])->name('jobseeker.applications.index');
+    Route::get('/applications/{id}', [JobseekerApplicationController::class, 'show'])->name('jobseeker.applications.show');
+    Route::put('/applications/{id}', [JobseekerApplicationController::class, 'update'])->name('jobseeker.applications.update');
+    Route::delete('/applications/{id}', [JobseekerApplicationController::class, 'destroy'])->name('jobseeker.applications.destroy');
 
-    Route::get('/applications', fn() => view('jobseeker.applications.index'))->name('jobseeker.applications.index');
+    Route::get('/saved-jobs', [SavedJobController::class, 'index'])->name('jobseeker.saved.index');
+    Route::post('/saved-jobs/{job}', [SavedJobController::class, 'store'])->name('jobseeker.saved.store');
+    Route::delete('/saved-jobs/{job}', [SavedJobController::class, 'destroy'])->name('jobseeker.saved.destroy');
 
-    Route::get('/saved-jobs', fn() => view('jobseeker.saved.index'))->name('jobseeker.saved.index');
-
-    Route::get('/profile', fn() => view('jobseeker.profile'))->name('jobseeker.profile');
+    Route::get('/profile', [JobseekerProfileController::class, 'showProfile'])->name('jobseeker.profile');
+    Route::get('/profile/edit', [JobseekerProfileController::class, 'editProfile'])->name('jobseeker.profile.edit');
+    Route::get('/account-security', [JobseekerProfileController::class, 'accountSecurity'])->name('jobseeker.account.security');
+    Route::put('/profile', [JobseekerProfileController::class, 'updateProfile'])->name('jobseeker.profile.update');
+    Route::put('/profile/password', [JobseekerProfileController::class, 'updatePassword'])->name('jobseeker.profile.password');
 });

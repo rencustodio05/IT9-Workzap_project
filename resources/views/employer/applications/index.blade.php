@@ -1,6 +1,7 @@
 @extends('layouts.employer')
 
 @section('title', 'Applicant Management')
+@section('subtitle', 'Review and manage all incoming applicants.')
 
 @section('content')
 <div class="max-w-7xl mx-auto">
@@ -18,11 +19,19 @@
         class="bg-white rounded-lg p-4 shadow flex flex-col md:flex-row gap-4 mb-6">
 
         <!-- SEARCH APPLICANT -->
-        <input type="text"
-            name="search"
-            value="{{ request('search') }}"
-            placeholder="Search applicant name..."
-            class="border rounded px-3 py-2 flex-1" />
+        <div id="applicant-search-wrapper" class="relative flex-1">
+            <input type="text"
+                id="applicant-search"
+                name="search"
+                value="{{ request('search') }}"
+                placeholder="Search applicant name..."
+                autocomplete="off"
+                class="border rounded px-3 py-2 w-full" />
+
+            <ul id="applicant-suggestions"
+                class="absolute z-20 mt-1 w-full bg-white border border-gray-200 rounded shadow max-h-56 overflow-y-auto"
+                style="display:none;"></ul>
+        </div>
 
 
         <!-- STATUS -->
@@ -31,6 +40,7 @@
             <option value="pending" {{ request('status')=='pending'?'selected':'' }}>Pending</option>
             <option value="interview" {{ request('status')=='interview'?'selected':'' }}>Interview</option>
             <option value="hired" {{ request('status')=='hired'?'selected':'' }}>Hired</option>
+            <option value="fired" {{ request('status')=='fired'?'selected':'' }}>Fired</option>
             <option value="rejected" {{ request('status')=='rejected'?'selected':'' }}>Rejected</option>
         </select>
 
@@ -51,6 +61,8 @@
                     <th class="py-4 px-6">Applicant</th>
                     <th class="py-4 px-6">Applied for</th>
                     <th class="py-4 px-6">Date applied</th>
+                    <th class="py-4 px-6">Date Hired</th>
+                    <th class="py-4 px-6">Date Fired</th>
                     <th class="py-4 px-6">Status</th>
                     <th class="py-4 px-6">Action</th>
                 </tr>
@@ -72,7 +84,7 @@
 
                             <div>
                                 <div class="font-bold">
-                                    {{ $app->jobseeker->name ?? 'N/A' }}
+                                    {{ trim(($app->jobseeker->first_name ?? '') . ' ' . ($app->jobseeker->last_name ?? '')) ?: 'N/A' }}
                                 </div>
                                 <div class="text-xs text-gray-500">
                                     {{ $app->jobseeker->email ?? 'N/A' }}
@@ -92,6 +104,16 @@
                         {{ $app->created_at->format('M d, Y') }}
                     </td>
 
+                    <!-- DATE HIRED -->
+                    <td class="py-4 px-6 text-sm text-gray-900">
+                        {{ $app->hired_at ? \Carbon\Carbon::parse($app->hired_at)->format('M d, Y') : 'N/A' }}
+                    </td>
+
+                    <!-- DATE FIRED -->
+                    <td class="py-4 px-6 text-sm text-gray-900">
+                        {{ $app->fired_at ? \Carbon\Carbon::parse($app->fired_at)->format('M d, Y') : 'N/A' }}
+                    </td>
+
                     <!-- STATUS -->
                     <td class="py-4 px-6">
                         <span
@@ -99,11 +121,12 @@
         @if($app->status == 'pending') bg-yellow-100 text-yellow-800
         @elseif($app->status == 'interview') bg-blue-100 text-blue-800
         @elseif($app->status == 'hired') bg-green-100 text-green-800
+        @elseif($app->status == 'fired') bg-gray-200 text-gray-800
         @else bg-red-100 text-red-800
         @endif"
                             data-id="{{ $app->id }}"
                             data-status="{{ $app->status }}">
-                            {{ ucfirst($app->status) }}
+                            {{ $app->status ? ucfirst($app->status) : 'N/A' }}
                         </span>
                     </td>
 
@@ -115,23 +138,7 @@
                             View
                         </a>
 
-                        <form method="POST"
-                            class="status-form"
-                            action="{{ route('applications.update', $app->id) }}">
-                            @csrf
-                            @method('PUT')
 
-                            <select name="status" class="border rounded px-2 py-1 text-sm">
-                                <option value="pending" {{ $app->status == 'pending' ? 'selected' : '' }}>Pending</option>
-                                <option value="interview" {{ $app->status == 'interview' ? 'selected' : '' }}>Interview</option>
-                                <option value="hired" {{ $app->status == 'hired' ? 'selected' : '' }}>Hired</option>
-                                <option value="rejected" {{ $app->status == 'rejected' ? 'selected' : '' }}>Rejected</option>
-                            </select>
-
-                            <button class="px-4 py-1 bg-blue-600 text-white rounded">
-                                Update
-                            </button>
-                        </form>
 
                     </td>
 
@@ -140,7 +147,7 @@
                 @empty
 
                 <tr>
-                    <td colspan="5" class="text-center py-6 text-gray-500">
+                    <td colspan="7" class="text-center py-6 text-gray-500">
                         No applicants yet
                     </td>
                 </tr>
@@ -157,43 +164,23 @@
 
 @section('scripts')
 <script>
-    document.querySelectorAll('.status-form').forEach(form => {
-        form.addEventListener('submit', async function(e) {
-            e.preventDefault();
+    document.addEventListener('DOMContentLoaded', () => {
+        const searchInput = document.getElementById('applicant-search');
+        const suggestionsBox = document.getElementById('applicant-suggestions');
+        const searchWrapper = document.getElementById('applicant-search-wrapper');
 
-            let formData = new FormData(this);
+        if (!searchInput || !suggestionsBox || !searchWrapper) {
+            return;
+        }
 
-            let response = await fetch(this.action, {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                    'X-HTTP-Method-Override': 'PUT',
-                    'Accept': 'application/json'
-                },
-                body: formData
-            });
+        const hideSuggestions = () => {
+            suggestionsBox.style.display = 'none';
+            suggestionsBox.innerHTML = '';
+        };
 
-            let data = await response.json();
-
-            if (data.success) {
-
-                let row = this.closest('tr');
-                let badge = row.querySelector('.status-badge');
-
-                badge.textContent =
-                    data.status.charAt(0).toUpperCase() + data.status.slice(1);
-
-                badge.className = "status-badge px-3 py-1 rounded-full text-xs";
-
-                if (data.status === 'pending') {
-                    badge.classList.add('bg-yellow-100', 'text-yellow-800');
-                } else if (data.status === 'interview') {
-                    badge.classList.add('bg-blue-100', 'text-blue-800');
-                } else if (data.status === 'hired') {
-                    badge.classList.add('bg-green-100', 'text-green-800');
-                } else {
-                    badge.classList.add('bg-red-100', 'text-red-800');
-                }
+        document.addEventListener('click', (event) => {
+            if (!searchWrapper.contains(event.target)) {
+                hideSuggestions();
             }
         });
     });

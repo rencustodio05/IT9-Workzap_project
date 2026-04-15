@@ -58,6 +58,11 @@ class AdminController extends Controller
                 return back()->withErrors(['email' => 'Unauthorized access.']);
             }
 
+            if ((bool) ($user->is_active ?? true) === false) {
+                Auth::logout();
+                return back()->withErrors(['email' => 'Your account is currently deactivated.']);
+            }
+
             $request->session()->regenerate();
             return redirect()->route('admin.dashboard');
         }

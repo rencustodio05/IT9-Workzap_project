@@ -28,6 +28,11 @@ class AuthController extends Controller
 
             $user = Auth::user();
 
+            if ((bool) ($user->is_active ?? true) === false) {
+                Auth::logout();
+                return back()->withErrors(['email' => 'Your account is currently deactivated.']);
+            }
+
             if ($user->role === 'employer') {
                 return redirect()->route('employer.dashboard');
             } elseif ($user->role === 'admin') {
@@ -61,6 +66,7 @@ class AuthController extends Controller
             'email'      => $request->email,
             'password'   => Hash::make($request->password),
             'role' => $request->role,
+            'is_active' => true,
         ]);
 
         return redirect()->route('login');

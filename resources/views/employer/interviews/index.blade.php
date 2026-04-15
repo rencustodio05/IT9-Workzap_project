@@ -1,6 +1,7 @@
 @extends('layouts.employer')
 
 @section('title', 'Interview Scheduling')
+@section('subtitle', 'Schedule and manage candidate interviews.')
 
 @section('content')
 <div class="max-w-7xl mx-auto">
@@ -10,94 +11,134 @@
             <h1 class="text-2xl font-bold text-gray-900">Interview scheduling</h1>
             <p class="text-gray-500 mt-1">Manage all scheduled interviews</p>
         </div>
-        <a href="#" class="mt-4 sm:mt-0 inline-flex items-center px-5 py-2 bg-blue-600 text-white rounded font-semibold hover:bg-blue-700 transition">
-            + Schedule interview
-        </a>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <!-- Calendar Column (Dummy Calendar) -->
+        <!-- Schedule Form Column -->
         <div>
             <div class="bg-white shadow rounded-lg p-6 mb-6">
                 <div class="flex items-center mb-4">
-                    <button class="mr-2 px-4 py-1 bg-blue-700 text-white rounded font-medium">Calendar view</button>
-                    <button class="px-4 py-1 bg-gray-100 text-gray-800 rounded font-medium">List view</button>
+                    <button class="mr-2 px-4 py-1 bg-blue-700 text-white rounded font-medium" disabled>Schedule interview</button>
                 </div>
-                <!-- Dummy Calendar layout -->
-                <div class="grid grid-cols-7 gap-2 text-center text-sm text-gray-500 mb-4">
-                    <div>Sun</div>
-                    <div>Mon</div>
-                    <div>Tue</div>
-                    <div>Wed</div>
-                    <div>Thu</div>
-                    <div>Fri</div>
-                    <div>Sat</div>
-                    <div class="col-span-1"></div>
-                    <div>1</div>
-                    <div>2</div>
-                    <div>3</div>
-                    <div>4</div>
-                    <div>5</div>
-                    <div>6</div>
-                    <div>7</div>
-                    <div class="bg-blue-100 text-blue-700 font-bold rounded-full">9</div>
-                    <div class="bg-gray-200 rounded-full">10</div>
-                    <div class="bg-gray-200 rounded-full">11</div>
-                    <div class="bg-gray-200 rounded-full">12</div>
-                    <div class="bg-gray-200 rounded-full">13</div>
+
+                @if(session('success'))
+                <div class="mb-4 p-3 rounded bg-green-100 text-green-800 text-sm">
+                    {{ session('success') }}
                 </div>
+                @endif
+
+                @if($errors->any())
+                <div class="mb-4 p-3 rounded bg-red-100 text-red-800 text-sm">
+                    {{ $errors->first() }}
+                </div>
+                @endif
+
+                <form method="POST" action="{{ route('interviews.store') }}" class="space-y-4">
+                    @csrf
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Applicant / Job</label>
+                        <select name="application_id" class="w-full border rounded px-3 py-2" required>
+                            <option value="">Select application</option>
+                            @foreach(($applications ?? collect()) as $application)
+                            <option value="{{ $application->id }}" {{ old('application_id') == $application->id ? 'selected' : '' }}>
+                                {{ $application->jobseeker->name ?? 'Applicant' }} - {{ $application->job->title ?? 'Job' }}
+                            </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Interview Date</label>
+                        <input type="date" name="interview_date" value="{{ old('interview_date') }}" class="w-full border rounded px-3 py-2" required>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Interview Time</label>
+                        <input type="time" name="interview_time" value="{{ old('interview_time') }}" class="w-full border rounded px-3 py-2" required>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Notes (optional)</label>
+                        <textarea name="notes" rows="3" class="w-full border rounded px-3 py-2" placeholder="Add interview notes...">{{ old('notes') }}</textarea>
+                    </div>
+
+                    <button type="submit" class="inline-flex items-center px-5 py-2 bg-blue-600 text-white rounded font-semibold hover:bg-blue-700 transition">
+                        + Schedule interview
+                    </button>
+                </form>
             </div>
         </div>
         <!-- Schedule Cards Column -->
         <div>
             <!-- Today's Interviews -->
             <div class="bg-white shadow rounded-lg p-6 mb-6">
-                <div class="text-gray-800 font-bold mb-2">Today — March 23</div>
+                <div class="text-gray-800 font-bold mb-2">Today - {{ now()->format('F d') }}</div>
                 <div class="space-y-3">
-                    <div class="flex justify-between items-center bg-gray-50 p-4 rounded-lg border">
-                        <div>
-                            <div class="font-semibold">Ben Torres</div>
-                            <div class="text-gray-500 text-xs">Warehouse Staff</div>
-                            <div class="text-gray-400 text-xs">9:00 AM — 9:30 AM</div>
+                    @forelse($todayInterviews as $interview)
+                    <div class="bg-gray-50 p-4 rounded-lg border">
+                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-3">
+                            <div class="min-w-0">
+                                <div class="text-sm font-semibold text-gray-900 truncate">{{ optional(optional($interview->application)->job)->title ?? 'N/A' }}</div>
+                                <div class="text-gray-700 text-sm mt-1">{{ trim((optional(optional($interview->application)->jobseeker)->first_name ?? '') . ' ' . (optional(optional($interview->application)->jobseeker)->last_name ?? '')) ?: 'N/A' }}</div>
+                                <div class="text-gray-500 text-xs mt-1">{{ optional(optional($interview->application)->jobseeker)->email ?? 'N/A' }}</div>
+                                <div class="text-gray-400 text-xs mt-1">{{ $interview->interview_date ? \Illuminate\Support\Carbon::parse($interview->interview_date)->format('M d') : '' }} · {{ $interview->interview_time ? \Illuminate\Support\Carbon::parse($interview->interview_time)->format('g:i A') : '' }}</div>
+                                <span class="inline-flex mt-2 px-3 py-1 rounded-full text-xs font-semibold {{ $interview->status === 'completed' ? 'bg-green-100 text-green-800' : ($interview->status === 'cancelled' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800') }}">{{ ucfirst($interview->status ?? 'scheduled') }}</span>
+                            </div>
+
+                            <div class="flex justify-end gap-2 flex-wrap">
+                                @if(optional($interview->application)->id)
+                                <a href="{{ route('applications.show', $interview->application->id) }}" class="px-3 py-1.5 rounded bg-blue-600 text-white text-xs font-medium hover:bg-blue-700">
+                                    View
+                                </a>
+                                @endif
+
+                                <a href="{{ route('interviews.show', $interview->id) }}" class="px-3 py-1.5 rounded bg-amber-500 text-white text-xs font-medium hover:bg-amber-600">
+                                    Reschedule
+                                </a>
+                            </div>
                         </div>
-                        <span class="px-3 py-1 rounded-full text-xs bg-green-100 text-green-800 font-semibold">Confirmed</span>
                     </div>
+                    @empty
                     <div class="flex justify-between items-center bg-gray-50 p-4 rounded-lg border">
-                        <div>
-                            <div class="font-semibold">Maria Reyes</div>
-                            <div class="text-gray-500 text-xs">Sales Associate</div>
-                            <div class="text-gray-400 text-xs">2:00 PM — 2:30 PM</div>
-                        </div>
-                        <span class="px-3 py-1 rounded-full text-xs bg-yellow-100 text-yellow-800 font-semibold">Pending</span>
+                        <div class="text-gray-500 text-sm">No interviews scheduled for today.</div>
                     </div>
-                    <div class="flex justify-between items-center bg-gray-50 p-4 rounded-lg border">
-                        <div>
-                            <div class="font-semibold">Rico Cruz</div>
-                            <div class="text-gray-500 text-xs">Driver</div>
-                            <div class="text-gray-400 text-xs">4:00 PM — 4:30 PM</div>
-                        </div>
-                        <span class="px-3 py-1 rounded-full text-xs bg-green-100 text-green-800 font-semibold">Confirmed</span>
-                    </div>
+                    @endforelse
                 </div>
             </div>
             <!-- Upcoming Interviews -->
             <div class="bg-white shadow rounded-lg p-6">
                 <div class="text-gray-800 font-bold mb-2">Upcoming</div>
                 <div class="space-y-3">
-                    <div class="flex justify-between items-center bg-gray-50 p-4 rounded-lg border">
-                        <div>
-                            <div class="font-semibold">Jose Santos</div>
-                            <div class="text-gray-500 text-xs">Mar 24 · 10:00 AM</div>
+                    @forelse($upcomingInterviews as $interview)
+                    <div class="bg-gray-50 p-4 rounded-lg border">
+                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-3">
+                            <div class="min-w-0">
+                                <div class="text-sm font-semibold text-gray-900 truncate">{{ optional(optional($interview->application)->job)->title ?? 'N/A' }}</div>
+                                <div class="text-gray-700 text-sm mt-1">{{ trim((optional(optional($interview->application)->jobseeker)->first_name ?? '') . ' ' . (optional(optional($interview->application)->jobseeker)->last_name ?? '')) ?: 'N/A' }}</div>
+                                <div class="text-gray-500 text-xs mt-1">{{ optional(optional($interview->application)->jobseeker)->email ?? 'N/A' }}</div>
+                                <div class="text-gray-400 text-xs mt-1">{{ $interview->interview_date ? \Illuminate\Support\Carbon::parse($interview->interview_date)->format('M d') : '' }} · {{ $interview->interview_time ? \Illuminate\Support\Carbon::parse($interview->interview_time)->format('g:i A') : '' }}</div>
+                                <span class="inline-flex mt-2 px-3 py-1 rounded-full text-xs font-semibold {{ $interview->status === 'completed' ? 'bg-green-100 text-green-800' : ($interview->status === 'cancelled' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800') }}">{{ ucfirst($interview->status ?? 'scheduled') }}</span>
+                            </div>
+
+                            <div class="flex justify-end gap-2 flex-wrap">
+                                @if(optional($interview->application)->id)
+                                <a href="{{ route('applications.show', $interview->application->id) }}" class="px-3 py-1.5 rounded bg-blue-600 text-white text-xs font-medium hover:bg-blue-700">
+                                    View
+                                </a>
+                                @endif
+
+                                <a href="{{ route('interviews.show', $interview->id) }}" class="px-3 py-1.5 rounded bg-amber-500 text-white text-xs font-medium hover:bg-amber-600">
+                                    Reschedule
+                                </a>
+                            </div>
                         </div>
-                        <span class="px-3 py-1 rounded-full text-xs bg-green-100 text-green-800 font-semibold">Confirmed</span>
                     </div>
+                    @empty
                     <div class="flex justify-between items-center bg-gray-50 p-4 rounded-lg border">
-                        <div>
-                            <div class="font-semibold">Ana Lim</div>
-                            <div class="text-gray-500 text-xs">Mar 26 · 1:00 PM</div>
-                        </div>
-                        <span class="px-3 py-1 rounded-full text-xs bg-yellow-100 text-yellow-800 font-semibold">Pending</span>
+                        <div class="text-gray-500 text-sm">No upcoming interviews.</div>
                     </div>
+                    @endforelse
                 </div>
             </div>
         </div>

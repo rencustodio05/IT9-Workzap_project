@@ -1,95 +1,108 @@
 @extends('layouts.jobseeker')
 
 @section('title', 'Jobseeker Dashboard')
+@section('subtitle', 'Find and manage your job opportunities')
 
 @section('content')
-<div class="max-w-7xl mx-auto">
-    <!-- Header -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
-        <div>
-            <h1 class="text-3xl font-bold text-gray-900">Jobseeker Dashboard</h1>
-            <p class="text-gray-500 mt-1">Find and manage your job opportunities</p>
+
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8 items-stretch">
+    <a href="{{ route('jobseeker.applications.index') }}" class="block h-full">
+        <div class="js-card h-full min-h-[112px] p-5 flex items-center justify-between gap-4 hover:-translate-y-0.5 transition">
+            <div class="min-w-0">
+                <div class="text-sm font-semibold text-gray-800">Jobs Applying</div>
+                <div class="text-sm text-gray-500 mt-1">Progress: {{ $progressApplications ?? 0 }}</div>
+            </div>
+            <div class="text-right text-3xl font-extrabold leading-none text-gray-900">{{ $totalAppliedJobs ?? 0 }}</div>
         </div>
-        <a href="{{ route('jobseeker.jobs.index') }}"
-            class="mt-4 sm:mt-0 inline-flex items-center px-5 py-2 bg-blue-600 text-white rounded font-semibold hover:bg-blue-700 transition">
-            Browse Jobs
-        </a>
-    </div>
-    <!-- Main Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <!-- Recommended Jobs -->
-        <div class="bg-white rounded-lg shadow p-6 flex flex-col h-full">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-lg font-semibold text-gray-900">Recommended Jobs</h2>
+    </a>
+
+    <a href="{{ route('jobseeker.applications.index') }}" class="block h-full">
+        <div class="js-card h-full min-h-[112px] p-5 flex items-center justify-between gap-4 hover:-translate-y-0.5 transition">
+            <div class="min-w-0">
+                <div class="text-sm font-semibold text-gray-800">Interview Schedule</div>
+                <div class="text-sm text-gray-500 mt-1 truncate">{{ $nearestInterviewSchedule ?? 'No upcoming interviews' }}</div>
             </div>
-            <div class="space-y-4">
-                <div class="flex justify-between items-center p-3 border rounded">
-                    <div>
-                        <div class="font-bold text-gray-800">Warehouse Staff</div>
-                        <div class="text-gray-500 text-sm">Acme Corp · Davao City</div>
-                    </div>
-                    <a href="{{ route('jobseeker.jobs.index') }}" class="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold px-4 py-1 rounded transition">Apply Now</a>
-                </div>
-                <div class="flex justify-between items-center p-3 border rounded">
-                    <div>
-                        <div class="font-bold text-gray-800">Delivery Rider</div>
-                        <div class="text-gray-500 text-sm">FastExpress · Davao City</div>
-                    </div>
-                    <a href="{{ route('jobseeker.jobs.index') }}" class="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold px-4 py-1 rounded transition">Apply Now</a>
-                </div>
-            </div>
+            <div class="text-right text-3xl font-extrabold leading-none text-gray-900">{{ $upcomingInterviewCount ?? 0 }}</div>
         </div>
-        <!-- My Applications -->
-        <div class="bg-white rounded-lg shadow p-6 flex flex-col h-full">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-lg font-semibold text-gray-900">My Applications</h2>
-                <a href="{{ route('jobseeker.applications.index') }}" class="text-blue-600 hover:underline font-medium">View All</a>
+    </a>
+
+    <a href="{{ $latestHiredApplication ? route('jobseeker.applications.show', $latestHiredApplication->id) : route('jobseeker.applications.index') }}" class="block h-full">
+        <div class="js-card h-full min-h-[112px] p-5 flex items-center justify-between gap-4 hover:-translate-y-0.5 transition">
+            @php
+            $hiredTitleList = (($recentApplications ?? collect())
+            ->filter(fn($application) => ($application->status ?? null) === 'hired')
+            ->pluck('job.title')
+            ->filter()
+            ->unique()
+            ->take(3)
+            ->values());
+            $extraHiredCount = max(0, (int) ($hiredJobsCount ?? 0) - $hiredTitleList->count());
+            @endphp
+
+            <div class="min-w-0">
+                <div class="text-sm font-semibold text-gray-800">Current Jobs</div>
+
+                @if($hiredTitleList->isEmpty())
+                <div class="text-sm text-gray-500 mt-1 truncate">No hired jobs yet</div>
+                @else
+                <div class="text-sm text-gray-500 mt-1 space-y-0.5">
+                    @foreach($hiredTitleList as $title)
+                    <div class="truncate">Hired: {{ $title }}</div>
+                    @endforeach
+
+                    @if($extraHiredCount > 0)
+                    <div class="truncate">+{{ $extraHiredCount }} more</div>
+                    @endif
+                </div>
+                @endif
             </div>
-            <div class="space-y-4">
-                <div class="flex items-center justify-between p-3 border rounded">
-                    <div>
-                        <div class="font-bold text-gray-800">Sales Associate</div>
-                        <div class="text-gray-500 text-sm">Applied 2 days ago</div>
-                    </div>
-                    <span class="bg-blue-100 text-blue-800 font-semibold px-3 py-1 rounded-full text-xs">Interview</span>
-                </div>
-                <div class="flex items-center justify-between p-3 border rounded">
-                    <div>
-                        <div class="font-bold text-gray-800">Warehouse Staff</div>
-                        <div class="text-gray-500 text-sm">Applied 5 days ago</div>
-                    </div>
-                    <span class="bg-green-100 text-green-800 font-semibold px-3 py-1 rounded-full text-xs">Pending</span>
-                </div>
-                <div class="flex items-center justify-between p-3 border rounded">
-                    <div>
-                        <div class="font-bold text-gray-800">Cashier</div>
-                        <div class="text-gray-500 text-sm">Applied 1 week ago</div>
-                    </div>
-                    <span class="bg-red-100 text-red-800 font-semibold px-3 py-1 rounded-full text-xs">Rejected</span>
-                </div>
-            </div>
+
+            <div class="text-right text-3xl font-extrabold leading-none text-gray-900">{{ $hiredJobsCount ?? 0 }}</div>
         </div>
-        <!-- Saved Jobs -->
-        <div class="bg-white rounded-lg shadow p-6 flex flex-col h-full md:col-span-2">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-lg font-semibold text-gray-900">Saved Jobs</h2>
-                <a href="{{ route('jobseeker.saved.index') }}" class="text-blue-600 hover:underline font-medium">View All</a>
-            </div>
-            <div class="flex flex-col md:flex-row gap-4">
-                <div class="flex-1 flex flex-col justify-between border rounded p-3 mb-3 md:mb-0">
-                    <div>
-                        <div class="font-bold text-gray-800">Customer Service Rep</div>
-                        <div class="text-gray-500 text-sm">Acme Support</div>
-                    </div>
+    </a>
+</div>
+<!-- Main Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- Recommended Jobs -->
+    <div class="js-card p-6 flex flex-col h-full">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-lg font-semibold text-gray-900">Recommended Jobs</h2>
+            <a href="{{ route('jobseeker.jobs.index') }}" class="text-blue-600 hover:underline font-medium">View All</a>
+        </div>
+        <div class="space-y-4">
+            @forelse(($recommendedJobs ?? collect()) as $job)
+            <div class="flex justify-between items-center p-3 border rounded">
+                <div>
+                    <div class="font-bold text-gray-800">{{ $job->title }}</div>
+                    <div class="text-gray-500 text-sm">{{ $job->employer->name ?? 'Employer' }} · {{ $job->location }}</div>
                 </div>
-                <div class="flex-1 flex flex-col justify-between border rounded p-3">
-                    <div>
-                        <div class="font-bold text-gray-800">Data Encoder</div>
-                        <div class="text-gray-500 text-sm">MegaData Inc.</div>
-                    </div>
-                </div>
+                <a href="{{ route('jobseeker.jobs.show', $job->id) }}" class="js-brand-btn font-semibold px-4 py-1 rounded transition">Apply Now</a>
             </div>
+            @empty
+            <div class="text-sm text-gray-500">No recommended jobs right now.</div>
+            @endforelse
         </div>
     </div>
+    <!-- My Applications -->
+    <div class="js-card p-6 flex flex-col h-full">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-lg font-semibold text-gray-900">My Applications</h2>
+            <a href="{{ route('jobseeker.applications.index') }}" class="text-blue-600 hover:underline font-medium">View All</a>
+        </div>
+        <div class="space-y-4">
+            @forelse(($recentApplications ?? collect()) as $application)
+            <div class="flex items-center justify-between p-3 border rounded">
+                <div>
+                    <div class="font-bold text-gray-800">{{ $application->job->title ?? 'N/A' }}</div>
+                    <div class="text-gray-500 text-sm">Applied {{ $application->created_at->diffForHumans() }}</div>
+                </div>
+                <span class="bg-blue-100 text-blue-800 font-semibold px-3 py-1 rounded-full text-xs">{{ ucfirst($application->status) }}</span>
+            </div>
+            @empty
+            <div class="text-sm text-gray-500">No applications yet.</div>
+            @endforelse
+        </div>
+    </div>
+</div>
 </div>
 @endsection

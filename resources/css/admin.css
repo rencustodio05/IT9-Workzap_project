@@ -1,0 +1,146 @@
+@import 'tailwindcss';
+
+@source '../views/admin/**/*.blade.php';
+
+:root {
+    --admin-bg: #f5f7fb;
+    --admin-surface: #ffffff;
+    --admin-sidebar: #0f172a;
+    --admin-primary: #2563eb;
+    --admin-primary-strong: #1d4ed8;
+    --admin-text: #0f172a;
+    --admin-muted: #64748b;
+    --admin-border: #e2e8f0;
+    --admin-success: #16a34a;
+    --admin-warning: #d97706;
+    --admin-danger: #dc2626;
+    --admin-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+}
+
+.dark {
+    --admin-bg: #0b1220;
+    --admin-surface: #101a2f;
+    --admin-sidebar: #08101f;
+    --admin-primary: #3b82f6;
+    --admin-primary-strong: #2563eb;
+    --admin-text: #e5e7eb;
+    --admin-muted: #94a3b8;
+    --admin-border: #1e293b;
+    --admin-success: #22c55e;
+    --admin-warning: #f59e0b;
+    --admin-danger: #ef4444;
+    --admin-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+.admin-shell {
+    min-height: 100vh;
+    background: radial-gradient(1200px 450px at 15% -15%, rgba(37, 99, 235, 0.14), transparent 45%), var(--admin-bg);
+    color: var(--admin-text);
+}
+
+.admin-sidebar {
+    background: linear-gradient(165deg, var(--admin-sidebar) 0%, #0b1224 65%, #101935 100%);
+}
+
+.admin-surface {
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    box-shadow: var(--admin-shadow);
+}
+
+.admin-nav-link {
+    color: #cbd5e1;
+    transition: all 0.18s ease;
+}
+
+.admin-nav-link:hover {
+    background: rgba(148, 163, 184, 0.12);
+    color: #f8fafc;
+}
+
+.admin-nav-link.active {
+    background: rgba(37, 99, 235, 0.28);
+    color: #ffffff;
+    border: 1px solid rgba(96, 165, 250, 0.6);
+}
+
+.admin-stat-card {
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.admin-stat-card:hover {
+    transform: translateY(-2px);
+}
+
+.admin-stat-card::after {
+    content: '';
+    position: absolute;
+    right: -24px;
+    bottom: -24px;
+    width: 96px;
+    height: 96px;
+    background: radial-gradient(circle, rgba(37, 99, 235, 0.18), transparent 68%);
+}
+
+.admin-chip {
+    border: 1px solid var(--admin-border);
+    color: var(--admin-muted);
+}
+
+.admin-table th {
+    color: var(--admin-muted);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.admin-table td {
+    border-top: 1px solid var(--admin-border);
+}
+
+.admin-fade-up {
+    animation: adminFadeUp 0.35s ease both;
+}
+
+@keyframes adminFadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.admin-skeleton {
+    position: relative;
+    overflow: hidden;
+    background: rgba(148, 163, 184, 0.2);
+}
+
+.admin-skeleton::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+    animation: adminSkeleton 1.3s infinite;
+}
+
+@keyframes adminSkeleton {
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+.admin-button-primary {
+    background: var(--admin-primary);
+}
+
+.admin-button-primary:hover {
+    background: var(--admin-primary-strong);
+}

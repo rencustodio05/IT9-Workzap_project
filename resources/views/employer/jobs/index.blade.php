@@ -1,179 +1,125 @@
 @extends('layouts.employer')
 
 @section('title', 'My Job Postings')
-
-@vite(['resources/css/employer.css', 'resources/js/app.js'])
+@section('subtitle', 'Manage your active and closed job listings.')
 
 @section('content')
+<div class="w-full max-w-6xl mx-auto space-y-6">
+    <div class="bg-white border border-slate-200 rounded-xl shadow-sm p-5 sm:p-6">
+        <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+            <div>
+                <h1 class="text-2xl font-bold tracking-tight text-slate-900">My Job Postings</h1>
+                <p class="text-sm text-slate-500 mt-1">Manage all your active and closed listings in one place.</p>
+            </div>
 
-<div class="job-container">
-
-    {{-- HEADER --}}
-    <div class="job-header">
-        <div>
-            <h1>My job postings</h1>
-            <p>Manage all your job listings here.</p>
+            <a href="{{ route('jobs.create') }}" class="inline-flex items-center justify-center px-4 py-2.5 rounded-lg bg-blue-600 text-white font-semibold text-sm hover:bg-blue-700 transition">
+                + Post a Job
+            </a>
         </div>
-
-        <a href="{{ route('jobs.create') }}" class="btn-primary">
-            + Post a job
-        </a>
     </div>
 
-    {{-- FILTERS --}}
-    <div class="job-filters">
-
-        <form method="GET" action="{{ route('jobs.index') }}" class="filter-form">
-
-            {{-- SEARCH --}}
-            <div class="search-wrapper">
-                <input type="text"
-                    id="jobSearch"
+    <div class="bg-white border border-slate-200 rounded-xl shadow-sm p-4 sm:p-5">
+        <form method="GET" action="{{ route('jobs.index') }}" class="grid grid-cols-1 md:grid-cols-4 gap-3">
+            <div class="md:col-span-2">
+                <input
+                    type="text"
                     name="search"
                     value="{{ request('search') }}"
                     placeholder="Search job title..."
-                    autocomplete="off">
-
-                <div id="suggestions"></div>
+                    class="w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400">
             </div>
 
-            {{-- STATUS --}}
-            <select name="status">
-                <option value="">All Status</option>
-                <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Active</option>
-                <option value="closed" {{ request('status') == 'closed' ? 'selected' : '' }}>Closed</option>
-            </select>
+            <div>
+                <select name="status" class="w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400">
+                    <option value="">All Status</option>
+                    <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Active</option>
+                    <option value="closed" {{ request('status') == 'closed' || request('status') == 'inactive' ? 'selected' : '' }}>Closed</option>
+                </select>
+            </div>
 
-            {{-- DATE --}}
-            <select name="date">
-                <option value="">Latest</option>
-                <option value="latest" {{ request('date') == 'latest' ? 'selected' : '' }}>Newest</option>
-                <option value="oldest" {{ request('date') == 'oldest' ? 'selected' : '' }}>Oldest</option>
-            </select>
+            <div>
+                <select name="date" class="w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400">
+                    <option value="">Latest</option>
+                    <option value="latest" {{ request('date') == 'latest' ? 'selected' : '' }}>Newest</option>
+                    <option value="oldest" {{ request('date') == 'oldest' ? 'selected' : '' }}>Oldest</option>
+                </select>
+            </div>
 
-            <button type="submit" class="filter-btn">Filter</button>
-
+            <div class="md:col-span-4">
+                <button type="submit" class="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-slate-900 text-white text-sm font-medium hover:bg-slate-800 transition">
+                    Apply Filters
+                </button>
+            </div>
         </form>
     </div>
 
-    {{-- TABS --}}
-    <div class="job-tabs">
-
+    <div class="flex flex-wrap items-center gap-2 border-b border-slate-200 pb-3">
         <a href="{{ route('jobs.index') }}"
-            class="tab {{ !request('status') ? 'active' : '' }}">
+            class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium transition {{ !request('status') ? 'bg-blue-100 text-blue-700' : 'text-slate-600 hover:bg-slate-100' }}">
             All ({{ $jobs->total() }})
         </a>
 
         <a href="{{ route('jobs.index', ['status' => 'active']) }}"
-            class="tab {{ request('status') == 'active' ? 'active' : '' }}">
+            class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium transition {{ request('status') == 'active' ? 'bg-emerald-100 text-emerald-700' : 'text-slate-600 hover:bg-slate-100' }}">
             Active
         </a>
 
         <a href="{{ route('jobs.index', ['status' => 'closed']) }}"
-            class="tab {{ request('status') == 'closed' ? 'active' : '' }}">
+            class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium transition {{ request('status') == 'closed' || request('status') == 'inactive' ? 'bg-slate-200 text-slate-700' : 'text-slate-600 hover:bg-slate-100' }}">
             Closed
         </a>
-
     </div>
 
-    {{-- JOB LIST --}}
-    @forelse($jobs as $job)
+    <div class="space-y-3">
+        @forelse($jobs as $job)
+        <div class="bg-white border border-slate-200 rounded-xl shadow-sm p-4 sm:p-5">
+            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                <div class="min-w-0">
+                    <h3 class="text-base sm:text-lg font-semibold text-slate-900 truncate">{{ $job->title }}</h3>
 
-    <div class="job-card">
+                    <div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-slate-500">
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold {{ $job->status === 'active' ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-200 text-slate-700' }}">
+                            {{ ucfirst($job->status) }}
+                        </span>
+                        <span>{{ $job->location }}</span>
+                        <span>{{ $job->views }} views</span>
+                        <span>{{ $job->created_at->format('M d, Y') }}</span>
+                    </div>
+                </div>
 
-        <div>
-            <h3>{{ $job->title }}</h3>
+                <div class="flex flex-wrap items-center gap-2">
+                    <a href="{{ route('jobs.show', $job->id) }}" class="inline-flex items-center px-3 py-2 rounded-lg border border-slate-300 text-slate-700 text-sm font-medium hover:bg-slate-50 transition">
+                        View
+                    </a>
 
-            <p>
-                <span class="status">{{ ucfirst($job->status) }}</span> ·
-                {{ $job->location }} ·
-                {{ $job->views }} views ·
-                {{ $job->created_at->format('M d, Y') }}
-            </p>
+                    <a href="{{ route('jobs.edit', $job->id) }}" class="inline-flex items-center px-3 py-2 rounded-lg border border-slate-300 text-slate-700 text-sm font-medium hover:bg-slate-50 transition">
+                        Edit
+                    </a>
+
+                    <form action="{{ route('jobs.destroy', $job->id) }}" method="POST" class="inline-flex">
+                        @csrf
+                        @method('DELETE')
+
+                        <button type="submit" class="inline-flex items-center px-3 py-2 rounded-lg bg-red-600 text-white text-sm font-medium hover:bg-red-700 transition"
+                            onclick="return confirm('Delete this job?')">
+                            Delete
+                        </button>
+                    </form>
+                </div>
+            </div>
         </div>
-
-        <div class="actions">
-
-            <a href="{{ route('jobs.show', $job->id) }}" class="btn-outline">
-                View
-            </a>
-
-            <a href="{{ route('jobs.edit', $job->id) }}" class="btn-outline">
-                Edit
-            </a>
-
-            <form action="{{ route('jobs.destroy', $job->id) }}" method="POST">
-                @csrf
-                @method('DELETE')
-
-                <button type="submit" class="btn-danger"
-                    onclick="return confirm('Delete this job?')">
-                    Delete
-                </button>
-            </form>
-
+        @empty
+        <div class="bg-white border border-dashed border-slate-300 rounded-xl p-8 text-center text-slate-500">
+            No job postings yet.
         </div>
-
+        @endforelse
     </div>
 
-    @empty
-    <div class="job-card">
-        <p>No job postings yet.</p>
+    @if(method_exists($jobs, 'links'))
+    <div class="pt-2">
+        {{ $jobs->withQueryString()->links() }}
     </div>
-    @endforelse
-
+    @endif
 </div>
 
 @endsection
-
-
-{{-- ✅ SCRIPT RESTORED --}}
-@push('scripts')
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-
-        let input = document.getElementById('jobSearch');
-        let box = document.getElementById('suggestions');
-
-        if (!input) return;
-
-        input.addEventListener('keyup', function() {
-
-            let query = this.value;
-
-            if (query.length < 1) {
-                box.style.display = 'none';
-                return;
-            }
-
-            fetch(`{{ route('jobs.suggest') }}?query=${query}`)
-                .then(res => res.json())
-                .then(data => {
-
-                    box.innerHTML = '';
-
-                    if (data.length > 0) {
-                        box.style.display = 'block';
-
-                        data.forEach(item => {
-                            let div = document.createElement('div');
-                            div.textContent = item;
-
-                            div.onclick = function() {
-                                input.value = item;
-                                box.style.display = 'none';
-                            };
-
-                            box.appendChild(div);
-                        });
-
-                    } else {
-                        box.style.display = 'none';
-                    }
-                });
-
-        });
-
-    });
-</script>
-@endpush

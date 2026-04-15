@@ -1,6 +1,7 @@
 @extends('layouts.employer')
 
-@section('title', 'Create Job Posting') a
+@section('title', 'Create Job Posting')
+@section('subtitle', 'Publish a new job opportunity for applicants.')
 
 @section('content')
 

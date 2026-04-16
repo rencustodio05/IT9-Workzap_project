@@ -5,11 +5,11 @@
 @section('content')
 
 
-<div class="js-card p-6 mb-6">
+<div class="admin-surface rounded-xl admin-fade-up p-6 mb-6">
     <h2 class="text-lg font-semibold mb-4">Employment History</h2>
     <div class="space-y-3">
         @forelse($employmentHistory as $application)
-        <div class="border rounded p-4 flex justify-between items-center">
+        <div class="rounded-lg border p-4 flex justify-between items-center">
             <div>
                 <div class="font-semibold text-gray-900">{{ $application->job->title ?? 'N/A' }}</div>
                 <div class="text-sm text-gray-600">{{ $application->job->employer->name ?? 'Employer' }}</div>

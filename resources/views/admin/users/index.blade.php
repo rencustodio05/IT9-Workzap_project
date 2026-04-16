@@ -24,7 +24,7 @@
                 <option value="">All roles</option>
                 <option value="admin" {{ $role === 'admin' ? 'selected' : '' }}>Admin</option>
                 <option value="employer" {{ $role === 'employer' ? 'selected' : '' }}>Employer</option>
-                <option value="jobseeker" {{ $role === 'jobseeker' ? 'selected' : '' }}>Jobseeker</option>
+                <option value="jobseeker" {{ $role === 'jobseeker' ? 'selected' : '' }}>Applicant</option>
             </select>
         </div>
 
@@ -62,15 +62,30 @@
                 <td class="py-3 pr-4" style="color: var(--admin-muted);">{{ optional($user->created_at)->format('M d, Y') }}</td>
                 <td class="py-3 text-right">
                     <div class="flex items-center justify-end gap-2">
-                        <a href="{{ route('admin.users.show', $user) }}" class="rounded-lg border px-3 py-1.5 text-xs font-semibold" style="border-color: var(--admin-border);">View</a>
-                        <a href="{{ route('admin.users.edit', $user) }}" class="rounded-lg border px-3 py-1.5 text-xs font-semibold" style="border-color: var(--admin-border);">Edit Role</a>
+                        <a href="{{ route('admin.users.show', $user) }}" title="View" aria-label="View" class="inline-flex items-center justify-center p-2 rounded-md text-blue-600 hover:bg-blue-50 transition">
+                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12s3.75-6.75 9.75-6.75S21.75 12 21.75 12 18 18.75 12 18.75 2.25 12 2.25 12z" />
+                                <circle cx="12" cy="12" r="2.75" />
+                            </svg>
+                        </a>
+                        <a href="{{ route('admin.users.edit', $user) }}" title="Edit" aria-label="Edit" class="inline-flex items-center justify-center p-2 rounded-md text-amber-600 hover:bg-amber-50 transition">
+                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 3.487a2.1 2.1 0 1 1 2.971 2.971L8.25 18.042l-4.5 1.125 1.125-4.5L16.862 3.487z" />
+                            </svg>
+                        </a>
                         <button
                             type="button"
-                            class="rounded-lg border border-red-200 px-3 py-1.5 text-xs font-semibold text-red-700"
+                            title="Archive"
+                            aria-label="Archive"
+                            class="inline-flex items-center justify-center p-2 rounded-md text-violet-600 hover:bg-violet-50 transition"
                             data-delete-trigger
                             data-user-name="{{ trim(($user->first_name ?? '') . ' ' . ($user->last_name ?? '')) ?: $user->email }}"
                             data-delete-url="{{ route('admin.users.destroy', $user) }}">
-                            Archive
+                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 7.5h16.5v3.75H3.75z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 11.25h13.5v8.25H5.25z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M10.125 14.625h3.75" />
+                            </svg>
                         </button>
                     </div>
                 </td>

@@ -5,7 +5,7 @@
 
 @section('content')
 
-<div class="max-w-3xl mx-auto bg-white shadow-lg rounded-xl p-8">
+<div class="max-w-3xl mx-auto admin-surface rounded-xl p-8">
 
     {{-- HEADER --}}
     <div class="flex justify-between items-center mb-6">
@@ -95,7 +95,7 @@
 
             {{-- SUBMIT --}}
             <button type="submit"
-                class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                class="px-6 py-2 admin-button-primary text-white rounded-lg hover:brightness-95 transition">
                 Save Job
             </button>
 

@@ -17,7 +17,7 @@
     <div class="mb-4 p-3 rounded bg-red-100 text-red-800 text-sm">{{ $errors->first() }}</div>
     @endif
 
-    <div class="bg-white rounded-lg shadow p-8 flex flex-col items-center">
+    <div class="admin-surface rounded-xl p-8 flex flex-col items-center">
         <div class="mb-6">
             <div class="rounded-full bg-gray-200 w-24 h-24 flex items-center justify-center text-4xl text-gray-600">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -37,20 +37,20 @@
 
             <div>
                 <label class="block text-sm font-medium mb-1">First Name</label>
-                <input name="first_name" type="text" value="{{ old('first_name', $user->first_name) }}" class="w-full border rounded px-3 py-2" required>
+                <input name="first_name" type="text" value="{{ old('first_name', $user->first_name) }}" class="w-full rounded-lg border px-3 py-2" required>
             </div>
 
             <div>
                 <label class="block text-sm font-medium mb-1">Last Name</label>
-                <input name="last_name" type="text" value="{{ old('last_name', $user->last_name) }}" class="w-full border rounded px-3 py-2" required>
+                <input name="last_name" type="text" value="{{ old('last_name', $user->last_name) }}" class="w-full rounded-lg border px-3 py-2" required>
             </div>
 
             <div>
                 <label class="block text-sm font-medium mb-1">Email</label>
-                <input name="email" type="email" value="{{ old('email', $user->email) }}" class="w-full border rounded px-3 py-2" required>
+                <input name="email" type="email" value="{{ old('email', $user->email) }}" class="w-full rounded-lg border px-3 py-2" required>
             </div>
 
-            <button class="mt-1 inline-flex items-center px-5 py-2 bg-blue-600 text-white rounded font-semibold hover:bg-blue-700 transition">
+            <button class="mt-1 inline-flex items-center px-5 py-2 admin-button-primary text-white rounded font-semibold hover:brightness-95 transition">
                 Edit profile
             </button>
         </form>
@@ -66,10 +66,10 @@
 
                 <div>
                     <label class="block text-sm font-medium mb-1">Current Password</label>
-                    <input name="current_password" type="password" class="w-full border rounded px-3 py-2" required>
+                    <input name="current_password" type="password" class="w-full rounded-lg border px-3 py-2" required>
                 </div>
 
-                <button class="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700">Verify Password</button>
+                <button class="px-4 py-2 rounded admin-button-primary text-white hover:brightness-95">Verify Password</button>
             </form>
             @else
             <form method="POST" action="{{ route('employer.profile.password') }}" class="space-y-4">
@@ -79,20 +79,20 @@
 
                 <div>
                     <label class="block text-sm font-medium mb-1">Current Password</label>
-                    <input name="current_password" type="password" class="w-full border rounded px-3 py-2" required>
+                    <input name="current_password" type="password" class="w-full rounded-lg border px-3 py-2" required>
                 </div>
 
                 <div>
                     <label class="block text-sm font-medium mb-1">New Password</label>
-                    <input name="password" type="password" class="w-full border rounded px-3 py-2" required>
+                    <input name="password" type="password" class="w-full rounded-lg border px-3 py-2" required>
                 </div>
 
                 <div>
                     <label class="block text-sm font-medium mb-1">Confirm New Password</label>
-                    <input name="password_confirmation" type="password" class="w-full border rounded px-3 py-2" required>
+                    <input name="password_confirmation" type="password" class="w-full rounded-lg border px-3 py-2" required>
                 </div>
 
-                <button class="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700">Save New Password</button>
+                <button class="px-4 py-2 rounded admin-button-primary text-white hover:brightness-95">Save New Password</button>
             </form>
             @endif
         </div>

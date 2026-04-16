@@ -32,6 +32,10 @@ class DashboardController extends Controller
             ->whereDate('scheduled_at', now()->toDateString())
             ->count();
 
+        $hiredApplicants = Application::whereHas('job', function ($q) {
+            $q->where('user_id', Auth::id());
+        })->where('status', 'hired')->count();
+
         $recentApplicants = Application::with(['job', 'jobseeker'])
             ->whereIn('job_id', $jobIds)
             ->latest()
@@ -49,6 +53,7 @@ class DashboardController extends Controller
             'totalApplicants',
             'applicantsToday',
             'interviewsToday',
+            'hiredApplicants',
             'recentApplicants',
             'latestJobs'
         ));

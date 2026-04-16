@@ -55,12 +55,27 @@
                 <td class="py-3 pr-4">{{ optional($job->created_at)->format('M d, Y') }}</td>
                 <td class="py-3 text-right">
                     <div class="flex items-center justify-end gap-2">
-                        <a href="{{ route('admin.jobs.show', $job) }}" class="rounded-lg border px-3 py-1.5 text-xs font-semibold" style="border-color: var(--admin-border);">View</a>
-                        <a href="{{ route('admin.jobs.edit', $job) }}" class="rounded-lg border px-3 py-1.5 text-xs font-semibold" style="border-color: var(--admin-border);">Edit</a>
+                        <a href="{{ route('admin.jobs.show', $job) }}" title="View" aria-label="View" class="inline-flex items-center justify-center p-2 rounded-md text-blue-600 hover:bg-blue-50 transition">
+                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12s3.75-6.75 9.75-6.75S21.75 12 21.75 12 18 18.75 12 18.75 2.25 12 2.25 12z" />
+                                <circle cx="12" cy="12" r="2.75" />
+                            </svg>
+                        </a>
+                        <a href="{{ route('admin.jobs.edit', $job) }}" title="Edit" aria-label="Edit" class="inline-flex items-center justify-center p-2 rounded-md text-amber-600 hover:bg-amber-50 transition">
+                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 3.487a2.1 2.1 0 1 1 2.971 2.971L8.25 18.042l-4.5 1.125 1.125-4.5L16.862 3.487z" />
+                            </svg>
+                        </a>
                         <form method="POST" action="{{ route('admin.jobs.destroy', $job) }}" onsubmit="return confirm('Archive this job post?');">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="rounded-lg border border-red-200 px-3 py-1.5 text-xs font-semibold text-red-700">Archive</button>
+                            <button type="submit" title="Archive" aria-label="Archive" class="inline-flex items-center justify-center p-2 rounded-md text-violet-600 hover:bg-violet-50 transition">
+                                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 7.5h16.5v3.75H3.75z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 11.25h13.5v8.25H5.25z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.125 14.625h3.75" />
+                                </svg>
+                            </button>
                         </form>
                     </div>
                 </td>

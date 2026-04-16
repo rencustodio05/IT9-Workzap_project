@@ -3,51 +3,52 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>@yield('title', 'Jobseeker Dashboard')</title>
+    <title>@yield('title', 'Applicant Dashboard')</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    @vite(['resources/css/app.css'])
+    @vite(['resources/css/app.css', 'resources/css/admin.css'])
 </head>
 
-<body class="bg-slate-100 flex min-h-screen text-slate-900">
+<body class="admin-shell flex min-h-screen text-slate-900">
     <!-- Sidebar -->
-    <aside class="bg-[#1e3a5f] text-white w-64 flex flex-col p-6 space-y-4 h-screen sticky top-0 overflow-y-auto shadow-xl">
-        <div class="mb-7">
-            <span class="text-2xl font-bold tracking-wide">Workzap <span class="text-yellow-400">Job seeker</span></span>
+    <aside class="admin-sidebar text-white w-64 flex flex-col p-6 space-y-4 h-screen sticky top-0 overflow-y-auto shadow-xl">
+        <div class="mb-5 pb-2">
+            <span class="text-2xl font-bold tracking-wide">Workzap <span class="text-yellow-400">Applicant</span></span>
+            <div class="mt-2 mb-3 h-px w-full rounded-full bg-white/20 shadow-[0_0_10px_rgba(255,255,255,0.18)] blur-[0.5px]"></div>
         </div>
         <nav class="flex flex-col gap-2 flex-1">
             <a href="{{ route('jobseeker.dashboard') }}"
-                class="py-2.5 px-4 rounded-lg {{ request()->routeIs('jobseeker.dashboard') ? 'bg-[#2a4f7a] font-semibold shadow-sm' : 'hover:bg-[#27486f]' }}">
+                class="admin-nav-link py-2.5 px-4 rounded-lg {{ request()->routeIs('jobseeker.dashboard') ? 'active font-semibold shadow-sm' : '' }}">
                 Dashboard
             </a>
             <a href="{{ route('jobseeker.jobs.index') }}"
-                class="py-2.5 px-4 rounded-lg {{ request()->routeIs('jobseeker.jobs.index') ? 'bg-[#2a4f7a] font-semibold shadow-sm' : 'hover:bg-[#27486f]' }}">
-                Browse Jobs
+                class="admin-nav-link py-2.5 px-4 rounded-lg {{ request()->routeIs('jobseeker.jobs.index') ? 'active font-semibold shadow-sm' : '' }}">
+                Browse Jobs (Applicant)
             </a>
             <a href="{{ route('jobseeker.applications.index') }}"
-                class="py-2.5 px-4 rounded-lg {{ request()->routeIs('jobseeker.applications.index') ? 'bg-[#2a4f7a] font-semibold shadow-sm' : 'hover:bg-[#27486f]' }}">
+                class="admin-nav-link py-2.5 px-4 rounded-lg {{ request()->routeIs('jobseeker.applications.index') ? 'active font-semibold shadow-sm' : '' }}">
                 My Applications
             </a>
             <a href="{{ route('jobseeker.saved.index') }}"
-                class="py-2.5 px-4 rounded-lg {{ request()->routeIs('jobseeker.saved.index') ? 'bg-[#2a4f7a] font-semibold shadow-sm' : 'hover:bg-[#27486f]' }}">
+                class="admin-nav-link py-2.5 px-4 rounded-lg {{ request()->routeIs('jobseeker.saved.index') ? 'active font-semibold shadow-sm' : '' }}">
                 Saved Jobs
             </a>
         </nav>
     </aside>
     <!-- Main Content -->
-    <main class="flex-1 min-h-screen p-5 md:p-8 bg-[#F8FAFC]">
-        <div class="js-shell-topbar" id="jobseeker-global-topbar">
+    <main class="flex-1 min-h-screen p-5 md:p-8">
+        <div class="admin-surface sticky top-0 z-50 bg-white shadow-sm rounded-xl p-4 sm:p-5 mb-4 flex items-center justify-between gap-3" id="jobseeker-global-topbar">
             <div class="min-w-0">
-                <h1 class="js-shell-title truncate">@yield('title', 'Jobseeker Dashboard')</h1>
-                <p class="js-shell-subtitle">@yield('subtitle', 'Manage your opportunities with confidence.')</p>
+                <h1 class="text-xl font-black tracking-tight truncate">@yield('title', 'Applicant Dashboard')</h1>
+                <p class="text-sm text-slate-500">@yield('subtitle', 'Manage your opportunities with confidence.')</p>
             </div>
 
             <div class="relative" id="global-header-menu-root">
-                <button type="button" id="global-header-menu-button" class="js-menu-button inline-flex items-center justify-center" aria-label="Open account menu" aria-expanded="false">
+                <button type="button" id="global-header-menu-button" class="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-50" aria-label="Open account menu" aria-expanded="false">
                     <span class="sr-only">Toggle menu</span>
                     <span class="text-xl leading-none">☰</span>
                 </button>
 
-                <div id="global-header-menu" class="js-menu-dropdown hidden absolute right-0 mt-2 w-56 origin-top-right transition duration-150 ease-out opacity-0 scale-95 z-40">
+                <div id="global-header-menu" class="admin-surface hidden absolute right-0 mt-2 w-56 origin-top-right rounded-xl transition duration-150 ease-out opacity-0 scale-95 z-40">
                     <a href="{{ route('jobseeker.profile') }}" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50">Profile</a>
                     <a href="{{ route('jobseeker.account.security') }}" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50">Account Security</a>
                     <form method="POST" action="{{ route('logout') }}">

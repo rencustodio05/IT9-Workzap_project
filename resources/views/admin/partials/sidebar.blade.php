@@ -1,7 +1,8 @@
 <aside class="admin-sidebar fixed inset-y-0 left-0 z-40 w-72 p-5 border-r border-slate-800/60 hidden lg:flex flex-col">
-    <div class="mb-8">
+    <div class="mb-6 pb-2">
         <div class="text-2xl font-black tracking-tight text-white">Workzap <span class="text-yellow-400">Admin</span></div>
         <div class="text-xs text-slate-400 mt-1">Control center</div>
+        <div class="mt-2 mb-3 h-px w-full rounded-full bg-white/20 shadow-[0_0_10px_rgba(255,255,255,0.18)] blur-[0.5px]"></div>
     </div>
 
     <nav class="space-y-2">

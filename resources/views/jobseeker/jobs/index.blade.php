@@ -8,7 +8,7 @@
 <!-- SEARCH -->
 <form method="GET"
     action="{{ route('jobseeker.jobs.index') }}"
-    class="js-card p-4 mb-6 flex flex-col md:flex-row gap-3 relative">
+    class="admin-surface rounded-xl admin-fade-up p-4 mb-6 flex flex-col md:flex-row gap-3 relative">
 
     <!-- SEARCH INPUT -->
     <div class="relative w-full">
@@ -17,7 +17,7 @@
             name="search"
             value="{{ request('search') }}"
             placeholder="Search job title..."
-            class="border rounded px-3 py-2 w-full">
+            class="rounded-lg border px-3 py-2 w-full">
 
     </div>
 
@@ -26,16 +26,16 @@
         name="location"
         value="{{ request('location') }}"
         placeholder="Location"
-        class="border rounded px-3 py-2">
+        class="rounded-lg border px-3 py-2">
 
     <!-- TYPE -->
-    <select name="type" class="border rounded px-3 py-2">
+    <select name="type" class="rounded-lg border px-3 py-2">
         <option value="">Job Type</option>
         <option value="full-time" {{ request('type')=='full-time'?'selected':'' }}>Full Time</option>
         <option value="part-time" {{ request('type')=='part-time'?'selected':'' }}>Part Time</option>
     </select>
 
-    <button class="js-brand-btn px-4 py-2 rounded">
+    <button class="admin-button-primary text-white px-4 py-2 rounded">
         Search
     </button>
 
@@ -47,9 +47,9 @@
 </form>
 
 <!-- TABLE -->
-<div class="overflow-x-auto js-card">
+<div class="overflow-x-auto admin-surface rounded-xl admin-fade-up">
 
-    <table class="min-w-full text-left whitespace-nowrap">
+    <table class="admin-table min-w-full text-sm text-left whitespace-nowrap">
 
         <thead class="bg-gray-50 border-b">
             <tr class="text-gray-600 text-sm">
@@ -77,7 +77,7 @@
 
                 <!-- LOCATION -->
                 <td class="py-4 px-6 text-sm text-gray-600">
-                    📍 {{ $job->location ?? 'No location' }}
+                    {{ $job->location ?? 'No location' }}
                 </td>
 
                 <!-- TYPE -->
@@ -95,17 +95,22 @@
 
                 <!-- SALARY -->
                 <td class="py-4 px-6 text-sm">
-                    ₱{{ number_format($job->salary_min ?? 0) }}
+                    {{ number_format($job->salary_min ?? 0) }}
                     -
-                    ₱{{ number_format($job->salary_max ?? 0) }}
+                    {{ number_format($job->salary_max ?? 0) }}
                 </td>
 
                 <!-- ACTION -->
                 <td class="py-4 px-6 flex gap-2">
 
                     <a href="{{ route('jobseeker.jobs.show', $job->id) }}"
-                        class="px-3 py-1 border rounded text-gray-700 hover:bg-gray-100">
-                        View
+                        title="View"
+                        aria-label="View"
+                        class="inline-flex items-center justify-center p-2 rounded-md text-blue-600 hover:bg-blue-50 transition">
+                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12s3.75-6.75 9.75-6.75S21.75 12 21.75 12 18 18.75 12 18.75 2.25 12 2.25 12z" />
+                            <circle cx="12" cy="12" r="2.75" />
+                        </svg>
                     </a>
 
                     @php
@@ -137,7 +142,7 @@
                     <form action="{{ route('jobseeker.apply', $job->id) }}"
                         method="POST">
                         @csrf
-                        <button class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700">
+                        <button class="px-3 py-1 admin-button-primary text-white rounded hover:brightness-95">
                             {{ in_array($applicationStatus, ['rejected', 'cancelled']) ? 'Apply Again' : 'Apply' }}
                         </button>
                     </form>

@@ -1,4 +1,4 @@
-<header class="sticky top-0 z-30 p-4 sm:p-6 lg:p-8 pb-0">
+<header class="sticky top-0 z-30 px-4 sm:px-6 lg:px-8 pt-4 pb-0">
     <div class="admin-surface rounded-2xl px-4 sm:px-6 py-4 admin-fade-up">
         <div class="flex items-center justify-between gap-3">
             <div>

@@ -19,9 +19,9 @@
         </article>
 
         <article class="admin-surface admin-stat-card rounded-xl p-5 admin-fade-up">
-            <div class="text-sm" style="color: var(--admin-muted);">Total Jobseekers</div>
+            <div class="text-sm" style="color: var(--admin-muted);">Total Applicants</div>
             <div class="mt-2 text-3xl font-black tracking-tight">{{ number_format($stats['total_jobseekers']) }}</div>
-            <div class="mt-2 text-xs" style="color: var(--admin-muted);">Users with jobseeker role</div>
+            <div class="mt-2 text-xs" style="color: var(--admin-muted);">Users with applicant role</div>
         </article>
 
         <article class="admin-surface admin-stat-card rounded-xl p-5 admin-fade-up" id="jobs">
@@ -33,7 +33,7 @@
         <article class="admin-surface admin-stat-card rounded-xl p-5 admin-fade-up">
             <div class="text-sm" style="color: var(--admin-muted);">Total Applications</div>
             <div class="mt-2 text-3xl font-black tracking-tight">{{ number_format($stats['total_applications']) }}</div>
-            <div class="mt-2 text-xs" style="color: var(--admin-muted);">Submitted by jobseekers</div>
+            <div class="mt-2 text-xs" style="color: var(--admin-muted);">Submitted by applicants</div>
         </article>
     </section>
 

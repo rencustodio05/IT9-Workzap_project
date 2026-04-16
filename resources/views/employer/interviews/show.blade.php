@@ -5,7 +5,7 @@
 
 @section('content')
 <div class="max-w-3xl mx-auto">
-    <div class="bg-white rounded-lg shadow p-6">
+    <div class="admin-surface rounded-xl p-6">
         <div class="mb-5">
             <h1 class="text-2xl font-bold text-gray-900">Reschedule Interview</h1>
             <p class="text-sm text-gray-500 mt-1">Update interview date, time, status, and notes.</p>
@@ -35,7 +35,7 @@
                     type="date"
                     name="interview_date"
                     value="{{ old('interview_date', $interview->interview_date ? \Illuminate\Support\Carbon::parse($interview->interview_date)->format('Y-m-d') : '') }}"
-                    class="w-full border rounded px-3 py-2"
+                    class="w-full rounded-lg border px-3 py-2"
                     required>
             </div>
 
@@ -45,13 +45,13 @@
                     type="time"
                     name="interview_time"
                     value="{{ old('interview_time', $interview->interview_time ? \Illuminate\Support\Carbon::parse($interview->interview_time)->format('H:i') : '') }}"
-                    class="w-full border rounded px-3 py-2"
+                    class="w-full rounded-lg border px-3 py-2"
                     required>
             </div>
 
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                <select name="status" class="w-full border rounded px-3 py-2">
+                <select name="status" class="w-full rounded-lg border px-3 py-2">
                     <option value="scheduled" {{ old('status', $interview->status) === 'scheduled' ? 'selected' : '' }}>Scheduled</option>
                     <option value="completed" {{ old('status', $interview->status) === 'completed' ? 'selected' : '' }}>Completed</option>
                     <option value="cancelled" {{ old('status', $interview->status) === 'cancelled' ? 'selected' : '' }}>Cancelled</option>
@@ -60,7 +60,7 @@
 
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Notes</label>
-                <textarea name="notes" rows="3" class="w-full border rounded px-3 py-2">{{ old('notes', $interview->notes) }}</textarea>
+                <textarea name="notes" rows="3" class="w-full rounded-lg border px-3 py-2">{{ old('notes', $interview->notes) }}</textarea>
             </div>
 
             <div class="pt-3 border-t flex items-center justify-between gap-3">

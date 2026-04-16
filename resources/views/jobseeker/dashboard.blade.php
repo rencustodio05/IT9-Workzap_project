@@ -1,13 +1,12 @@
 @extends('layouts.jobseeker')
 
-@section('title', 'Jobseeker Dashboard')
+@section('title', 'Applicant Dashboard')
 @section('subtitle', 'Find and manage your job opportunities')
 
 @section('content')
-
 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8 items-stretch">
     <a href="{{ route('jobseeker.applications.index') }}" class="block h-full">
-        <div class="js-card h-full min-h-[112px] p-5 flex items-center justify-between gap-4 hover:-translate-y-0.5 transition">
+        <div class="admin-surface rounded-xl admin-fade-up h-full min-h-[112px] p-5 flex items-center justify-between gap-4 hover:-translate-y-0.5 transition">
             <div class="min-w-0">
                 <div class="text-sm font-semibold text-gray-800">Jobs Applying</div>
                 <div class="text-sm text-gray-500 mt-1">Progress: {{ $progressApplications ?? 0 }}</div>
@@ -17,7 +16,7 @@
     </a>
 
     <a href="{{ route('jobseeker.applications.index') }}" class="block h-full">
-        <div class="js-card h-full min-h-[112px] p-5 flex items-center justify-between gap-4 hover:-translate-y-0.5 transition">
+        <div class="admin-surface rounded-xl admin-fade-up h-full min-h-[112px] p-5 flex items-center justify-between gap-4 hover:-translate-y-0.5 transition">
             <div class="min-w-0">
                 <div class="text-sm font-semibold text-gray-800">Interview Schedule</div>
                 <div class="text-sm text-gray-500 mt-1 truncate">{{ $nearestInterviewSchedule ?? 'No upcoming interviews' }}</div>
@@ -27,7 +26,7 @@
     </a>
 
     <a href="{{ $latestHiredApplication ? route('jobseeker.applications.show', $latestHiredApplication->id) : route('jobseeker.applications.index') }}" class="block h-full">
-        <div class="js-card h-full min-h-[112px] p-5 flex items-center justify-between gap-4 hover:-translate-y-0.5 transition">
+        <div class="admin-surface rounded-xl admin-fade-up h-full min-h-[112px] p-5 flex items-center justify-between gap-4 hover:-translate-y-0.5 transition">
             @php
             $hiredTitleList = (($recentApplications ?? collect())
             ->filter(fn($application) => ($application->status ?? null) === 'hired')
@@ -64,7 +63,7 @@
 <!-- Main Grid -->
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
     <!-- Recommended Jobs -->
-    <div class="js-card p-6 flex flex-col h-full">
+    <div class="admin-surface rounded-xl admin-fade-up p-6 flex flex-col h-full">
         <div class="flex justify-between items-center mb-4">
             <h2 class="text-lg font-semibold text-gray-900">Recommended Jobs</h2>
             <a href="{{ route('jobseeker.jobs.index') }}" class="text-blue-600 hover:underline font-medium">View All</a>
@@ -74,9 +73,9 @@
             <div class="flex justify-between items-center p-3 border rounded">
                 <div>
                     <div class="font-bold text-gray-800">{{ $job->title }}</div>
-                    <div class="text-gray-500 text-sm">{{ $job->employer->name ?? 'Employer' }} · {{ $job->location }}</div>
+                    <div class="text-gray-500 text-sm">{{ $job->employer->name ?? 'Employer' }} {{ $job->location }}</div>
                 </div>
-                <a href="{{ route('jobseeker.jobs.show', $job->id) }}" class="js-brand-btn font-semibold px-4 py-1 rounded transition">Apply Now</a>
+                <a href="{{ route('jobseeker.jobs.show', $job->id) }}" class="admin-button-primary text-white font-semibold px-4 py-1 rounded transition">Apply Now</a>
             </div>
             @empty
             <div class="text-sm text-gray-500">No recommended jobs right now.</div>
@@ -84,7 +83,7 @@
         </div>
     </div>
     <!-- My Applications -->
-    <div class="js-card p-6 flex flex-col h-full">
+    <div class="admin-surface rounded-xl admin-fade-up p-6 flex flex-col h-full">
         <div class="flex justify-between items-center mb-4">
             <h2 class="text-lg font-semibold text-gray-900">My Applications</h2>
             <a href="{{ route('jobseeker.applications.index') }}" class="text-blue-600 hover:underline font-medium">View All</a>

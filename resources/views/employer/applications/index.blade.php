@@ -4,19 +4,14 @@
 @section('subtitle', 'Review and manage all incoming applicants.')
 
 @section('content')
-<div class="max-w-7xl mx-auto">
+<div class="max-w-7xl mx-auto w-full min-w-0">
 
     <!-- HEADER -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
-        <div>
-            <h1 class="text-2xl font-bold text-gray-900">Applicant Management</h1>
-            <p class="text-gray-500 mt-1">Review and manage all your applicants.</p>
-        </div>
-    </div>
+
 
     <!-- SEARCH / FILTER -->
     <form method="GET" action="{{ route('applications.index') }}"
-        class="bg-white rounded-lg p-4 shadow flex flex-col md:flex-row gap-4 mb-6">
+        class="admin-surface rounded-xl p-4 flex flex-col md:flex-row gap-4 mb-6">
 
         <!-- SEARCH APPLICANT -->
         <div id="applicant-search-wrapper" class="relative flex-1">
@@ -26,7 +21,7 @@
                 value="{{ request('search') }}"
                 placeholder="Search applicant name..."
                 autocomplete="off"
-                class="border rounded px-3 py-2 w-full" />
+                class="rounded-lg border px-3 py-2 w-full" />
 
             <ul id="applicant-suggestions"
                 class="absolute z-20 mt-1 w-full bg-white border border-gray-200 rounded shadow max-h-56 overflow-y-auto"
@@ -35,7 +30,7 @@
 
 
         <!-- STATUS -->
-        <select name="status" class="border rounded px-3 py-2">
+        <select name="status" class="rounded-lg border px-3 py-2">
             <option value="">All Status</option>
             <option value="pending" {{ request('status')=='pending'?'selected':'' }}>Pending</option>
             <option value="interview" {{ request('status')=='interview'?'selected':'' }}>Interview</option>
@@ -44,7 +39,7 @@
             <option value="rejected" {{ request('status')=='rejected'?'selected':'' }}>Rejected</option>
         </select>
 
-        <button class="bg-blue-600 text-white px-4 py-2 rounded">
+        <button class="admin-button-primary text-white px-4 py-2 rounded">
             Search
         </button>
 
@@ -53,8 +48,8 @@
 
 
     <!-- TABLE -->
-    <div class="overflow-x-auto bg-white rounded-lg shadow">
-        <table class="min-w-full text-left whitespace-nowrap">
+    <div class="overflow-x-auto admin-surface rounded-xl w-full max-w-full">
+        <table class="admin-table w-full min-w-[860px] table-auto text-sm text-left">
 
             <thead>
                 <tr class="text-gray-500 text-sm border-b">
@@ -79,14 +74,14 @@
                         <div class="flex items-center gap-3">
 
                             <div class="rounded-full bg-gray-200 w-8 h-8 flex items-center justify-center text-gray-600">
-                                👤
+                                U
                             </div>
 
-                            <div>
-                                <div class="font-bold">
+                            <div class="min-w-0">
+                                <div class="font-bold max-w-[180px] truncate">
                                     {{ trim(($app->jobseeker->first_name ?? '') . ' ' . ($app->jobseeker->last_name ?? '')) ?: 'N/A' }}
                                 </div>
-                                <div class="text-xs text-gray-500">
+                                <div class="text-xs text-gray-500 max-w-[220px] truncate">
                                     {{ $app->jobseeker->email ?? 'N/A' }}
                                 </div>
                             </div>
@@ -95,8 +90,8 @@
                     </td>
 
                     <!-- JOB -->
-                    <td class="py-4 px-6">
-                        {{ $app->job->title ?? 'N/A' }}
+                    <td class="py-4 px-6 max-w-[240px] truncate">
+                        <span class="block truncate">{{ $app->job->title ?? 'N/A' }}</span>
                     </td>
 
                     <!-- DATE -->
@@ -131,15 +126,19 @@
                     </td>
 
                     <!-- ACTION -->
-                    <td class="py-4 px-6 flex gap-2">
+                    <td class="py-4 px-6 whitespace-nowrap">
+                        <div class="flex gap-2 items-center">
 
-                        <a href="{{ route('applications.show', $app->id) }}"
-                            class="px-4 py-1 rounded border font-medium text-gray-800 hover:bg-gray-100">
-                            View
-                        </a>
-
-
-
+                            <a href="{{ route('applications.show', $app->id) }}"
+                                title="View"
+                                class="inline-flex items-center justify-center p-2 rounded-md text-blue-600 hover:bg-blue-50 transition">
+                                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M2.25 12s3.75-6.75 9.75-6.75S21.75 12 21.75 12 18 18.75 12 18.75 2.25 12 2.25 12z" />
+                                    <circle cx="12" cy="12" r="2.75" />
+                                </svg>
+                            </a>
+                        </div>
                     </td>
 
                 </tr>

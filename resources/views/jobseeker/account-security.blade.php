@@ -4,7 +4,7 @@
 @section('subtitle', 'Manage your email display and password settings.')
 
 @section('content')
-<div class="js-page-wrap">
+<div class="w-full">
     <div class="mx-auto w-full max-w-2xl">
 
         @if(session('success'))
@@ -19,12 +19,12 @@
         </div>
         @endif
 
-        <div class="js-card p-6">
+        <div class="admin-surface rounded-xl admin-fade-up p-6">
             <h2 class="text-xl font-semibold text-gray-900 mb-4">Account Security</h2>
 
             <div class="mb-4">
                 <label class="block text-sm font-medium mb-1">Email Address</label>
-                <input name="email" type="email" value="{{ $user->email }}" class="w-full border rounded px-3 py-2 bg-gray-50" readonly>
+                <input name="email" type="email" value="{{ $user->email }}" class="w-full rounded-lg border px-3 py-2 bg-gray-50" readonly>
             </div>
 
             <form method="POST" action="{{ route('jobseeker.profile.password') }}" class="space-y-4">
@@ -34,17 +34,17 @@
 
                 <div>
                     <label class="block text-sm font-medium mb-1">Current Password</label>
-                    <input name="current_password" type="password" class="w-full border rounded px-3 py-2" required>
+                    <input name="current_password" type="password" class="w-full rounded-lg border px-3 py-2" required>
                 </div>
 
                 <div>
                     <label class="block text-sm font-medium mb-1">New Password</label>
-                    <input name="password" type="password" class="w-full border rounded px-3 py-2" required>
+                    <input name="password" type="password" class="w-full rounded-lg border px-3 py-2" required>
                 </div>
 
                 <div>
                     <label class="block text-sm font-medium mb-1">Confirm Password</label>
-                    <input name="password_confirmation" type="password" class="w-full border rounded px-3 py-2" required>
+                    <input name="password_confirmation" type="password" class="w-full rounded-lg border px-3 py-2" required>
                 </div>
 
                 <div class="pt-2">

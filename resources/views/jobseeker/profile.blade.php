@@ -15,7 +15,7 @@ $photoPath = str_contains($user->profile_photo_path, '/')
 $defaultAvatar = asset('images/default-avatar.png');
 @endphp
 
-<div class="js-page-wrap">
+<div class="w-full">
     <div class="space-y-6 max-w-6xl">
 
         @if(session('success'))
@@ -31,15 +31,15 @@ $defaultAvatar = asset('images/default-avatar.png');
         @endif
 
         @if(!($isEditMode ?? false))
-        <div class="js-card overflow-hidden">
+        <div class="admin-surface rounded-xl admin-fade-up overflow-hidden">
             <div class="px-6 py-5 md:px-8 md:py-6 border-b border-gray-100 bg-gradient-to-r from-white to-gray-50">
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div>
-                        <h2 class="text-xl md:text-2xl font-semibold text-gray-900">Jobseeker Profile</h2>
+                        <h2 class="text-xl md:text-2xl font-semibold text-gray-900">Applicant Profile</h2>
                         <p class="text-sm text-gray-500 mt-1">Review your personal and professional information.</p>
                     </div>
                     <a href="{{ route('jobseeker.profile.edit') }}"
-                        class="inline-flex items-center justify-center px-4 py-2.5 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition">
+                        class="inline-flex items-center justify-center px-4 py-2.5 rounded-lg admin-button-primary text-white text-sm font-medium hover:brightness-95 transition">
                         Edit Profile
                     </a>
                 </div>
@@ -126,9 +126,9 @@ $defaultAvatar = asset('images/default-avatar.png');
         </div>
 
         @else
-        <div class="js-card overflow-hidden">
+        <div class="admin-surface rounded-xl admin-fade-up overflow-hidden">
             <div class="px-6 py-5 md:px-8 md:py-6 border-b border-gray-100 bg-gradient-to-r from-white to-gray-50">
-                <h2 class="text-xl md:text-2xl font-semibold text-gray-900">Edit Jobseeker Profile</h2>
+                <h2 class="text-xl md:text-2xl font-semibold text-gray-900">Edit Applicant Profile</h2>
                 <p class="text-sm text-gray-500 mt-1">Update your biodata to keep your profile ready for new opportunities.</p>
             </div>
 
@@ -251,7 +251,7 @@ $defaultAvatar = asset('images/default-avatar.png');
                         </a>
 
                         <button type="submit"
-                            class="inline-flex items-center justify-center px-5 py-2.5 rounded-lg bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition">
+                            class="inline-flex items-center justify-center px-5 py-2.5 rounded-lg admin-button-primary text-white text-sm font-semibold hover:brightness-95 transition">
                             Save Changes
                         </button>
                     </div>

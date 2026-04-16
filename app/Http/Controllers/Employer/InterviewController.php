@@ -28,17 +28,21 @@ class InterviewController extends Controller
             ->orderBy('interview_time')
             ->get();
 
-        $today = now()->toDateString();
+        $today = Carbon::today('Asia/Manila')->toDateString();
 
         $todayInterviews = $interviews
             ->filter(function ($interview) use ($today) {
-                return (string) $interview->interview_date === $today;
+                return Carbon::parse($interview->interview_date)
+                    ->timezone('Asia/Manila')
+                    ->toDateString() === $today;
             })
             ->values();
 
         $upcomingInterviews = $interviews
             ->filter(function ($interview) use ($today) {
-                return (string) $interview->interview_date > $today;
+                return Carbon::parse($interview->interview_date)
+                    ->timezone('Asia/Manila')
+                    ->toDateString() > $today;
             })
             ->values();
 
@@ -84,7 +88,7 @@ class InterviewController extends Controller
         }
 
         try {
-            $scheduledAt = Carbon::createFromFormat('Y-m-d H:i', $validated['interview_date'] . ' ' . $validated['interview_time']);
+            $scheduledAt = Carbon::createFromFormat('Y-m-d H:i', $validated['interview_date'] . ' ' . $validated['interview_time'], 'Asia/Manila');
         } catch (InvalidFormatException $e) {
             return back()
                 ->withInput()
@@ -151,14 +155,14 @@ class InterviewController extends Controller
 
         if ($hasDate && $hasTime) {
             try {
-                $scheduledAt = Carbon::createFromFormat('Y-m-d H:i', $validated['interview_date'] . ' ' . $validated['interview_time']);
+                $scheduledAt = Carbon::createFromFormat('Y-m-d H:i', $validated['interview_date'] . ' ' . $validated['interview_time'], 'Asia/Manila');
             } catch (InvalidFormatException $e) {
                 return back()
                     ->withInput()
                     ->withErrors(['interview_date' => 'Invalid interview date/time format.']);
             }
 
-            $interview->interview_date = Carbon::parse($validated['interview_date'])->format('Y-m-d');
+            $interview->interview_date = $validated['interview_date'];
             $interview->interview_time = $validated['interview_time'];
             $interview->scheduled_at = $scheduledAt;
         }

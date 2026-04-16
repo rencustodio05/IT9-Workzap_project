@@ -43,7 +43,12 @@
                     </span>
                 </td>
                 <td class="py-3 text-right">
-                    <a href="{{ route('admin.employers.show', $employer) }}" class="rounded-lg border px-3 py-1.5 text-xs font-semibold" style="border-color: var(--admin-border);">View Profile</a>
+                    <a href="{{ route('admin.employers.show', $employer) }}" title="View" aria-label="View" class="inline-flex items-center justify-center p-2 rounded-md text-blue-600 hover:bg-blue-50 transition">
+                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12s3.75-6.75 9.75-6.75S21.75 12 21.75 12 18 18.75 12 18.75 2.25 12 2.25 12z" />
+                            <circle cx="12" cy="12" r="2.75" />
+                        </svg>
+                    </a>
                 </td>
             </tr>
             @endforeach

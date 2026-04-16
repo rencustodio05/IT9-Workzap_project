@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Job;
 use App\Models\Application;
+use App\Models\Interview;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
@@ -178,18 +179,13 @@ class JobController extends Controller
             return back()->with('error', 'Already applied.');
         }
 
-        $previousInactiveApplication = Application::where('job_id', $id)
+        $oldApplications = Application::where('job_id', $id)
             ->where('user_id', Auth::id())
-            ->whereIn('status', ['rejected', 'cancelled'])
-            ->latest()
-            ->first();
+            ->where('status', 'rejected')
+            ->get();
 
-        if ($previousInactiveApplication) {
-            $previousInactiveApplication->update([
-                'status' => 'pending',
-            ]);
-
-            return back()->with('success', 'Applied successfully!');
+        foreach ($oldApplications as $oldApp) {
+            Interview::where('application_id', $oldApp->id)->delete();
         }
 
         Application::create([

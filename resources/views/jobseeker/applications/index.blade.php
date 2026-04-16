@@ -16,8 +16,8 @@
 </div>
 @endif
 
-<div class="js-card overflow-x-auto">
-    <table class="min-w-full text-left whitespace-nowrap">
+<div class="admin-surface rounded-xl admin-fade-up overflow-x-auto">
+    <table class="admin-table min-w-full text-sm text-left whitespace-nowrap">
         <thead class="bg-gray-50 border-b text-sm text-gray-600">
             <tr>
                 <th class="py-3 px-4">Job</th>
@@ -41,8 +41,11 @@
                     {{ $application->interview?->scheduled_at ? $application->interview->scheduled_at->format('M d, Y h:i A') : 'Not scheduled' }}
                 </td>
                 <td class="py-3 px-4 flex gap-2">
-                    <a href="{{ route('jobseeker.jobs.show', ['id' => $application->job_id, 'application_id' => $application->id, 'from' => 'applications']) }}" class="px-3 py-1 border rounded text-sm text-gray-700 hover:bg-gray-100">
-                        View
+                    <a href="{{ route('jobseeker.jobs.show', ['id' => $application->job_id, 'application_id' => $application->id, 'from' => 'applications']) }}" title="View" aria-label="View" class="inline-flex items-center justify-center p-2 rounded-md text-blue-600 hover:bg-blue-50 transition">
+                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12s3.75-6.75 9.75-6.75S21.75 12 21.75 12 18 18.75 12 18.75 2.25 12 2.25 12z" />
+                            <circle cx="12" cy="12" r="2.75" />
+                        </svg>
                     </a>
                     @if(in_array($application->status, ['pending', 'interview']))
                     <form method="POST" action="{{ route('jobseeker.applications.update', $application->id) }}">
@@ -54,7 +57,13 @@
                     <form method="POST" action="{{ route('jobseeker.applications.destroy', $application->id) }}" class="js-delete-form" data-application-id="{{ $application->id }}" onsubmit="return confirm('Delete this application permanently?');">
                         @csrf
                         @method('DELETE')
-                        <button class="px-3 py-1 bg-gray-700 text-white rounded text-sm">Delete</button>
+                        <button title="Delete" aria-label="Delete" class="inline-flex items-center justify-center p-2 rounded-md text-red-600 hover:bg-red-50 transition">
+                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 7.5h15" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 7.5V6a1.5 1.5 0 0 1 1.5-1.5h1.5A1.5 1.5 0 0 1 14.25 6v1.5" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 7.5l.75 11.25a1.5 1.5 0 0 0 1.5 1.5h6a1.5 1.5 0 0 0 1.5-1.5l.75-11.25" />
+                            </svg>
+                        </button>
                     </form>
                 </td>
             </tr>

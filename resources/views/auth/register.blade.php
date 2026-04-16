@@ -30,7 +30,7 @@
                     @csrf
 
                     <div class="role-toggle">
-                        <button type="button" onclick="setRole('jobseeker')" id="btn-jobseeker" class="role-btn active">🏆 Job Seeker</button>
+                        <button type="button" onclick="setRole('jobseeker')" id="btn-jobseeker" class="role-btn active">👤 Applicant</button>
                         <span>or</span>
                         <button type="button" onclick="setRole('employer')" id="btn-employer" class="role-btn">🏢 Employer</button>
                         <input type="hidden" name="role" id="role-input" value="jobseeker">

@@ -20,12 +20,34 @@ $photoPath = str_starts_with($jobseeker->avatar, 'http://') || str_starts_with($
 }
 
 $defaultAvatar = asset('images/default-avatar.png');
+$isFired = ($application->status === 'fired');
+$isHired = ($application->status === 'hired');
 
 @endphp
 <div class="max-w-3xl mx-auto">
-    <div class="bg-white rounded-lg shadow overflow-hidden">
+    @if($isHired)
+    <div class="relative mb-3 min-h-[28vh] flex items-center justify-center overflow-hidden">
+        <div class="absolute h-28 w-28 rounded-full bg-green-200/20 blur-2xl"></div>
+        <div class="relative text-center">
+            <div class="text-3xl font-bold uppercase tracking-widest text-green-600">Hired</div>
+            <p class="mt-2 text-sm text-gray-500">This applicant is currently hired for this position</p>
+        </div>
+    </div>
+    @endif
+
+    @if($isFired)
+    <div class="relative mb-3 min-h-[28vh] flex items-center justify-center overflow-hidden">
+        <div class="absolute h-28 w-28 rounded-full bg-red-200/20 blur-2xl"></div>
+        <div class="relative text-center">
+            <div class="text-3xl font-bold uppercase tracking-widest text-red-600">Fired</div>
+            <p class="mt-2 text-sm text-gray-500">This applicant is no longer active in this position</p>
+        </div>
+    </div>
+    @endif
+
+    <div class="admin-surface rounded-xl overflow-hidden {{ $isFired ? 'opacity-70 grayscale' : '' }}">
         <div class="px-6 py-5 border-b border-gray-100 bg-gradient-to-r from-white to-gray-50">
-            <h2 class="text-2xl font-bold text-gray-900">Jobseeker Profile</h2>
+            <h2 class="text-2xl font-bold text-gray-900">Applicant Profile</h2>
             <p class="text-sm text-gray-500 mt-1">Review personal and professional profile information.</p>
         </div>
 
@@ -35,7 +57,7 @@ $defaultAvatar = asset('images/default-avatar.png');
                     <div class="border border-gray-200 bg-white shadow-sm p-4 space-y-3">
                         <div class="text-xs font-semibold uppercase tracking-[0.12em] text-gray-500">Profile Photo</div>
                         <div class="w-full aspect-square overflow-hidden border border-gray-200 bg-gray-50">
-                            <img src="{{ $photoPath ?? $defaultAvatar }}" alt="Jobseeker Profile Photo" class="w-full h-full object-cover">
+                            <img src="{{ $photoPath ?? $defaultAvatar }}" alt="Applicant Profile Photo" class="w-full h-full object-cover">
                         </div>
                         <div class="text-xs text-gray-500"></div>
                     </div>
@@ -106,16 +128,33 @@ $defaultAvatar = asset('images/default-avatar.png');
             </div>
 
             <div class="mt-6 pt-4 border-t border-gray-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                <a href="{{ route('applications.index') }}" class="inline-flex items-center justify-center px-4 py-2 rounded bg-gray-200 text-gray-800 hover:bg-gray-300">
+                <a href="{{ route('applications.index') }}"
+                    class="inline-flex items-center justify-center px-4 py-2 rounded bg-gray-200 text-gray-800 hover:bg-gray-300">
                     Back
                 </a>
 
+                @if($isFired)
+                {{-- No actions --}}
+                @elseif($isHired)
+                <div class="flex items-center gap-3 sm:justify-end">
+                    <form method="POST" action="{{ route('applications.update', $application->id) }}">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" name="status" value="fired">
+                        <button type="submit"
+                            class="inline-flex items-center justify-center px-4 py-2 rounded bg-gray-800 text-white hover:bg-gray-900">
+                            Fire
+                        </button>
+                    </form>
+                </div>
+                @else
                 <div class="flex flex-wrap items-center gap-3 sm:justify-end">
                     <form method="POST" action="{{ route('applications.update', $application->id) }}">
                         @csrf
                         @method('PUT')
                         <input type="hidden" name="status" value="rejected">
-                        <button type="submit" class="inline-flex items-center justify-center px-4 py-2 rounded bg-red-600 text-white hover:bg-red-700">
+                        <button type="submit"
+                            class="inline-flex items-center justify-center px-4 py-2 rounded bg-red-600 text-white hover:bg-red-700">
                             Reject
                         </button>
                     </form>
@@ -124,7 +163,8 @@ $defaultAvatar = asset('images/default-avatar.png');
                         @csrf
                         @method('PUT')
                         <input type="hidden" name="status" value="hired">
-                        <button type="submit" class="inline-flex items-center justify-center px-4 py-2 rounded bg-green-600 text-white hover:bg-green-700">
+                        <button type="submit"
+                            class="inline-flex items-center justify-center px-4 py-2 rounded bg-green-600 text-white hover:bg-green-700">
                             Hire
                         </button>
                     </form>
@@ -133,11 +173,13 @@ $defaultAvatar = asset('images/default-avatar.png');
                         @csrf
                         @method('PUT')
                         <input type="hidden" name="status" value="fired">
-                        <button type="submit" class="inline-flex items-center justify-center px-4 py-2 rounded bg-gray-800 text-white hover:bg-gray-900">
+                        <button type="submit"
+                            class="inline-flex items-center justify-center px-4 py-2 rounded bg-gray-800 text-white hover:bg-gray-900">
                             Fire
                         </button>
                     </form>
                 </div>
+                @endif
             </div>
         </div>
     </div>

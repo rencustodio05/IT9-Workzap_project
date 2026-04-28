@@ -109,7 +109,11 @@ class InterviewController extends Controller
             'notes' => $validated['notes'] ?? null,
         ]);
 
-        return redirect()->route('employer.interviews.index')
+        $application->update([
+            'status' => 'interview',
+        ]);
+
+        return redirect()->route('employer.applications.decision', $application->id)
             ->with('success', 'Interview scheduled successfully.');
     }
 
@@ -180,7 +184,13 @@ class InterviewController extends Controller
 
         $interview->save();
 
-        return redirect()->route('employer.interviews.index')
+        if ($interview->application) {
+            $interview->application->update([
+                'status' => 'interview',
+            ]);
+        }
+
+        return redirect()->route('employer.applications.decision', $interview->application_id)
             ->with('success', 'Interview rescheduled successfully.');
     }
 }

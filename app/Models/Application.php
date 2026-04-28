@@ -12,6 +12,13 @@ class Application extends Model
         'job_id',
         'user_id',
         'status',
+        'hired_at',
+        'fired_at',
+    ];
+
+    protected $casts = [
+        'hired_at' => 'datetime',
+        'fired_at' => 'datetime',
     ];
 
     public function job(): BelongsTo

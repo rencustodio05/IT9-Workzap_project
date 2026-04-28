@@ -125,6 +125,13 @@ $interview = $application->interview;
                     <span class="inline-flex items-center px-3 py-2 rounded-lg bg-gray-100 text-gray-700 text-sm font-medium">
                         Decision already made: {{ ucfirst($application->status) }}
                     </span>
+
+                    @if($application->status === 'hired')
+                    <form method="POST" action="{{ route('employer.applications.fire', $application->id) }}">
+                        @csrf
+                        <button type="submit" class="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-gray-700 text-white hover:bg-gray-800 transition">Fire</button>
+                    </form>
+                    @endif
                     @endif
                 </div>
 

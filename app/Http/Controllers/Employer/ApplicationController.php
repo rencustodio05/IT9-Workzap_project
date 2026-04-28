@@ -14,7 +14,7 @@ class ApplicationController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Application::with(['jobseeker', 'job'])
+        $query = Application::with(['jobseeker', 'job', 'interview'])
             ->whereHas('job', function ($q) {
                 $q->where('user_id', Auth::id());
             });
@@ -134,5 +134,29 @@ class ApplicationController extends Controller
         ]);
 
         return back()->with('success', 'Applicant rejected successfully.');
+    }
+
+    public function fire(Application $application)
+    {
+        $application->load(['job', 'interview']);
+
+        if ((int) $application->job->user_id !== (int) Auth::id()) {
+            abort(403, 'Unauthorized');
+        }
+
+        if (!$application->interview) {
+            return back()->withErrors(['application_id' => 'Interview must be scheduled before firing.']);
+        }
+
+        if ($application->status !== 'hired') {
+            return back()->withErrors(['application_id' => 'Only hired applicants can be fired.']);
+        }
+
+        $application->update([
+            'status' => 'fired',
+            'fired_at' => now(),
+        ]);
+
+        return back()->with('success', 'Applicant fired successfully.');
     }
 }

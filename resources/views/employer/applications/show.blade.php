@@ -22,7 +22,13 @@ $photoPath = str_starts_with($jobseeker->avatar, 'http://') || str_starts_with($
 $defaultAvatar = asset('images/default-avatar.png');
 $isFired = ($application->status === 'fired');
 $isHired = ($application->status === 'hired');
+$isRejected = ($application->status === 'rejected');
+$isCancelled = ($application->status === 'cancelled');
+$isDecided = in_array($application->status, ['rejected', 'hired', 'fired', 'cancelled'], true);
 $hasInterview = $application->interview !== null;
+$shouldAutoOpenInterviewModal = $hasInterview
+? ($errors->has('interview_date') || $errors->has('interview_time') || $errors->has('notes'))
+: ($errors->has('application_id') || $errors->has('interview_date') || $errors->has('interview_time') || $errors->has('notes'));
 @endphp
 
 <div class="max-w-3xl mx-auto">
@@ -129,39 +135,54 @@ $hasInterview = $application->interview !== null;
             </div>
 
             <div class="mt-6 pt-4 border-t border-gray-100 flex items-center justify-between gap-3"
-                @if(!$hasInterview)
-                x-data="{ openInterviewModal: {{ $errors->any() ? 'true' : 'false' }} }"
-                @keydown.escape.window="openInterviewModal = false"
-                @endif>
-                <a href="{{ route('employer.applications.index') }}"
-                    class="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-gray-200 text-gray-800 hover:bg-gray-300 transition">
-                    Back
-                </a>
+                x-data="{ openInterviewModal: {{ $shouldAutoOpenInterviewModal ? 'true' : 'false' }} }"
+                @keydown.escape.window="openInterviewModal = false">
+                <div class="flex items-center gap-3">
+                    <a href="{{ route('employer.applications.index') }}"
+                        class="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-gray-200 text-gray-800 hover:bg-gray-300 transition">
+                        Back
+                    </a>
 
-                @if(!$hasInterview)
-                <button type="button"
-                    @click="openInterviewModal = true"
-                    @disabled($isHired || $isFired)
-                    class="inline-flex items-center justify-center px-5 py-2.5 rounded-lg text-white shadow-sm transition bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 disabled:cursor-not-allowed disabled:opacity-50">
-                    Schedule Interview
-                </button>
+                    @if($isDecided)
+                    <span class="inline-flex items-center px-3 py-2 rounded-lg bg-gray-100 text-gray-700 text-sm font-medium">
+                        Already decided: {{ ucfirst($application->status) }}
+                    </span>
+                    @endif
+                </div>
 
-                @include('employer.applications.partials.interview-modal', [
-                'application' => $application,
-                'fullName' => $fullName,
-                ])
-                @else
-                <button type="button"
-                    @click="openInterviewModal = true"
-                    class="inline-flex items-center justify-center px-5 py-2.5 rounded-lg text-white shadow-sm transition bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800">
-                    Reschedule Interview
-                </button>
+                <div class="flex items-center gap-3">
+                    @if($application->status === 'hired')
+                    <form method="POST" action="{{ route('employer.applications.fire', $application->id) }}">
+                        @csrf
+                        <button type="submit"
+                            class="inline-flex items-center justify-center px-5 py-2.5 rounded-lg bg-gray-700 text-white shadow-sm transition hover:bg-gray-800">
+                            Fire
+                        </button>
+                    </form>
 
-                @include('employer.applications.partials.interview-modal', [
-                'application' => $application,
-                'fullName' => $fullName,
-                ])
-                @endif
+                    @endif
+
+                    @if(!$isDecided)
+                    @if(!$hasInterview)
+                    <button type="button"
+                        @click="openInterviewModal = true"
+                        class="inline-flex items-center justify-center px-5 py-2.5 rounded-lg text-white shadow-sm transition bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800">
+                        Schedule Interview
+                    </button>
+                    @else
+                    <button type="button"
+                        @click="openInterviewModal = true"
+                        class="inline-flex items-center justify-center px-5 py-2.5 rounded-lg text-white shadow-sm transition bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800">
+                        Reschedule Interview
+                    </button>
+                    @endif
+
+                    @include('employer.applications.partials.interview-modal', [
+                    'application' => $application,
+                    'fullName' => $fullName,
+                    ])
+                    @endif
+                </div>
             </div>
         </div>
     </div>

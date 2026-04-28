@@ -56,7 +56,13 @@
         class="admin-sidebar fixed inset-y-0 left-0 z-50 w-64 text-white flex h-screen flex-col overflow-y-auto border-r border-white/10 px-5 py-6 shadow-xl transform -translate-x-full transition-transform duration-300 ease-out lg:translate-x-0">
         <div class="mb-6">
             <div class="flex items-center justify-between gap-3">
-                <span class="text-2xl font-bold tracking-wide">Workzap <span class="text-yellow-400">Applicant</span></span>
+                <div class="flex items-center gap-3">
+                    <img src="/images/workzap-logo.png" alt="Workzap logo" style="width: 32px; height: 40px;" class="object-contain">
+                    <div class="leading-tight">
+                        <div class="text-2xl font-bold tracking-wide">Workzap</div>
+                        <div class="text-sm text-yellow-400">Applicant</div>
+                    </div>
+                </div>
                 <button
                     id="jobseeker-sidebar-close"
                     type="button"

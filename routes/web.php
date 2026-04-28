@@ -121,6 +121,7 @@ Route::middleware('auth')->prefix('employer')->name('employer.')->group(function
     Route::get('/applications/{application}/decision', [ApplicationController::class, 'decision'])->name('applications.decision');
     Route::post('/applications/{application}/hire', [ApplicationController::class, 'hire'])->name('applications.hire');
     Route::post('/applications/{application}/reject', [ApplicationController::class, 'reject'])->name('applications.reject');
+    Route::post('/applications/{application}/fire', [ApplicationController::class, 'fire'])->name('applications.fire');
 
     // Interviews (index, show) + explicit store route
     Route::resource('interviews', InterviewController::class)->only(['index', 'show']);

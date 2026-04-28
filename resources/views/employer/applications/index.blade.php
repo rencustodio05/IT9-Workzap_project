@@ -1,24 +1,18 @@
 @extends('layouts.employer')
 
-@section('title', 'Applicant Management')
+@section('title', 'Applications')
 @section('subtitle', 'Review and manage all incoming applicants.')
 
 @section('content')
 <div class="max-w-7xl mx-auto w-full min-w-0">
-
-    <!-- HEADER -->
-
-
-    <!-- SEARCH / FILTER -->
-    <form method="GET" action="{{ route('applications.index') }}"
+    <form method="GET" action="{{ route('employer.applications.index') }}"
         class="admin-surface rounded-xl p-4 flex flex-col md:flex-row gap-4 mb-6">
 
-        <!-- SEARCH APPLICANT -->
         <div id="applicant-search-wrapper" class="relative flex-1">
             <input type="text"
                 id="applicant-search"
-                name="search"
-                value="{{ request('search') }}"
+                name="q"
+                value="{{ request('q') }}"
                 placeholder="Search applicant name..."
                 autocomplete="off"
                 class="rounded-lg border px-3 py-2 w-full" />
@@ -28,8 +22,6 @@
                 style="display:none;"></ul>
         </div>
 
-
-        <!-- STATUS -->
         <select name="status" class="rounded-lg border px-3 py-2">
             <option value="">All Status</option>
             <option value="pending" {{ request('status')=='pending'?'selected':'' }}>Pending</option>
@@ -42,15 +34,10 @@
         <button class="admin-button-primary text-white px-4 py-2 rounded">
             Search
         </button>
-
     </form>
-    <!-- FILTER BUTTONS -->
 
-
-    <!-- TABLE -->
     <div class="overflow-x-auto admin-surface rounded-xl w-full max-w-full">
         <table class="admin-table w-full min-w-[860px] table-auto text-sm text-left">
-
             <thead>
                 <tr class="text-gray-500 text-sm border-b">
                     <th class="py-4 px-6">Applicant</th>
@@ -64,19 +51,13 @@
             </thead>
 
             <tbody class="text-gray-900">
-
                 @forelse($applications as $app)
-
                 <tr class="border-t">
-
-                    <!-- APPLICANT -->
                     <td class="py-4 px-6">
                         <div class="flex items-center gap-3">
-
                             <div class="rounded-full bg-gray-200 w-8 h-8 flex items-center justify-center text-gray-600">
                                 U
                             </div>
-
                             <div class="min-w-0">
                                 <div class="font-bold max-w-[180px] truncate">
                                     {{ trim(($app->jobseeker->first_name ?? '') . ' ' . ($app->jobseeker->last_name ?? '')) ?: 'N/A' }}
@@ -85,31 +66,25 @@
                                     {{ $app->jobseeker->email ?? 'N/A' }}
                                 </div>
                             </div>
-
                         </div>
                     </td>
 
-                    <!-- JOB -->
                     <td class="py-4 px-6 max-w-[240px] truncate">
                         <span class="block truncate">{{ $app->job->title ?? 'N/A' }}</span>
                     </td>
 
-                    <!-- DATE -->
                     <td class="py-4 px-6">
                         {{ $app->created_at->format('M d, Y') }}
                     </td>
 
-                    <!-- DATE HIRED -->
                     <td class="py-4 px-6 text-sm text-gray-900">
                         {{ $app->hired_at ? \Carbon\Carbon::parse($app->hired_at)->format('M d, Y') : 'N/A' }}
                     </td>
 
-                    <!-- DATE FIRED -->
                     <td class="py-4 px-6 text-sm text-gray-900">
                         {{ $app->fired_at ? \Carbon\Carbon::parse($app->fired_at)->format('M d, Y') : 'N/A' }}
                     </td>
 
-                    <!-- STATUS -->
                     <td class="py-4 px-6">
                         <span
                             class="status-badge px-3 py-1 rounded-full text-xs
@@ -125,14 +100,14 @@
                         </span>
                     </td>
 
-                    <!-- ACTION -->
                     <td class="py-4 px-6 whitespace-nowrap">
                         <div class="flex gap-2 items-center">
-
-                            <a href="{{ route('applications.show', $app->id) }}"
+                            <a href="{{ route('employer.applications.decision', $app->id) }}"
+                                data-stop-row-click
                                 title="View"
-                                class="inline-flex items-center justify-center p-2 rounded-md text-blue-600 hover:bg-blue-50 transition">
-                                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                                class="inline-flex items-center justify-center p-2 rounded-md text-blue-600 hover:bg-blue-50 transition"
+                                aria-label="View application">
+                                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
                                     <path stroke-linecap="round" stroke-linejoin="round"
                                         d="M2.25 12s3.75-6.75 9.75-6.75S21.75 12 21.75 12 18 18.75 12 18.75 2.25 12 2.25 12z" />
                                     <circle cx="12" cy="12" r="2.75" />
@@ -140,24 +115,17 @@
                             </a>
                         </div>
                     </td>
-
                 </tr>
-
                 @empty
-
                 <tr>
                     <td colspan="7" class="text-center py-6 text-gray-500">
                         No applicants yet
                     </td>
                 </tr>
-
                 @endforelse
-
             </tbody>
-
         </table>
     </div>
-
 </div>
 @endsection
 
@@ -167,6 +135,7 @@
         const searchInput = document.getElementById('applicant-search');
         const suggestionsBox = document.getElementById('applicant-suggestions');
         const searchWrapper = document.getElementById('applicant-search-wrapper');
+        const stopLinks = document.querySelectorAll('a[data-stop-row-click]');
 
         if (!searchInput || !suggestionsBox || !searchWrapper) {
             return;
@@ -181,6 +150,12 @@
             if (!searchWrapper.contains(event.target)) {
                 hideSuggestions();
             }
+        });
+
+        stopLinks.forEach((link) => {
+            link.addEventListener('click', (event) => {
+                event.stopPropagation();
+            });
         });
     });
 </script>

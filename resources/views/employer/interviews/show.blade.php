@@ -4,6 +4,10 @@
 @section('subtitle', 'Update interview schedule and status.')
 
 @section('content')
+@php
+$application = $interview->application;
+$hasInterview = $application !== null;
+@endphp
 <div class="max-w-3xl mx-auto">
     <div class="admin-surface rounded-xl p-6">
         <div class="mb-5">
@@ -18,14 +22,14 @@
         @endif
 
         <div class="mb-5 p-4 rounded border bg-gray-50">
-            <div class="text-sm font-semibold text-gray-900">{{ optional(optional($interview->application)->job)->title ?? 'N/A' }}</div>
+            <div class="text-sm font-semibold text-gray-900">{{ optional(optional($application)->job)->title ?? 'N/A' }}</div>
             <div class="text-sm text-gray-700 mt-1">
-                {{ trim((optional(optional($interview->application)->jobseeker)->first_name ?? '') . ' ' . (optional(optional($interview->application)->jobseeker)->last_name ?? '')) ?: 'N/A' }}
+                {{ trim((optional(optional($application)->jobseeker)->first_name ?? '') . ' ' . (optional(optional($application)->jobseeker)->last_name ?? '')) ?: 'N/A' }}
             </div>
-            <div class="text-xs text-gray-500">{{ optional(optional($interview->application)->jobseeker)->email ?? 'N/A' }}</div>
+            <div class="text-xs text-gray-500">{{ optional(optional($application)->jobseeker)->email ?? 'N/A' }}</div>
         </div>
 
-        <form method="POST" action="{{ route('interviews.update', $interview->id) }}" class="space-y-4">
+        <form method="POST" action="{{ route('employer.interviews.update', $interview->id) }}" id="rescheduleInterviewForm" class="space-y-4">
             @csrf
             @method('PUT')
 
@@ -64,10 +68,15 @@
             </div>
 
             <div class="pt-3 border-t flex items-center justify-between gap-3">
-                <a href="{{ route('interviews.index') }}" class="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300">Back</a>
-                <button type="submit" class="px-4 py-2 bg-amber-500 text-white rounded hover:bg-amber-600">Save Reschedule</button>
+                <div class="flex items-center gap-2">
+                    <a href="{{ route('employer.interviews.index') }}" class="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300">Back</a>
+                    <a href="{{ route('employer.applications.show', $application->id) }}" class="px-4 py-2 bg-blue-50 text-blue-700 rounded hover:bg-blue-100">View Profile</a>
+                </div>
+
+                <button type="submit" form="rescheduleInterviewForm" class="px-4 py-2 bg-amber-500 text-white rounded hover:bg-amber-600">Save Reschedule</button>
             </div>
         </form>
+
     </div>
 </div>
 @endsection

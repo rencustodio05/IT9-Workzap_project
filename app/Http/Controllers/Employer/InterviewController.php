@@ -79,7 +79,9 @@ class InterviewController extends Controller
                 ->withErrors(['application_id' => 'Only active applications can be scheduled for interview.']);
         }
 
-        $alreadyScheduled = Interview::where('application_id', $application->id)->exists();
+        $alreadyScheduled = Interview::where('application_id', $application->id)
+            ->whereIn('status', ['scheduled', 'completed'])
+            ->exists();
 
         if ($alreadyScheduled) {
             return back()
@@ -107,7 +109,8 @@ class InterviewController extends Controller
             'notes' => $validated['notes'] ?? null,
         ]);
 
-        return redirect()->route('interviews.index')->with('success', 'Interview scheduled successfully.');
+        return redirect()->route('employer.interviews.index')
+            ->with('success', 'Interview scheduled successfully.');
     }
 
     public function show(Interview $interview)
@@ -177,6 +180,7 @@ class InterviewController extends Controller
 
         $interview->save();
 
-        return redirect()->route('interviews.index')->with('success', 'Interview rescheduled successfully.');
+        return redirect()->route('employer.interviews.index')
+            ->with('success', 'Interview rescheduled successfully.');
     }
 }

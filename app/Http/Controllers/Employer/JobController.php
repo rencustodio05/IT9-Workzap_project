@@ -41,12 +41,15 @@ class JobController extends Controller
         $allCount = (clone $base)->count();
         $activeCount = (clone $base)->where('status', 'active')->count();
         $closedCount = (clone $base)->where('status', 'inactive')->count();
+        $canPostJobs = app(\App\Services\EmployerSubscriptionService::class)
+            ->hasActiveSubscription(Auth::id());
 
         return view('employer.jobs.index', compact(
             'jobs',
             'allCount',
             'activeCount',
-            'closedCount'
+            'closedCount',
+            'canPostJobs'
         ));
     }
 
@@ -57,6 +60,11 @@ class JobController extends Controller
 
     public function store(Request $request)
     {
+        $employerId = Auth::id();
+
+        if (!app(\App\Services\EmployerSubscriptionService::class)->hasActiveSubscription($employerId)) {
+            return back()->with('error', 'You need an active subscription to post jobs.');
+        }
         $request->validate([
             'title' => 'required',
             'description' => 'required',
@@ -80,7 +88,7 @@ class JobController extends Controller
             'type' => $request->type ? implode(',', $request->type) : null,
         ]);
 
-        return redirect()->route('jobs.index')
+        return redirect()->route('employer.jobs.index')
             ->with('success', 'Job posted successfully!');
     }
 
@@ -132,7 +140,7 @@ class JobController extends Controller
             'type' => $request->type ? implode(',', $request->type) : null,
         ]);
 
-        return redirect()->route('jobs.index')
+        return redirect()->route('employer.jobs.index')
             ->with('success', 'Job updated successfully!');
     }
 
@@ -144,7 +152,7 @@ class JobController extends Controller
 
         $job->delete();
 
-        return redirect()->route('jobs.index')
+        return redirect()->route('employer.jobs.index')
             ->with('success', 'Job deleted successfully!');
     }
 }

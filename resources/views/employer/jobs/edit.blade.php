@@ -8,7 +8,7 @@
 
 
 
-    <form action="{{ route('jobs.update', $job) }}"
+    <form action="{{ route('employer.jobs.update', $job) }}"
         method="POST"
         class="bg-white p-6 rounded-lg shadow space-y-5">
 
@@ -113,7 +113,7 @@
 
         {{-- BUTTONS --}}
         <div class="flex justify-end gap-3 pt-2">
-            <a href="{{ route('jobs.index') }}"
+            <a href="{{ route('employer.jobs.index') }}"
                 class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition">
                 Cancel
             </a>

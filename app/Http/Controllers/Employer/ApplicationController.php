@@ -5,88 +5,134 @@ namespace App\Http\Controllers\Employer;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Schema;
 use App\Models\Application;
 
 class ApplicationController extends Controller
 {
+    /**
+     * Display applications list with filters
+     */
     public function index(Request $request)
     {
-        $query = Application::with(['job', 'jobseeker'])
+        $query = Application::with(['jobseeker', 'job'])
             ->whereHas('job', function ($q) {
                 $q->where('user_id', Auth::id());
             });
 
-        // 🔍 SEARCH APPLICANT NAME
-        if ($request->filled('search')) {
-            $search = $request->input('search');
+        // Search
+        if ($request->filled('q')) {
+            $search = $request->input('q');
             $query->whereHas('jobseeker', function ($q) use ($search) {
                 $q->where('first_name', 'like', '%' . $search . '%')
                     ->orWhere('last_name', 'like', '%' . $search . '%')
-                    ->orWhereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", ['%' . $search . '%']);
+                    ->orWhere('email', 'like', '%' . $search . '%');
             });
         }
 
-        // 🧑 JOB POSITION FILTER
-        if ($request->filled('job')) {
-            $query->whereHas('job', function ($q) use ($request) {
-                $q->where('title', 'like', '%' . $request->job . '%');
-            });
-        }
-
-        // 📌 STATUS FILTER
+        // Status filter
         if ($request->filled('status')) {
             $query->where('status', $request->status);
         }
 
-        $applications = $query->latest()->get();
+        $applications = $query->latest()->paginate(15)->withQueryString();
 
         return view('employer.applications.index', compact('applications'));
     }
 
-    public function update(Request $request, $id)
+    /**
+     * Show full application profile page
+     */
+    public function show(Application $application)
     {
-        $request->validate([
-            'status' => 'required|in:pending,interview,hired,rejected,fired',
-        ]);
+        // Ensure employer owns the job
+        $application->load(['job', 'jobseeker', 'interview']);
 
-        $application = Application::findOrFail($id);
-        $application->status = $request->status;
-
-        if ($request->status === 'hired' && Schema::hasColumn('applications', 'hired_at')) {
-            $application->hired_at = now();
+        if ($application->job->user_id !== Auth::id()) {
+            abort(403);
         }
-
-        if ($request->status === 'fired' && Schema::hasColumn('applications', 'fired_at')) {
-            $application->fired_at = now();
-        }
-
-        $application->save();
-
-        if ($request->expectsJson()) {
-            return response()->json([
-                'success' => true,
-                'status' => $application->status,
-            ]);
-        }
-
-        if ($request->status === 'fired') {
-            return redirect()->route('applications.index')
-                ->with('success', 'Employee has been fired successfully.');
-        }
-
-        return redirect()->route('applications.index')
-            ->with('success', 'Application updated successfully.');
-    }
-
-    public function show($id)
-    {
-        $application = Application::with(['job', 'jobseeker'])
-            ->whereHas('job', function ($q) {
-                $q->where('user_id', Auth::id());
-            })
-            ->findOrFail($id);
 
         return view('employer.applications.show', compact('application'));
+    }
+
+    public function decision(Application $application)
+    {
+        $application->load(['job', 'jobseeker', 'interview']);
+
+        if ($application->job->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        if (!$application->interview) {
+            return redirect()->route('employer.applications.show', $application->id)
+                ->withErrors(['application_id' => 'Schedule an interview before making a decision.']);
+        }
+
+        return view('employer.applications.decision', compact('application'));
+    }
+
+    /**
+     * Update application status
+     */
+    public function update(Request $request, Application $application)
+    {
+        $request->validate([
+            'status' => 'required|in:pending,interview,hired,rejected,fired'
+        ]);
+
+        if ($application->job->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $application->update([
+            'status' => $request->status,
+            'hired_at' => $request->status === 'hired' ? now() : $application->hired_at,
+            'fired_at' => $request->status === 'fired' ? now() : $application->fired_at,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'status' => $application->status,
+            'message' => 'Status updated!'
+        ]);
+    }
+
+    public function hire(Application $application)
+    {
+        $application->load(['job', 'interview']);
+
+        if ((int) $application->job->user_id !== (int) Auth::id()) {
+            abort(403, 'Unauthorized');
+        }
+
+        if (!$application->interview) {
+            return back()->withErrors(['application_id' => 'Interview must be scheduled before hiring.']);
+        }
+
+        $application->update([
+            'status' => 'hired',
+            'hired_at' => now(),
+        ]);
+
+        return back()->with('success', 'Applicant hired successfully.');
+    }
+
+    public function reject(Application $application)
+    {
+        $application->load(['job', 'interview']);
+
+        if ((int) $application->job->user_id !== (int) Auth::id()) {
+            abort(403, 'Unauthorized');
+        }
+
+        if (!$application->interview) {
+            return back()->withErrors(['application_id' => 'Interview must be scheduled before rejecting.']);
+        }
+
+        $application->update([
+            'status' => 'rejected',
+            'fired_at' => now(),
+        ]);
+
+        return back()->with('success', 'Applicant rejected successfully.');
     }
 }

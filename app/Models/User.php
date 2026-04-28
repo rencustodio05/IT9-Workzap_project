@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\Job;
+use App\Models\EmployerSubscription;
+use App\Models\SubscriptionPayment;
 
 class User extends Authenticatable
 {
@@ -31,6 +33,7 @@ class User extends Authenticatable
         'password',
         'role',
         'is_active',
+        'subscription_active',
     ];
 
     protected $hidden = [
@@ -45,6 +48,7 @@ class User extends Authenticatable
             'password' => 'hashed',
             'date_of_birth' => 'date',
             'is_active' => 'boolean',
+            'subscription_active' => 'boolean',
         ];
     }
 
@@ -71,6 +75,25 @@ class User extends Authenticatable
     public function savedJobs(): BelongsToMany
     {
         return $this->belongsToMany(Job::class, 'saved_jobs')->withTimestamps();
+    }
+
+    public function employerSubscriptions(): HasMany
+    {
+        return $this->hasMany(EmployerSubscription::class, 'employer_id');
+    }
+
+    public function subscriptionPayments(): HasMany
+    {
+        return $this->hasMany(SubscriptionPayment::class, 'employer_id');
+    }
+
+    public function hasActiveEmployerSubscription(): bool
+    {
+        return $this->employerSubscriptions()
+            ->where('status', EmployerSubscription::STATUS_ACTIVE)
+            ->whereDate('start_date', '<=', now()->toDateString())
+            ->whereDate('end_date', '>=', now()->toDateString())
+            ->exists();
     }
 
     public function getNameAttribute(): string

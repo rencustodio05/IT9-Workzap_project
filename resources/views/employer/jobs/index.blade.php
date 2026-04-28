@@ -6,14 +6,14 @@
 @section('content')
 <div class="max-w-6xl mx-auto space-y-5">
     <div class="flex justify-end">
-        <a href="{{ route('jobs.create') }}"
+        <a href="{{ $canPostJobs ? route('employer.jobs.create') : route('employer.subscription.index') }}"
             class="inline-flex items-center px-4 py-2 admin-button-primary text-white rounded-lg hover:brightness-95 text-sm font-semibold transition">
-            + Post a Job
+            {{ $canPostJobs ? '+ Post a Job' : 'Subscribe to Post a Job' }}
         </a>
     </div>
 
     <div class="admin-surface rounded-xl p-4 sm:p-5">
-        <form method="GET" action="{{ route('jobs.index') }}" class="grid grid-cols-1 md:grid-cols-12 gap-3">
+        <form method="GET" action="{{ route('employer.jobs.index') }}" class="grid grid-cols-1 md:grid-cols-12 gap-3">
             <div class="md:col-span-5">
                 <label class="block text-xs mb-1 text-slate-500">Search</label>
                 <input
@@ -43,7 +43,7 @@
             </div>
 
             <div class="md:col-span-3 flex items-end justify-end gap-2">
-                <a href="{{ route('jobs.index') }}" class="inline-flex items-center justify-center px-4 py-2 rounded-lg border border-slate-300 text-slate-700 text-sm font-medium hover:bg-slate-50 transition">
+                <a href="{{ route('employer.jobs.index') }}" class="inline-flex items-center justify-center px-4 py-2 rounded-lg border border-slate-300 text-slate-700 text-sm font-medium hover:bg-slate-50 transition">
                     Reset
                 </a>
                 <button type="submit" class="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-slate-900 text-white text-sm font-medium hover:bg-slate-800 transition">
@@ -54,17 +54,17 @@
     </div>
 
     <div class="flex flex-wrap items-center gap-2 border-b border-slate-200 pb-3">
-        <a href="{{ route('jobs.index') }}"
+        <a href="{{ route('employer.jobs.index') }}"
             class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium transition {{ !request('status') ? 'bg-blue-100 text-blue-700' : 'text-slate-600 hover:bg-slate-100' }}">
             All ({{ $jobs->total() }})
         </a>
 
-        <a href="{{ route('jobs.index', ['status' => 'active']) }}"
+        <a href="{{ route('employer.jobs.index', ['status' => 'active']) }}"
             class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium transition {{ request('status') == 'active' ? 'bg-emerald-100 text-emerald-700' : 'text-slate-600 hover:bg-slate-100' }}">
             Active
         </a>
 
-        <a href="{{ route('jobs.index', ['status' => 'closed']) }}"
+        <a href="{{ route('employer.jobs.index', ['status' => 'closed']) }}"
             class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium transition {{ request('status') == 'closed' || request('status') == 'inactive' ? 'bg-slate-200 text-slate-700' : 'text-slate-600 hover:bg-slate-100' }}">
             Closed
         </a>
@@ -87,20 +87,20 @@
                 </div>
 
                 <div class="flex flex-wrap items-center gap-2">
-                    <a href="{{ route('jobs.show', $job->id) }}" title="View" aria-label="View" class="inline-flex items-center justify-center p-2 rounded-md text-blue-600 hover:bg-blue-50 transition">
+                    <a href="{{ route('employer.jobs.show', $job->id) }}" title="View" aria-label="View" class="inline-flex items-center justify-center p-2 rounded-md text-blue-600 hover:bg-blue-50 transition">
                         <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12s3.75-6.75 9.75-6.75S21.75 12 21.75 12 18 18.75 12 18.75 2.25 12 2.25 12z" />
                             <circle cx="12" cy="12" r="2.75" />
                         </svg>
                     </a>
 
-                    <a href="{{ route('jobs.edit', $job->id) }}" title="Edit" aria-label="Edit" class="inline-flex items-center justify-center p-2 rounded-md text-amber-600 hover:bg-amber-50 transition">
+                    <a href="{{ route('employer.jobs.edit', $job->id) }}" title="Edit" aria-label="Edit" class="inline-flex items-center justify-center p-2 rounded-md text-amber-600 hover:bg-amber-50 transition">
                         <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 3.487a2.1 2.1 0 1 1 2.971 2.971L8.25 18.042l-4.5 1.125 1.125-4.5L16.862 3.487z" />
                         </svg>
                     </a>
 
-                    <form action="{{ route('jobs.destroy', $job->id) }}" method="POST" class="inline-flex">
+                    <form action="{{ route('employer.jobs.destroy', $job->id) }}" method="POST" class="inline-flex">
                         @csrf
                         @method('DELETE')
 

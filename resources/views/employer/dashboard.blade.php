@@ -7,7 +7,7 @@
 <div class="max-w-6xl mx-auto space-y-6">
     <!-- Header Section -->
     <div class="flex justify-end">
-        <a href="{{ route('jobs.create') }}"
+        <a href="{{ route('employer.jobs.create') }}"
             class="inline-flex items-center px-4 py-2 admin-button-primary text-white rounded-lg hover:brightness-95 text-sm font-semibold transition">
             + Post a Job
         </a>
@@ -55,7 +55,7 @@
         <div class="admin-surface rounded-xl p-4 sm:p-5 flex flex-col h-full">
             <div class="flex justify-between items-center mb-3">
                 <h2 class="text-base font-semibold text-gray-900">Recent Applicants</h2>
-                <a href="{{ route('applications.index') }}" class="text-sm text-blue-600 hover:underline font-medium">View all</a>
+                <a href="{{ route('employer.applications.index') }}" class="text-sm text-blue-600 hover:underline font-medium">View all</a>
             </div>
             <div class="space-y-3">
                 @forelse(($recentApplicants ?? collect()) as $application)
@@ -76,7 +76,7 @@
         <div class="admin-surface rounded-xl p-4 sm:p-5 flex flex-col h-full">
             <div class="flex justify-between items-center mb-3">
                 <h2 class="text-base font-semibold text-gray-900">My Job Postings</h2>
-                <a href="{{ route('jobs.index') }}" class="text-sm text-blue-600 hover:underline font-medium">View all</a>
+                <a href="{{ route('employer.jobs.index') }}" class="text-sm text-blue-600 hover:underline font-medium">View all</a>
             </div>
             <div class="space-y-3">
                 @forelse(($latestJobs ?? collect()) as $job)

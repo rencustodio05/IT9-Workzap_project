@@ -9,12 +9,15 @@ use App\Http\Controllers\Admin\AdminJobController;
 use App\Http\Controllers\Admin\AdminEmployerController;
 use App\Http\Controllers\Admin\AdminArchiveController;
 use App\Http\Controllers\Admin\AdminSettingsController;
+use App\Http\Controllers\Admin\AdminSubscriptionController;
 use App\Http\Controllers\Employer\JobController as EmployerJobController;
 use App\Http\Controllers\Jobseeker\JobController as JobseekerJobController;
 use App\Http\Controllers\Employer\ApplicationController;
 use App\Http\Controllers\Employer\InterviewController;
 use App\Http\Controllers\Employer\DashboardController as EmployerDashboardController;
 use App\Http\Controllers\Employer\ProfileController as EmployerProfileController;
+use App\Http\Controllers\Employer\SubscriptionController as EmployerSubscriptionController;
+use App\Http\Controllers\SubscriptionPaymentController;
 use App\Http\Controllers\Jobseeker\ApplicationController as JobseekerApplicationController;
 use App\Http\Controllers\Jobseeker\DashboardController as JobseekerDashboardController;
 use App\Http\Controllers\Jobseeker\ProfileController as JobseekerProfileController;
@@ -61,6 +64,11 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/employers/{employer}', [AdminEmployerController::class, 'show'])->name('employers.show');
     Route::patch('/employers/{employer}/toggle-status', [AdminEmployerController::class, 'toggleStatus'])->name('employers.toggle-status');
 
+    Route::get('/subscriptions', [AdminSubscriptionController::class, 'index'])->name('subscriptions.index');
+
+    Route::get('/subscription-payments', [SubscriptionPaymentController::class, 'index'])->name('subscription-payments.index');
+    Route::patch('/subscription-payments/{subscriptionPayment}/status', [SubscriptionPaymentController::class, 'updateStatus'])->name('subscription-payments.update-status');
+
     Route::get('/archive', [AdminArchiveController::class, 'index'])->name('archive.index');
     Route::post('/archive/users/{id}/restore', [AdminArchiveController::class, 'restoreUser'])->name('archive.users.restore');
     Route::post('/archive/jobs/{id}/restore', [AdminArchiveController::class, 'restoreJob'])->name('archive.jobs.restore');
@@ -90,29 +98,39 @@ Route::middleware('auth')->group(function () {
 | EMPLOYER ROUTES
 |--------------------------------------------------------------------------
 */
-Route::middleware('auth')->prefix('employer')->group(function () {
+Route::middleware('auth')->prefix('employer')->name('employer.')->group(function () {
 
-    Route::get('/dashboard', [EmployerDashboardController::class, 'index'])->name('employer.dashboard');
+    Route::get('/dashboard', [EmployerDashboardController::class, 'index'])->name('dashboard');
 
-    Route::resource('jobs', EmployerJobController::class);
+    Route::get('/subscription', [EmployerSubscriptionController::class, 'index'])->name('subscription.index');
+    Route::post('/subscription/request', [EmployerSubscriptionController::class, 'store'])->name('subscription.store');
+    Route::post('/subscription-payments', [SubscriptionPaymentController::class, 'store'])->name('subscription-payments.store');
 
-    Route::get('/applications', [ApplicationController::class, 'index'])
-        ->name('applications.index');
+    Route::get('/jobs/create', [EmployerJobController::class, 'create'])
+        ->middleware('employer.subscription.active')
+        ->name('jobs.create');
 
-    Route::get('/applications/{id}', [ApplicationController::class, 'show'])
-        ->name('applications.show');
+    Route::post('/jobs', [EmployerJobController::class, 'store'])
+        ->middleware('employer.subscription.active')
+        ->name('jobs.store');
 
-    Route::match(['put', 'patch'], '/applications/{id}', [ApplicationController::class, 'update'])
-        ->name('applications.update');
+    Route::resource('jobs', EmployerJobController::class)->except(['create', 'store']);
 
-    Route::get('/interviews', [InterviewController::class, 'index'])->name('interviews.index');
-    Route::post('/interviews', [InterviewController::class, 'store'])->name('interviews.store');
-    Route::get('/interviews/{interview}', [InterviewController::class, 'show'])->name('interviews.show');
+    // Applications resource (index, show, update)
+    Route::resource('applications', ApplicationController::class)->only(['index', 'show', 'update']);
+    Route::get('/applications/{application}/decision', [ApplicationController::class, 'decision'])->name('applications.decision');
+    Route::post('/applications/{application}/hire', [ApplicationController::class, 'hire'])->name('applications.hire');
+    Route::post('/applications/{application}/reject', [ApplicationController::class, 'reject'])->name('applications.reject');
+
+    // Interviews (index, show) + explicit store route
+    Route::resource('interviews', InterviewController::class)->only(['index', 'show']);
+    Route::post('interviews', [InterviewController::class, 'store'])->name('interviews.store');
+
+    Route::get('/profile', [EmployerProfileController::class, 'edit'])->name('profile');
+    Route::put('/profile', [EmployerProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile/password', [EmployerProfileController::class, 'updatePassword'])->name('profile.password');
+
     Route::put('/interviews/{interview}', [InterviewController::class, 'update'])->name('interviews.update');
-
-    Route::get('/profile', [EmployerProfileController::class, 'edit'])->name('employer.profile');
-    Route::put('/profile', [EmployerProfileController::class, 'update'])->name('employer.profile.update');
-    Route::put('/profile/password', [EmployerProfileController::class, 'updatePassword'])->name('employer.profile.password');
 });
 
 /*

@@ -13,7 +13,7 @@
     </div>
 
     {{-- FORM --}}
-    <form action="{{ route('jobs.store') }}" method="POST" class="space-y-5">
+    <form action="{{ route('employer.jobs.store') }}" method="POST" class="space-y-5">
         @csrf
 
         {{-- TITLE --}}
@@ -88,7 +88,7 @@
         <div class="flex justify-between items-center pt-4">
 
             {{-- CANCEL --}}
-            <a href="{{ route('jobs.index') }}"
+            <a href="{{ route('employer.jobs.index') }}"
                 class="px-5 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 transition">
                 Cancel
             </a>

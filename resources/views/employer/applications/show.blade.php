@@ -22,8 +22,9 @@ $photoPath = str_starts_with($jobseeker->avatar, 'http://') || str_starts_with($
 $defaultAvatar = asset('images/default-avatar.png');
 $isFired = ($application->status === 'fired');
 $isHired = ($application->status === 'hired');
-
+$hasInterview = $application->interview !== null;
 @endphp
+
 <div class="max-w-3xl mx-auto">
     @if($isHired)
     <div class="relative mb-3 min-h-[28vh] flex items-center justify-center overflow-hidden">
@@ -127,58 +128,39 @@ $isHired = ($application->status === 'hired');
                 </section>
             </div>
 
-            <div class="mt-6 pt-4 border-t border-gray-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                <a href="{{ route('applications.index') }}"
-                    class="inline-flex items-center justify-center px-4 py-2 rounded bg-gray-200 text-gray-800 hover:bg-gray-300">
+            <div class="mt-6 pt-4 border-t border-gray-100 flex items-center justify-between gap-3"
+                @if(!$hasInterview)
+                x-data="{ openInterviewModal: {{ $errors->any() ? 'true' : 'false' }} }"
+                @keydown.escape.window="openInterviewModal = false"
+                @endif>
+                <a href="{{ route('employer.applications.index') }}"
+                    class="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-gray-200 text-gray-800 hover:bg-gray-300 transition">
                     Back
                 </a>
 
-                @if($isFired)
-                {{-- No actions --}}
-                @elseif($isHired)
-                <div class="flex items-center gap-3 sm:justify-end">
-                    <form method="POST" action="{{ route('applications.update', $application->id) }}">
-                        @csrf
-                        @method('PUT')
-                        <input type="hidden" name="status" value="fired">
-                        <button type="submit"
-                            class="inline-flex items-center justify-center px-4 py-2 rounded bg-gray-800 text-white hover:bg-gray-900">
-                            Fire
-                        </button>
-                    </form>
-                </div>
+                @if(!$hasInterview)
+                <button type="button"
+                    @click="openInterviewModal = true"
+                    @disabled($isHired || $isFired)
+                    class="inline-flex items-center justify-center px-5 py-2.5 rounded-lg text-white shadow-sm transition bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 disabled:cursor-not-allowed disabled:opacity-50">
+                    Schedule Interview
+                </button>
+
+                @include('employer.applications.partials.interview-modal', [
+                'application' => $application,
+                'fullName' => $fullName,
+                ])
                 @else
-                <div class="flex flex-wrap items-center gap-3 sm:justify-end">
-                    <form method="POST" action="{{ route('applications.update', $application->id) }}">
-                        @csrf
-                        @method('PUT')
-                        <input type="hidden" name="status" value="rejected">
-                        <button type="submit"
-                            class="inline-flex items-center justify-center px-4 py-2 rounded bg-red-600 text-white hover:bg-red-700">
-                            Reject
-                        </button>
-                    </form>
+                <button type="button"
+                    @click="openInterviewModal = true"
+                    class="inline-flex items-center justify-center px-5 py-2.5 rounded-lg text-white shadow-sm transition bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800">
+                    Reschedule Interview
+                </button>
 
-                    <form method="POST" action="{{ route('applications.update', $application->id) }}">
-                        @csrf
-                        @method('PUT')
-                        <input type="hidden" name="status" value="hired">
-                        <button type="submit"
-                            class="inline-flex items-center justify-center px-4 py-2 rounded bg-green-600 text-white hover:bg-green-700">
-                            Hire
-                        </button>
-                    </form>
-
-                    <form method="POST" action="{{ route('applications.update', $application->id) }}">
-                        @csrf
-                        @method('PUT')
-                        <input type="hidden" name="status" value="fired">
-                        <button type="submit"
-                            class="inline-flex items-center justify-center px-4 py-2 rounded bg-gray-800 text-white hover:bg-gray-900">
-                            Fire
-                        </button>
-                    </form>
-                </div>
+                @include('employer.applications.partials.interview-modal', [
+                'application' => $application,
+                'fullName' => $fullName,
+                ])
                 @endif
             </div>
         </div>

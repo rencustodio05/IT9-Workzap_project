@@ -13,6 +13,7 @@ $photoPath = str_contains($user->profile_photo_path, '/')
 : asset('storage/profile/' . $user->profile_photo_path);
 }
 $defaultAvatar = asset('images/default-avatar.png');
+$applyJobId = request()->query('job');
 @endphp
 
 <div class="w-full">
@@ -123,6 +124,17 @@ $defaultAvatar = asset('images/default-avatar.png');
                     </section>
                 </div>
             </div>
+
+            @if($applyJobId)
+            <div class="p-6 md:p-8">
+                <form action="{{ route('jobseeker.apply', $applyJobId) }}" method="POST">
+                    @csrf
+                    <button type="submit" class="px-4 py-2 rounded admin-button-primary text-white hover:brightness-95">
+                        Apply for this Job
+                    </button>
+                </form>
+            </div>
+            @endif
         </div>
 
         @else
@@ -160,8 +172,10 @@ $defaultAvatar = asset('images/default-avatar.png');
 
                             <div>
                                 <label class="block text-[11px] font-semibold uppercase tracking-[0.12em] text-gray-500 mb-2">Contact Number</label>
-                                <input type="text" name="contact_number"
+                                <input type="tel" name="contact_number"
                                     value="{{ old('contact_number', $user->contact_number) }}"
+                                    maxlength="11"
+                                    pattern="[0-9]{11}"
                                     class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400"
                                     required>
                             </div>

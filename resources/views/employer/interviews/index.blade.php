@@ -38,17 +38,10 @@
 
                         <div class="flex justify-end gap-2 flex-wrap">
                             @if(optional($interview->application)->id)
-                            <a href="{{ route('employer.applications.show', $interview->application->id) }}" title="View" aria-label="View" class="inline-flex items-center justify-center p-2 rounded-md text-blue-600 hover:bg-blue-50 transition">
-                                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12s3.75-6.75 9.75-6.75S21.75 12 21.75 12 18 18.75 12 18.75 2.25 12 2.25 12z" />
-                                    <circle cx="12" cy="12" r="2.75" />
-                                </svg>
+                            <a href="{{ route('employer.applications.show', $interview->application->id) }}" title="View" aria-label="View" class="inline-flex items-center justify-center px-3 py-1.5 rounded bg-blue-50 text-blue-700 text-xs font-medium hover:bg-blue-100 transition">
+                                View
                             </a>
                             @endif
-
-                            <a href="{{ route('employer.interviews.show', $interview->id) }}" class="px-3 py-1.5 rounded bg-amber-500 text-white text-xs font-medium hover:bg-amber-600">
-                                Reschedule
-                            </a>
                         </div>
                     </div>
                 </div>
@@ -80,17 +73,10 @@
 
                         <div class="flex justify-end gap-2 flex-wrap">
                             @if(optional($interview->application)->id)
-                            <a href="{{ route('employer.applications.show', $interview->application->id) }}" title="View" aria-label="View" class="inline-flex items-center justify-center p-2 rounded-md text-blue-600 hover:bg-blue-50 transition">
-                                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12s3.75-6.75 9.75-6.75S21.75 12 21.75 12 18 18.75 12 18.75 2.25 12 2.25 12z" />
-                                    <circle cx="12" cy="12" r="2.75" />
-                                </svg>
+                            <a href="{{ route('employer.applications.show', $interview->application->id) }}" title="View" aria-label="View" class="inline-flex items-center justify-center px-3 py-1.5 rounded bg-blue-50 text-blue-700 text-xs font-medium hover:bg-blue-100 transition">
+                                View
                             </a>
                             @endif
-
-                            <a href="{{ route('employer.interviews.show', $interview->id) }}" class="px-3 py-1.5 rounded bg-amber-500 text-white text-xs font-medium hover:bg-amber-600">
-                                Reschedule
-                            </a>
                         </div>
                     </div>
                 </div>

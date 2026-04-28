@@ -37,7 +37,7 @@
     'active' => 'jobseeker.profile',
     ],
     [
-    'label' => 'Settings',
+    'label' => 'Account ',
     'route' => 'jobseeker.account.security',
     'active' => 'jobseeker.account.security',
     ],

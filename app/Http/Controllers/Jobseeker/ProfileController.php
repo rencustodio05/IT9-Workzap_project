@@ -74,7 +74,7 @@ class ProfileController extends Controller
         $validated = $request->validate([
             'full_name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email,' . $user->id],
-            'contact_number' => ['required', 'string', 'max:30'],
+            'contact_number' => ['required', 'digits:11'],
             'address' => ['required', 'string', 'max:255'],
             'date_of_birth' => ['required', 'date'],
             'desired_job_title' => ['required', 'string', 'max:255'],

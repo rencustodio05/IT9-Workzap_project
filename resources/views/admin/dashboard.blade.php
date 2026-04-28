@@ -7,32 +7,42 @@
 <div class="space-y-6">
     <section class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
         <article class="admin-surface admin-stat-card rounded-xl p-5 admin-fade-up" id="employers">
-            <div class="text-sm" style="color: var(--admin-muted);">Total Users</div>
-            <div class="mt-2 text-3xl font-black tracking-tight">{{ number_format($stats['total_users']) }}</div>
+            <div class="flex items-start justify-between gap-4">
+                <div class="text-sm" style="color: var(--admin-muted);">Total Users</div>
+                <div class="text-3xl font-black tracking-tight text-right">{{ number_format($stats['total_users']) }}</div>
+            </div>
             <div class="mt-2 text-xs" style="color: var(--admin-muted);">All roles combined</div>
         </article>
 
         <article class="admin-surface admin-stat-card rounded-xl p-5 admin-fade-up">
-            <div class="text-sm" style="color: var(--admin-muted);">Total Employers</div>
-            <div class="mt-2 text-3xl font-black tracking-tight">{{ number_format($stats['total_employers']) }}</div>
+            <div class="flex items-start justify-between gap-4">
+                <div class="text-sm" style="color: var(--admin-muted);">Total Employers</div>
+                <div class="text-3xl font-black tracking-tight text-right">{{ number_format($stats['total_employers']) }}</div>
+            </div>
             <div class="mt-2 text-xs" style="color: var(--admin-muted);">Users with employer role</div>
         </article>
 
         <article class="admin-surface admin-stat-card rounded-xl p-5 admin-fade-up">
-            <div class="text-sm" style="color: var(--admin-muted);">Total Applicants</div>
-            <div class="mt-2 text-3xl font-black tracking-tight">{{ number_format($stats['total_jobseekers']) }}</div>
+            <div class="flex items-start justify-between gap-4">
+                <div class="text-sm" style="color: var(--admin-muted);">Total Applicants</div>
+                <div class="text-3xl font-black tracking-tight text-right">{{ number_format($stats['total_jobseekers']) }}</div>
+            </div>
             <div class="mt-2 text-xs" style="color: var(--admin-muted);">Users with applicant role</div>
         </article>
 
         <article class="admin-surface admin-stat-card rounded-xl p-5 admin-fade-up" id="jobs">
-            <div class="text-sm" style="color: var(--admin-muted);">Total Job Posts</div>
-            <div class="mt-2 text-3xl font-black tracking-tight">{{ number_format($stats['total_job_posts']) }}</div>
+            <div class="flex items-start justify-between gap-4">
+                <div class="text-sm" style="color: var(--admin-muted);">Total Job Posts</div>
+                <div class="text-3xl font-black tracking-tight text-right">{{ number_format($stats['total_job_posts']) }}</div>
+            </div>
             <div class="mt-2 text-xs" style="color: var(--admin-muted);">Created by employers</div>
         </article>
 
         <article class="admin-surface admin-stat-card rounded-xl p-5 admin-fade-up">
-            <div class="text-sm" style="color: var(--admin-muted);">Total Applications</div>
-            <div class="mt-2 text-3xl font-black tracking-tight">{{ number_format($stats['total_applications']) }}</div>
+            <div class="flex items-start justify-between gap-4">
+                <div class="text-sm" style="color: var(--admin-muted);">Total Applications</div>
+                <div class="text-3xl font-black tracking-tight text-right">{{ number_format($stats['total_applications']) }}</div>
+            </div>
             <div class="mt-2 text-xs" style="color: var(--admin-muted);">Submitted by applicants</div>
         </article>
     </section>

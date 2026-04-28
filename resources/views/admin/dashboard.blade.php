@@ -5,8 +5,8 @@
 
 @section('content')
 <div class="space-y-6">
-    <section class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-        <article class="admin-surface admin-stat-card rounded-xl p-5 admin-fade-up" id="employers">
+    <section class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-4">
+        <article class="admin-surface admin-stat-card rounded-xl p-5 admin-fade-up min-w-0" id="employers">
             <div class="flex items-start justify-between gap-4">
                 <div class="text-sm" style="color: var(--admin-muted);">Total Users</div>
                 <div class="text-3xl font-black tracking-tight text-right">{{ number_format($stats['total_users']) }}</div>
@@ -14,7 +14,7 @@
             <div class="mt-2 text-xs" style="color: var(--admin-muted);">All roles combined</div>
         </article>
 
-        <article class="admin-surface admin-stat-card rounded-xl p-5 admin-fade-up">
+        <article class="admin-surface admin-stat-card rounded-xl p-5 admin-fade-up min-w-0">
             <div class="flex items-start justify-between gap-4">
                 <div class="text-sm" style="color: var(--admin-muted);">Total Employers</div>
                 <div class="text-3xl font-black tracking-tight text-right">{{ number_format($stats['total_employers']) }}</div>
@@ -22,7 +22,7 @@
             <div class="mt-2 text-xs" style="color: var(--admin-muted);">Users with employer role</div>
         </article>
 
-        <article class="admin-surface admin-stat-card rounded-xl p-5 admin-fade-up">
+        <article class="admin-surface admin-stat-card rounded-xl p-5 admin-fade-up min-w-0">
             <div class="flex items-start justify-between gap-4">
                 <div class="text-sm" style="color: var(--admin-muted);">Total Applicants</div>
                 <div class="text-3xl font-black tracking-tight text-right">{{ number_format($stats['total_jobseekers']) }}</div>
@@ -30,7 +30,7 @@
             <div class="mt-2 text-xs" style="color: var(--admin-muted);">Users with applicant role</div>
         </article>
 
-        <article class="admin-surface admin-stat-card rounded-xl p-5 admin-fade-up" id="jobs">
+        <article class="admin-surface admin-stat-card rounded-xl p-5 admin-fade-up min-w-0" id="jobs">
             <div class="flex items-start justify-between gap-4">
                 <div class="text-sm" style="color: var(--admin-muted);">Total Job Posts</div>
                 <div class="text-3xl font-black tracking-tight text-right">{{ number_format($stats['total_job_posts']) }}</div>
@@ -38,7 +38,7 @@
             <div class="mt-2 text-xs" style="color: var(--admin-muted);">Created by employers</div>
         </article>
 
-        <article class="admin-surface admin-stat-card rounded-xl p-5 admin-fade-up">
+        <article class="admin-surface admin-stat-card rounded-xl p-5 admin-fade-up min-w-0">
             <div class="flex items-start justify-between gap-4">
                 <div class="text-sm" style="color: var(--admin-muted);">Total Applications</div>
                 <div class="text-3xl font-black tracking-tight text-right">{{ number_format($stats['total_applications']) }}</div>
@@ -48,20 +48,24 @@
     </section>
 
     <section class="grid grid-cols-1 xl:grid-cols-3 gap-6">
-        <article class="admin-surface rounded-xl p-5 xl:col-span-2 admin-fade-up">
+        <article class="admin-surface rounded-xl p-5 xl:col-span-2 admin-fade-up min-w-0">
             <div class="flex items-center justify-between mb-4">
                 <h2 class="text-base font-bold">User Registrations Per Month</h2>
                 <span class="admin-chip rounded-full px-3 py-1 text-xs font-medium">Last 12 months</span>
             </div>
-            <canvas id="adminUserGrowthChart" height="120"></canvas>
+            <div class="w-full overflow-hidden">
+                <canvas id="adminUserGrowthChart" height="120"></canvas>
+            </div>
         </article>
 
-        <article class="admin-surface rounded-xl p-5 admin-fade-up">
+        <article class="admin-surface rounded-xl p-5 admin-fade-up min-w-0">
             <div class="flex items-center justify-between mb-4">
                 <h2 class="text-base font-bold">Application Status</h2>
                 <span class="admin-chip rounded-full px-3 py-1 text-xs font-medium">Distribution</span>
             </div>
-            <canvas id="adminApplicationStatusChart" height="220"></canvas>
+            <div class="w-full overflow-hidden">
+                <canvas id="adminApplicationStatusChart" height="220"></canvas>
+            </div>
         </article>
     </section>
 
@@ -133,12 +137,14 @@
         </article>
     </section>
 
-    <section class="admin-surface rounded-xl p-5 admin-fade-up" id="settings">
+    <section class="admin-surface rounded-xl p-5 admin-fade-up min-w-0" id="settings">
         <div class="flex items-center justify-between mb-4">
             <h2 class="text-base font-bold">Job Posts Per Month</h2>
             <span class="admin-chip rounded-full px-3 py-1 text-xs font-medium">Last 12 months</span>
         </div>
-        <canvas id="adminJobPostsChart" height="110"></canvas>
+        <div class="w-full overflow-hidden">
+            <canvas id="adminJobPostsChart" height="110"></canvas>
+        </div>
     </section>
 
     <section class="admin-surface rounded-xl p-5 admin-fade-up">

@@ -88,7 +88,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 |--------------------------------------------------------------------------
 */
 Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', fn() => view('dashboard'))->name('dashboard');
     Route::get('/applications/history', [JobseekerApplicationController::class, 'history'])->name('jobseeker.applications.history');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });

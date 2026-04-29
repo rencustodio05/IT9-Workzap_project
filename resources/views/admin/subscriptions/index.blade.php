@@ -27,13 +27,13 @@
     <table class="admin-table min-w-full text-sm">
         <thead>
             <tr>
-                <th class="py-3 pr-4">Employer</th>
-                <th class="py-3 pr-4">Plan</th>
-                <th class="py-3 pr-4">Price</th>
-                <th class="py-3 pr-4">Start</th>
-                <th class="py-3 pr-4">End</th>
-                <th class="py-3 pr-4">Status</th>
-                <th class="py-3 pr-4">Approved By</th>
+                <th class="py-3 pr-4 text-left">Employer</th>
+                <th class="py-3 pr-4 text-left">Plan</th>
+                <th class="py-3 pr-4 text-left">Price</th>
+                <th class="py-3 pr-4 text-left">Start</th>
+                <th class="py-3 pr-4 text-left">End</th>
+                <th class="py-3 pr-4 text-left">Status</th>
+                <th class="py-3 pr-4 text-left">Approved By</th>
             </tr>
         </thead>
         <tbody>

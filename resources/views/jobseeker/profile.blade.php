@@ -89,7 +89,7 @@ $applyJobId = request()->query('job');
                                 </div>
 
                                 <div class="md:col-span-2">
-                                    <div class="text-[11px] uppercase tracking-[0.12em] text-gray-500 mb-1">Residential Address</div>
+                                    <div class="text-[11px] uppercase tracking-[0.12em] text-gray-500 mb-1">Address</div>
                                     <div class="text-sm font-medium text-gray-900">{{ $user->address ?? 'N/A' }}</div>
                                 </div>
                             </div>

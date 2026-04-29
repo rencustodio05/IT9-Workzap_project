@@ -42,7 +42,7 @@ class AuthController extends Controller
             }
         }
 
-        return back()->withErrors(['email' => 'Invalid credentials.'])->withInput();
+        return back()->withErrors(['email' => 'Wrong password or email address'])->withInput();
     }
 
     public function showRegister()

@@ -58,7 +58,7 @@
                 <a href="{{ route('employer.applications.index') }}" class="text-sm text-blue-600 hover:underline font-medium">View all</a>
             </div>
             <div class="space-y-3">
-                @forelse(($recentApplicants ?? collect()) as $application)
+                @forelse(($recentApplicants ?? collect())->take(3) as $application)
                 <div class="flex justify-between items-center p-2.5 border rounded-lg">
                     <div>
                         <div class="font-semibold text-sm text-gray-800">{{ $application->jobseeker->name ?? 'N/A' }}</div>
@@ -79,7 +79,7 @@
                 <a href="{{ route('employer.jobs.index') }}" class="text-sm text-blue-600 hover:underline font-medium">View all</a>
             </div>
             <div class="space-y-3">
-                @forelse(($latestJobs ?? collect()) as $job)
+                @forelse(($latestJobs ?? collect())->take(3) as $job)
                 <div class="flex justify-between items-center p-2.5 border rounded-lg">
                     <div>
                         <div class="font-semibold text-sm text-gray-800">{{ $job->title }}</div>

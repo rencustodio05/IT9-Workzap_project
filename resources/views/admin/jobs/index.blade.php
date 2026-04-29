@@ -31,13 +31,13 @@
     <table class="admin-table min-w-full text-sm">
         <thead>
             <tr>
-                <th class="py-3 pr-4">Title</th>
-                <th class="py-3 pr-4">Employer</th>
-                <th class="py-3 pr-4">Salary</th>
-                <th class="py-3 pr-4">Location</th>
-                <th class="py-3 pr-4">Status</th>
-                <th class="py-3 pr-4">Created</th>
-                <th class="py-3 text-right">Actions</th>
+                <th class="py-3 pr-4 text-left">Title</th>
+                <th class="py-3 pr-4 text-left">Employer</th>
+                <th class="py-3 pr-4 text-left">Salary</th>
+                <th class="py-3 pr-4 text-left">Location</th>
+                <th class="py-3 pr-4 text-left">Status</th>
+                <th class="py-3 pr-4 text-left">Created</th>
+                <th class="py-3 text-center">Actions</th>
             </tr>
         </thead>
         <tbody>

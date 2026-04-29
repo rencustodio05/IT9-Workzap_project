@@ -27,14 +27,14 @@
     <table class="admin-table min-w-full text-sm">
         <thead>
             <tr>
-                <th class="py-3 pr-4">Employer</th>
-                <th class="py-3 pr-4">Plan</th>
-                <th class="py-3 pr-4">Amount</th>
-                <th class="py-3 pr-4">Card</th>
-                <th class="py-3 pr-4">Expiry</th>
-                <th class="py-3 pr-4">Status</th>
-                <th class="py-3 pr-4">Submitted</th>
-                <th class="py-3 text-right">Action</th>
+                <th class="py-3 pr-4 text-left">Employer</th>
+                <th class="py-3 pr-4 text-left">Plan</th>
+                <th class="py-3 pr-4 text-left">Amount</th>
+                <th class="py-3 pr-4 text-left">Card</th>
+                <th class="py-3 pr-4 text-left">Expiry</th>
+                <th class="py-3 pr-4 text-left">Status</th>
+                <th class="py-3 pr-4 text-left">Submitted</th>
+                <th class="py-3 text-center">Action</th>
             </tr>
         </thead>
         <tbody>
@@ -92,8 +92,8 @@
 <div id="paymentDetailModal" class="fixed inset-0 z-50 hidden" aria-hidden="true">
     <div class="absolute inset-0 bg-black/50" data-payment-close-modal="true"></div>
     <div class="relative min-h-screen flex items-center justify-center p-4">
-        <div class="admin-surface w-full max-w-3xl rounded-xl border border-slate-200 bg-white p-5">
-            <div class="flex items-center justify-between">
+        <div class="admin-surface w-full max-w-2xl rounded-xl border border-slate-200 bg-white p-4 sm:p-5">
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <h3 class="text-base font-semibold text-slate-900">Subscription Payment Details</h3>
                 <button type="button" class="text-slate-500 hover:text-slate-700" data-payment-close-modal="true" aria-label="Close">x</button>
             </div>

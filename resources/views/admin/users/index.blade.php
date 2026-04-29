@@ -37,15 +37,15 @@
 </div>
 
 <div class="admin-surface rounded-xl p-5 admin-fade-up overflow-x-auto">
-    <table class="admin-table min-w-full text-sm">
+    <table class="admin-table min-w-full text-sm text-left">
         <thead>
             <tr>
-                <th class="py-3 pr-4">Name</th>
-                <th class="py-3 pr-4">Email</th>
-                <th class="py-3 pr-4">Role</th>
-                <th class="py-3 pr-4">Account</th>
-                <th class="py-3 pr-4">Registered</th>
-                <th class="py-3 text-right">Actions</th>
+                <th class="py-3 pr-4 text-left">Name</th>
+                <th class="py-3 pr-4 text-left">Email</th>
+                <th class="py-3 pr-4 text-left">Role</th>
+                <th class="py-3 pr-4 text-left">Account</th>
+                <th class="py-3 pr-4 text-left">Registered</th>
+                <th class="py-3 text-center">Actions</th>
             </tr>
         </thead>
         <tbody>

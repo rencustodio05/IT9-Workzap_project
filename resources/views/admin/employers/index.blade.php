@@ -22,12 +22,12 @@
     <table class="admin-table min-w-full text-sm">
         <thead>
             <tr>
-                <th class="py-3 pr-4">Name</th>
-                <th class="py-3 pr-4">Email</th>
-                <th class="py-3 pr-4">Username</th>
-                <th class="py-3 pr-4">Jobs Posted</th>
-                <th class="py-3 pr-4">Account</th>
-                <th class="py-3 text-right">Actions</th>
+                <th class="py-3 pr-4 text-left">Name</th>
+                <th class="py-3 pr-4 text-left">Email</th>
+                <th class="py-3 pr-4 text-left">Username</th>
+                <th class="py-3 pr-4 text-left">Jobs Posted</th>
+                <th class="py-3 pr-4 text-left">Account</th>
+                <th class="py-3 text-center">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -42,7 +42,7 @@
                         {{ $employer->is_active ? 'Active' : 'Inactive' }}
                     </span>
                 </td>
-                <td class="py-3 text-right">
+                <td class="py-3 text-center">
                     <a href="{{ route('admin.employers.show', $employer) }}" title="View" aria-label="View" class="inline-flex items-center justify-center p-2 rounded-md text-blue-600 hover:bg-blue-50 transition">
                         <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12s3.75-6.75 9.75-6.75S21.75 12 21.75 12 18 18.75 12 18.75 2.25 12 2.25 12z" />

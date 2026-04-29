@@ -63,7 +63,7 @@
 <!-- Main Grid -->
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
     <!-- Recommended Jobs -->
-    <div class="admin-surface rounded-xl admin-fade-up p-6 flex flex-col h-full">
+    <div class="admin-surface rounded-xl admin-fade-up p-6 flex flex-col">
         <div class="flex justify-between items-center mb-4">
             <h2 class="text-lg font-semibold text-gray-900">Recommended Jobs</h2>
             <a href="{{ route('jobseeker.jobs.index') }}" class="text-blue-600 hover:underline font-medium">View All</a>
@@ -83,7 +83,7 @@
         </div>
     </div>
     <!-- My Applications -->
-    <div class="admin-surface rounded-xl admin-fade-up p-6 flex flex-col h-full">
+    <div class="admin-surface rounded-xl admin-fade-up p-6 flex flex-col">
         <div class="flex justify-between items-center mb-4">
             <h2 class="text-lg font-semibold text-gray-900">My Applications</h2>
             <a href="{{ route('jobseeker.applications.index') }}" class="text-blue-600 hover:underline font-medium">View All</a>

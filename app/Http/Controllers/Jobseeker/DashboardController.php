@@ -27,15 +27,15 @@ class DashboardController extends Controller
                 $q->where('user_id', $user->id)
                     ->whereIn('status', ['pending', 'interview', 'hired']);
             })
-            ->latest()
-            ->take(4)
+            ->orderBy('id')
+            ->limit(3)
             ->get();
 
         $recentApplications = Application::with('job')
             ->where('user_id', $user->id)
             ->whereIn('status', ['pending', 'interview', 'hired'])
-            ->latest()
-            ->take(5)
+            ->orderBy('id')
+            ->limit(3)
             ->get();
 
         $totalAppliedJobs = Application::where('user_id', $user->id)
@@ -61,19 +61,17 @@ class DashboardController extends Controller
 
         $now = now();
 
-        $upcomingInterviews = Interview::where('jobseeker_id', $user->id)
+        $upcomingInterviews = Interview::whereHas('application', function ($q) use ($user) {
+            $q->where('user_id', $user->id)
+                ->whereIn('status', ['pending', 'interview']);
+        })
             ->where(function ($q) {
                 $q->whereNull('status')
                     ->orWhere('status', 'scheduled');
             })
             ->get()
             ->map(function ($interview) {
-                $date = $interview->interview_date ? Carbon::parse($interview->interview_date)->format('Y-m-d') : null;
-                $time = $interview->interview_time ? Carbon::parse($interview->interview_time)->format('H:i:s') : '00:00:00';
-
-                $interview->nearest_at = $date
-                    ? Carbon::parse($date . ' ' . $time)
-                    : optional($interview->scheduled_at);
+                $interview->nearest_at = $interview->scheduled_at;
 
                 return $interview;
             })

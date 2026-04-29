@@ -61,23 +61,14 @@ class JobController extends Controller
             ->pluck('status', 'job_id')
             ->toArray();
 
-        $activeApplications = Application::with('job:id,type')
+        $hiredApplications = Application::with('job:id,type')
             ->where('user_id', Auth::id())
-            ->whereIn('status', ['pending', 'interview', 'hired'])
+            ->where('status', 'hired')
             ->get();
-
-        $activeApplicationsCount = $activeApplications->count();
-
-        $activeHasFullTime = $activeApplications->contains(function ($application) {
-            $jobTypes = collect(explode(',', strtolower($application->job->type ?? '')))
-                ->map(fn($type) => trim($type));
-
-            return $jobTypes->contains('full-time');
-        });
 
         $savedJobs = $user->savedJobs()->pluck('jobs.id')->toArray();
 
-        return view('jobseeker.jobs.index', compact('jobs', 'applicationStatuses', 'savedJobs', 'activeApplicationsCount', 'activeHasFullTime'));
+        return view('jobseeker.jobs.index', compact('jobs', 'applicationStatuses', 'savedJobs'));
     }
 
     /**
@@ -110,28 +101,27 @@ class JobController extends Controller
             ->whereIn('status', ['pending', 'interview', 'hired'])
             ->exists();
 
-        $activeApplications = Application::with('job:id,type')
+        $hiredApplications = Application::with('job:id,type')
             ->where('user_id', Auth::id())
-            ->whereIn('status', ['pending', 'interview', 'hired'])
+            ->where('status', 'hired')
             ->get();
 
-        $activeApplicationsCount = $activeApplications->count();
-
-        $activeHasFullTime = $activeApplications->contains(function ($application) {
+        $hasHiredFullTime = $hiredApplications->contains(function ($application) {
             $jobTypes = collect(explode(',', strtolower($application->job->type ?? '')))
                 ->map(fn($type) => trim($type));
 
             return $jobTypes->contains('full-time');
         });
 
-        $jobTypes = collect(explode(',', strtolower($job->type ?? '')))
-            ->map(fn($type) => trim($type));
+        $hasHiredPartTime = $hiredApplications->contains(function ($application) {
+            $jobTypes = collect(explode(',', strtolower($application->job->type ?? '')))
+                ->map(fn($type) => trim($type));
 
-        $isFullTimeJob = $jobTypes->contains('full-time');
-        $limitReached = $activeApplicationsCount >= 2;
-        $fullTimeLimitReached = $activeHasFullTime && $isFullTimeJob;
-        $applyBlockedByRule = !$alreadyApplied && ($limitReached || $fullTimeLimitReached);
-        $applyRestrictionMessage = 'You cannot apply for more than 1 Full-Time job. Part-Time jobs are allowed up to 2.';
+            return $jobTypes->contains('part-time');
+        });
+
+        $applyBlockedByRule = !$alreadyApplied && $hasHiredFullTime && $hasHiredPartTime;
+        $applyRestrictionMessage = 'You cannot apply for more jobs while you have one active hired full-time application and one active hired part-time application.';
 
         return view('jobseeker.jobs.show', compact('job', 'application', 'alreadyApplied', 'applyBlockedByRule', 'applyRestrictionMessage'));
     }
@@ -147,27 +137,27 @@ class JobController extends Controller
 
         $job = Job::where('status', 'active')->findOrFail($id);
 
-        $jobTypes = collect(explode(',', strtolower($job->type ?? '')))
-            ->map(fn($type) => trim($type));
-
-        $isFullTimeJob = $jobTypes->contains('full-time');
-
-        $activeApplications = Application::with('job:id,type')
+        $hiredApplications = Application::with('job:id,type')
             ->where('user_id', Auth::id())
-            ->whereIn('status', ['pending', 'interview', 'hired'])
+            ->where('status', 'hired')
             ->get();
 
-        $activeApplicationsCount = $activeApplications->count();
-
-        $activeHasFullTime = $activeApplications->contains(function ($application) {
+        $hasHiredFullTime = $hiredApplications->contains(function ($application) {
             $types = collect(explode(',', strtolower($application->job->type ?? '')))
                 ->map(fn($type) => trim($type));
 
             return $types->contains('full-time');
         });
 
-        if ($activeApplicationsCount >= 2 || ($isFullTimeJob && $activeHasFullTime)) {
-            return back()->with('error', 'You cannot apply for more than 1 Full-Time job. Part-Time jobs are allowed up to 2.');
+        $hasHiredPartTime = $hiredApplications->contains(function ($application) {
+            $types = collect(explode(',', strtolower($application->job->type ?? '')))
+                ->map(fn($type) => trim($type));
+
+            return $types->contains('part-time');
+        });
+
+        if ($hasHiredFullTime && $hasHiredPartTime) {
+            return back()->with('error', 'You cannot apply for more jobs while you have one active hired full-time application and one active hired part-time application.');
         }
 
         $exists = Application::where('job_id', $id)

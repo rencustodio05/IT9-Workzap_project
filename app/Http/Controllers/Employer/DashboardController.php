@@ -28,7 +28,10 @@ class DashboardController extends Controller
             ->whereDate('created_at', now()->toDateString())
             ->count();
 
-        $interviewsToday = Interview::whereIn('job_id', $jobIds)
+        $interviewsToday = Interview::whereHas('application', function ($q) use ($jobIds) {
+            $q->whereIn('job_id', $jobIds)
+                ->whereIn('status', ['pending', 'interview']);
+        })
             ->whereDate('scheduled_at', now()->toDateString())
             ->count();
 

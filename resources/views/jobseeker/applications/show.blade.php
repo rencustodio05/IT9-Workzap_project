@@ -62,7 +62,7 @@ $backUrl = 'javascript:history.back()';
     @endif
 
     <div class="mt-6 flex gap-2">
-        <a href="{{ $backUrl }}" class="px-4 py-2 bg-gray-200 rounded">
+        <a href="{{ route('jobseeker.dashboard') }}" class="px-4 py-2 bg-gray-200 rounded">
             Back
         </a>
     </div>

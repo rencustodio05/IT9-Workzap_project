@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Application extends Model
 {
@@ -36,8 +36,26 @@ class Application extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function interview(): HasOne
+    public function interview(): HasMany
     {
-        return $this->hasOne(Interview::class);
+        return $this->hasMany(Interview::class);
+    }
+
+    public function interviews(): HasMany
+    {
+        return $this->hasMany(Interview::class);
+    }
+
+    public function getInterviewAttribute(): ?\App\Models\Interview
+    {
+        if ($this->relationLoaded('interview')) {
+            return $this->getRelation('interview')->first();
+        }
+
+        if ($this->relationLoaded('interviews')) {
+            return $this->getRelation('interviews')->first();
+        }
+
+        return $this->interviews()->latest('scheduled_at')->first();
     }
 }

@@ -24,15 +24,14 @@ class InterviewController extends Controller
             ->whereHas('application.job', function ($q) {
                 $q->where('user_id', Auth::id());
             })
-            ->orderBy('interview_date')
-            ->orderBy('interview_time')
+            ->orderBy('scheduled_at')
             ->get();
 
         $today = Carbon::today('Asia/Manila')->toDateString();
 
         $todayInterviews = $interviews
             ->filter(function ($interview) use ($today) {
-                return Carbon::parse($interview->interview_date)
+                return optional($interview->scheduled_at)
                     ->timezone('Asia/Manila')
                     ->toDateString() === $today;
             })
@@ -40,7 +39,7 @@ class InterviewController extends Controller
 
         $upcomingInterviews = $interviews
             ->filter(function ($interview) use ($today) {
-                return Carbon::parse($interview->interview_date)
+                return optional($interview->scheduled_at)
                     ->timezone('Asia/Manila')
                     ->toDateString() > $today;
             })
@@ -99,11 +98,6 @@ class InterviewController extends Controller
 
         Interview::create([
             'application_id' => $application->id,
-            'employer_id' => Auth::id(),
-            'jobseeker_id' => $application->user_id,
-            'job_id' => $application->job_id,
-            'interview_date' => $validated['interview_date'],
-            'interview_time' => $validated['interview_time'],
             'scheduled_at' => $scheduledAt,
             'status' => $validated['status'] ?? 'scheduled',
             'notes' => $validated['notes'] ?? null,
@@ -169,8 +163,6 @@ class InterviewController extends Controller
                     ->withErrors(['interview_date' => 'Invalid interview date/time format.']);
             }
 
-            $interview->interview_date = $validated['interview_date'];
-            $interview->interview_time = $validated['interview_time'];
             $interview->scheduled_at = $scheduledAt;
         }
 

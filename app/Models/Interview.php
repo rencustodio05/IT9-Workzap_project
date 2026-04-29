@@ -9,18 +9,12 @@ class Interview extends Model
 {
     protected $fillable = [
         'application_id',
-        'employer_id',
-        'jobseeker_id',
-        'job_id',
-        'interview_date',
-        'interview_time',
         'scheduled_at',
         'status',
         'notes',
     ];
 
     protected $casts = [
-        'interview_date' => 'date:Y-m-d',
         'scheduled_at' => 'datetime',
     ];
 
@@ -29,18 +23,21 @@ class Interview extends Model
         return $this->belongsTo(Application::class);
     }
 
-    public function job(): BelongsTo
+    public function getInterviewDateAttribute(): ?string
     {
-        return $this->belongsTo(Job::class);
+        if (! empty($this->attributes['interview_date'])) {
+            return $this->attributes['interview_date'];
+        }
+
+        return $this->scheduled_at?->format('Y-m-d');
     }
 
-    public function employer(): BelongsTo
+    public function getInterviewTimeAttribute(): ?string
     {
-        return $this->belongsTo(User::class, 'employer_id');
-    }
+        if (! empty($this->attributes['interview_time'])) {
+            return $this->attributes['interview_time'];
+        }
 
-    public function jobseeker(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'jobseeker_id');
+        return $this->scheduled_at?->format('H:i');
     }
 }

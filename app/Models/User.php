@@ -67,9 +67,9 @@ class User extends Authenticatable
         return $this->hasMany(Interview::class, 'employer_id');
     }
 
-    public function jobseekerInterviews(): HasMany
+    public function applicantInterviews(): HasMany
     {
-        return $this->hasMany(Interview::class, 'jobseeker_id');
+        return $this->hasMany(Interview::class, 'applicant_id');
     }
 
     public function savedJobs(): BelongsToMany

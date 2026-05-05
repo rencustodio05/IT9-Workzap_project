@@ -30,10 +30,10 @@
                     @csrf
 
                     <div class="role-toggle">
-                        <button type="button" onclick="setRole('jobseeker')" id="btn-jobseeker" class="role-btn active">👤 Applicant</button>
+                        <button type="button" onclick="setRole('applicant')" id="btn-applicant" class="role-btn active">👤 Applicant</button>
                         <span>or</span>
                         <button type="button" onclick="setRole('employer')" id="btn-employer" class="role-btn">🏢 Employer</button>
-                        <input type="hidden" name="role" id="role-input" value="jobseeker">
+                        <input type="hidden" name="role" id="role-input" value="applicant">
                     </div>
 
                     <div class="name-row">
@@ -74,7 +74,7 @@
     <script>
         function setRole(role) {
             document.getElementById('role-input').value = role;
-            document.getElementById('btn-jobseeker').classList.toggle('active', role === 'jobseeker');
+            document.getElementById('btn-applicant').classList.toggle('active', role === 'applicant');
             document.getElementById('btn-employer').classList.toggle('active', role === 'employer');
         }
     </script>

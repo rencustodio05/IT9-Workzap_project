@@ -23,6 +23,16 @@ class Interview extends Model
         return $this->belongsTo(Application::class);
     }
 
+    public function employer(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'employer_id');
+    }
+
+    public function applicant(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'applicant_id');
+    }
+
     public function getInterviewDateAttribute(): ?string
     {
         if (! empty($this->attributes['interview_date'])) {

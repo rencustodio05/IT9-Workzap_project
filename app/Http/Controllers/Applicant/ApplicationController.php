@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Jobseeker;
+namespace App\Http\Controllers\Applicant;
 
 use App\Http\Controllers\Controller;
 use App\Models\Application;
@@ -13,7 +13,7 @@ class ApplicationController extends Controller
     {
         $user = Auth::user();
 
-        if (!$user || $user->role !== 'jobseeker') {
+        if (!$user || $user->role !== 'applicant') {
             abort(403, 'Unauthorized');
         }
 
@@ -23,14 +23,14 @@ class ApplicationController extends Controller
             ->latest()
             ->paginate(10);
 
-        return view('jobseeker.applications.index', compact('applications'));
+        return view('applicant.applications.index', compact('applications'));
     }
 
     public function show($id)
     {
         $user = Auth::user();
 
-        if (!$user || $user->role !== 'jobseeker') {
+        if (!$user || $user->role !== 'applicant') {
             abort(403, 'Unauthorized');
         }
 
@@ -44,14 +44,14 @@ class ApplicationController extends Controller
             ->latest()
             ->get();
 
-        return view('jobseeker.applications.show', compact('application', 'hiredApplications'));
+        return view('applicant.applications.show', compact('application', 'hiredApplications'));
     }
 
     public function update(Request $request, $id)
     {
         $user = Auth::user();
 
-        if (!$user || $user->role !== 'jobseeker') {
+        if (!$user || $user->role !== 'applicant') {
             abort(403, 'Unauthorized');
         }
 
@@ -65,14 +65,14 @@ class ApplicationController extends Controller
             'status' => 'cancelled',
         ]);
 
-        return redirect()->route('jobseeker.applications.index')->with('success', 'Application cancelled successfully.');
+        return redirect()->route('applicant.applications.index')->with('success', 'Application cancelled successfully.');
     }
 
     public function destroy($id)
     {
         $user = Auth::user();
 
-        if (!$user || $user->role !== 'jobseeker') {
+        if (!$user || $user->role !== 'applicant') {
             abort(403, 'Unauthorized');
         }
 
@@ -86,14 +86,14 @@ class ApplicationController extends Controller
             ]);
         }
 
-        return redirect()->route('jobseeker.applications.index')->with('success', 'Application deleted successfully.');
+        return redirect()->route('applicant.applications.index')->with('success', 'Application deleted successfully.');
     }
 
     public function history()
     {
         $user = Auth::user();
 
-        if (!$user || $user->role !== 'jobseeker') {
+        if (!$user || $user->role !== 'applicant') {
             abort(403, 'Unauthorized');
         }
 
@@ -103,6 +103,6 @@ class ApplicationController extends Controller
             ->latest('updated_at')
             ->get();
 
-        return view('jobseeker.applications.history', compact('employmentHistory'));
+        return view('applicant.applications.history', compact('employmentHistory'));
     }
 }

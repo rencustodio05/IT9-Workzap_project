@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Jobseeker;
+namespace App\Http\Controllers\Applicant;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
@@ -17,13 +17,13 @@ class ProfileController extends Controller
         /** @var User|null $user */
         $user = Auth::user();
 
-        if (!$user || $user->role !== 'jobseeker') {
+        if (!$user || $user->role !== 'applicant') {
             abort(403, 'Unauthorized');
         }
 
         $isEditMode = false;
 
-        return view('jobseeker.profile', compact('user', 'isEditMode'));
+        return view('applicant.profile', compact('user', 'isEditMode'));
     }
 
     public function editProfile()
@@ -31,13 +31,13 @@ class ProfileController extends Controller
         /** @var User|null $user */
         $user = Auth::user();
 
-        if (!$user || $user->role !== 'jobseeker') {
+        if (!$user || $user->role !== 'applicant') {
             abort(403, 'Unauthorized');
         }
 
         $isEditMode = true;
 
-        return view('jobseeker.profile', compact('user', 'isEditMode'));
+        return view('applicant.profile', compact('user', 'isEditMode'));
     }
 
     public function edit()
@@ -55,11 +55,11 @@ class ProfileController extends Controller
         /** @var User|null $user */
         $user = Auth::user();
 
-        if (!$user || $user->role !== 'jobseeker') {
+        if (!$user || $user->role !== 'applicant') {
             abort(403, 'Unauthorized');
         }
 
-        return view('jobseeker.account-security', compact('user'));
+        return view('applicant.account-security', compact('user'));
     }
 
     public function updateProfile(Request $request)
@@ -67,7 +67,7 @@ class ProfileController extends Controller
         /** @var User|null $user */
         $user = Auth::user();
 
-        if (!$user || $user->role !== 'jobseeker') {
+        if (!$user || $user->role !== 'applicant') {
             abort(403, 'Unauthorized');
         }
 
@@ -123,7 +123,7 @@ class ProfileController extends Controller
 
         $user->update($updateData);
 
-        return redirect()->route('jobseeker.profile')->with('success', 'Profile updated successfully.');
+        return redirect()->route('applicant.profile')->with('success', 'Profile updated successfully.');
     }
 
     public function update(Request $request)
@@ -136,7 +136,7 @@ class ProfileController extends Controller
         /** @var User|null $user */
         $user = Auth::user();
 
-        if (!$user || $user->role !== 'jobseeker') {
+        if (!$user || $user->role !== 'applicant') {
             abort(403, 'Unauthorized');
         }
 
@@ -145,7 +145,7 @@ class ProfileController extends Controller
                 'current_password' => ['required', 'current_password'],
             ]);
 
-            return redirect()->route('jobseeker.account.security')
+            return redirect()->route('applicant.account.security')
                 ->with('password_verified', true)
                 ->with('success', 'Current password verified. You can now set a new password.');
         }
@@ -159,6 +159,6 @@ class ProfileController extends Controller
             'password' => Hash::make($validated['password']),
         ]);
 
-        return redirect()->route('jobseeker.account.security')->with('success', 'Password changed successfully.');
+        return redirect()->route('applicant.account.security')->with('success', 'Password changed successfully.');
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Jobseeker;
+namespace App\Http\Controllers\Applicant;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -17,7 +17,7 @@ class JobController extends Controller
      */
     public function index(Request $request)
     {
-        if (!Auth::check() || Auth::user()->role !== 'jobseeker') {
+        if (!Auth::check() || Auth::user()->role !== 'applicant') {
             abort(403, 'Unauthorized');
         }
 
@@ -68,7 +68,7 @@ class JobController extends Controller
 
         $savedJobs = $user->savedJobs()->pluck('jobs.id')->toArray();
 
-        return view('jobseeker.jobs.index', compact('jobs', 'applicationStatuses', 'savedJobs'));
+        return view('applicant.jobs.index', compact('jobs', 'applicationStatuses', 'savedJobs'));
     }
 
     /**
@@ -76,7 +76,7 @@ class JobController extends Controller
      */
     public function show(Request $request, $id)
     {
-        if (!Auth::check() || Auth::user()->role !== 'jobseeker') {
+        if (!Auth::check() || Auth::user()->role !== 'applicant') {
             abort(403, 'Unauthorized');
         }
 
@@ -123,7 +123,7 @@ class JobController extends Controller
         $applyBlockedByRule = !$alreadyApplied && $hasHiredFullTime && $hasHiredPartTime;
         $applyRestrictionMessage = 'You cannot apply for more jobs while you have one active hired full-time application and one active hired part-time application.';
 
-        return view('jobseeker.jobs.show', compact('job', 'application', 'alreadyApplied', 'applyBlockedByRule', 'applyRestrictionMessage'));
+        return view('applicant.jobs.show', compact('job', 'application', 'alreadyApplied', 'applyBlockedByRule', 'applyRestrictionMessage'));
     }
 
     /**
@@ -131,7 +131,7 @@ class JobController extends Controller
      */
     public function apply($id)
     {
-        if (!Auth::check() || Auth::user()->role !== 'jobseeker') {
+        if (!Auth::check() || Auth::user()->role !== 'applicant') {
             abort(403, 'Unauthorized');
         }
 

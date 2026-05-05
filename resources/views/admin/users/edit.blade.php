@@ -20,7 +20,7 @@
             <select id="role" name="role" class="w-full rounded-lg border px-3 py-2" style="border-color: var(--admin-border);">
                 <option value="admin" {{ old('role', $user->role) === 'admin' ? 'selected' : '' }}>Admin</option>
                 <option value="employer" {{ old('role', $user->role) === 'employer' ? 'selected' : '' }}>Employer</option>
-                <option value="jobseeker" {{ old('role', $user->role) === 'jobseeker' ? 'selected' : '' }}>Applicant</option>
+                <option value="applicant" {{ old('role', $user->role) === 'applicant' ? 'selected' : '' }}>Applicant</option>
             </select>
             @error('role')
             <div class="text-sm text-red-600 mt-1">{{ $message }}</div>

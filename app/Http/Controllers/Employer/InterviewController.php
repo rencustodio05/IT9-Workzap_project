@@ -16,7 +16,7 @@ class InterviewController extends Controller
     {
         $interviews = Interview::with([
             'application.job',
-            'application.jobseeker',
+            'application.applicant',
         ])
             ->whereHas('application', function ($q) {
                 $q->whereIn('status', ['pending', 'interview']);
@@ -45,7 +45,7 @@ class InterviewController extends Controller
             })
             ->values();
 
-        $applications = Application::with(['job', 'jobseeker'])
+        $applications = Application::with(['job', 'applicant'])
             ->whereHas('job', function ($q) {
                 $q->where('user_id', Auth::id());
             })
@@ -66,7 +66,7 @@ class InterviewController extends Controller
             'notes' => ['nullable', 'string'],
         ]);
 
-        $application = Application::with(['job', 'jobseeker'])->findOrFail($validated['application_id']);
+        $application = Application::with(['job', 'applicant'])->findOrFail($validated['application_id']);
 
         if ((int) $application->job->user_id !== (int) Auth::id()) {
             abort(403, 'Unauthorized');
@@ -113,7 +113,7 @@ class InterviewController extends Controller
 
     public function show(Interview $interview)
     {
-        $interview->load(['application.job', 'application.jobseeker']);
+        $interview->load(['application.job', 'application.applicant']);
 
         $ownerId = optional(optional($interview->application)->job)->user_id;
 

@@ -23,7 +23,7 @@ class UserController extends Controller
                         ->orWhere('email', 'like', "%{$search}%");
                 });
             })
-            ->when(in_array($role, ['admin', 'employer', 'jobseeker'], true), function ($query) use ($role) {
+            ->when(in_array($role, ['admin', 'employer', 'applicant'], true), function ($query) use ($role) {
                 $query->where('role', $role);
             })
             ->latest()
@@ -50,7 +50,7 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $validated = $request->validate([
-            'role' => ['required', Rule::in(['admin', 'employer', 'jobseeker'])],
+            'role' => ['required', Rule::in(['admin', 'employer', 'applicant'])],
         ]);
 
         $user->update([

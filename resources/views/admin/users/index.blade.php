@@ -24,7 +24,7 @@
                 <option value="">All roles</option>
                 <option value="admin" {{ $role === 'admin' ? 'selected' : '' }}>Admin</option>
                 <option value="employer" {{ $role === 'employer' ? 'selected' : '' }}>Employer</option>
-                <option value="jobseeker" {{ $role === 'jobseeker' ? 'selected' : '' }}>Applicant</option>
+                <option value="applicant" {{ $role === 'applicant' ? 'selected' : '' }}>Applicant</option>
             </select>
         </div>
 

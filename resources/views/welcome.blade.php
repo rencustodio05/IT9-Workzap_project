@@ -29,7 +29,7 @@
                                 ? 'admin.dashboard'
                                 : (auth()->user()->role === 'employer'
                                     ? 'employer.dashboard'
-                                    : 'jobseeker.dashboard');
+                                    : 'applicant.dashboard');
                         @endphp
                         <a
                             href="{{ route($dashboardRoute) }}"

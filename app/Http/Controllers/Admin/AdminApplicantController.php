@@ -14,7 +14,7 @@ class AdminApplicantController extends Controller
         $search = trim((string) $request->query('q', ''));
 
         $applicants = User::query()
-            ->where('role', 'jobseeker')
+            ->where('role', 'applicant')
             ->when($search !== '', function ($query) use ($search) {
                 $query->where(function ($inner) use ($search) {
                     $inner->where('first_name', 'like', "%{$search}%")
@@ -33,7 +33,7 @@ class AdminApplicantController extends Controller
 
     public function show(User $applicant)
     {
-        abort_unless($applicant->role === 'jobseeker', 404);
+        abort_unless($applicant->role === 'applicant', 404);
 
         $applications = $applicant->applications()->with('job.employer')->latest()->paginate(10);
 
@@ -45,7 +45,7 @@ class AdminApplicantController extends Controller
 
     public function toggleStatus(User $applicant)
     {
-        abort_unless($applicant->role === 'jobseeker', 404);
+        abort_unless($applicant->role === 'applicant', 404);
 
         $applicant->update([
             'is_active' => !$applicant->is_active,

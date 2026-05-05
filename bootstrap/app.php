@@ -14,6 +14,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'admin' => \App\Http\Middleware\AdminMiddleware::class,
             'employer.subscription.active' => \App\Http\Middleware\EnsureEmployerSubscriptionActive::class,
+            'guest' => \App\Http\Middleware\GuestMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

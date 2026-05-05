@@ -13,33 +13,33 @@
     $navItems = [
     [
     'label' => 'Dashboard',
-    'route' => 'jobseeker.dashboard',
-    'active' => 'jobseeker.dashboard',
+    'route' => 'applicant.dashboard',
+    'active' => 'applicant.dashboard',
     ],
     [
     'label' => 'Browse Jobs (Applicant)',
-    'route' => 'jobseeker.jobs.index',
-    'active' => 'jobseeker.jobs.*',
+    'route' => 'applicant.jobs.index',
+    'active' => 'applicant.jobs.*',
     ],
     [
     'label' => 'My Applications',
-    'route' => 'jobseeker.applications.index',
-    'active' => 'jobseeker.applications.*',
+    'route' => 'applicant.applications.index',
+    'active' => 'applicant.applications.*',
     ],
     [
     'label' => 'Saved Jobs',
-    'route' => 'jobseeker.saved.index',
-    'active' => 'jobseeker.saved.*',
+    'route' => 'applicant.saved.index',
+    'active' => 'applicant.saved.*',
     ],
     [
     'label' => 'Profile',
-    'route' => 'jobseeker.profile',
-    'active' => 'jobseeker.profile',
+    'route' => 'applicant.profile',
+    'active' => 'applicant.profile',
     ],
     [
     'label' => 'Account ',
-    'route' => 'jobseeker.account.security',
-    'active' => 'jobseeker.account.security',
+    'route' => 'applicant.account.security',
+    'active' => 'applicant.account.security',
     ],
     [
     'label' => 'Logout',
@@ -51,7 +51,7 @@
     @endphp
 
     <aside
-        id="jobseeker-sidebar"
+        id="applicant-sidebar"
         aria-label="Applicant navigation"
         class="admin-sidebar fixed inset-y-0 left-0 z-50 w-64 text-white flex h-screen flex-col overflow-y-auto border-r border-white/10 px-5 py-6 shadow-xl transform -translate-x-full transition-transform duration-300 ease-out lg:translate-x-0">
         <div class="mb-6">
@@ -64,7 +64,7 @@
                     </div>
                 </div>
                 <button
-                    id="jobseeker-sidebar-close"
+                    id="applicant-sidebar-close"
                     type="button"
                     class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-white/20 text-white transition hover:bg-white/10 lg:hidden"
                     aria-label="Close sidebar">
@@ -101,21 +101,21 @@
         </nav>
     </aside>
 
-    <div id="jobseeker-sidebar-overlay" class="fixed inset-0 z-40 bg-black/40 hidden lg:hidden" aria-hidden="true"></div>
+    <div id="applicant-sidebar-overlay" class="fixed inset-0 z-40 bg-black/40 hidden lg:hidden" aria-hidden="true"></div>
 
     <main class="flex-1 min-h-screen p-5 md:p-8 lg:ml-64">
-        <div id="jobseeker-global-topbar" class="admin-surface sticky top-0 z-50 mb-4 flex items-center justify-between gap-3 rounded-xl bg-white p-4 shadow-sm sm:p-5">
+        <div id="applicant-global-topbar" class="admin-surface sticky top-0 z-50 mb-4 flex items-center justify-between gap-3 rounded-xl bg-white p-4 shadow-sm sm:p-5">
             <div class="min-w-0">
                 <h1 class="truncate text-xl font-black tracking-tight">@yield('title', 'Applicant Dashboard')</h1>
                 <p class="text-sm text-slate-500">@yield('subtitle', 'Manage your opportunities with confidence.')</p>
             </div>
 
             <button
-                id="jobseeker-sidebar-toggle"
+                id="applicant-sidebar-toggle"
                 type="button"
                 class="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-700 transition hover:bg-slate-50 lg:hidden"
                 aria-label="Open sidebar"
-                aria-controls="jobseeker-sidebar"
+                aria-controls="applicant-sidebar"
                 aria-expanded="false">
                 <span class="text-xl leading-none">☰</span>
             </button>
@@ -126,10 +126,10 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const sidebar = document.getElementById('jobseeker-sidebar');
-            const sidebarToggle = document.getElementById('jobseeker-sidebar-toggle');
-            const sidebarClose = document.getElementById('jobseeker-sidebar-close');
-            const sidebarOverlay = document.getElementById('jobseeker-sidebar-overlay');
+            const sidebar = document.getElementById('applicant-sidebar');
+            const sidebarToggle = document.getElementById('applicant-sidebar-toggle');
+            const sidebarClose = document.getElementById('applicant-sidebar-close');
+            const sidebarOverlay = document.getElementById('applicant-sidebar-overlay');
 
             const setSidebarExpanded = (expanded) => {
                 sidebarToggle?.setAttribute('aria-expanded', expanded ? 'true' : 'false');

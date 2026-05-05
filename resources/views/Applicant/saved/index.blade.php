@@ -1,12 +1,11 @@
-@extends('layouts.jobseeker')
+@extends('layouts.applicant')
 @section('title', 'Saved Jobs')
 @section('subtitle', 'Review jobs you bookmarked and revisit opportunities quickly.')
+
 @section('content')
-
 <div class="mb-4 text-right">
-    <a href="{{ url('/applications/history') }}" class="admin-button-primary text-white inline-flex items-center px-4 py-2 rounded text-sm font-medium">History</a>
+    <a href="{{ route('applicant.applications.history') }}" class="admin-button-primary text-white inline-flex items-center px-4 py-2 rounded text-sm font-medium">History</a>
 </div>
-
 
 <div class="admin-surface rounded-xl admin-fade-up overflow-x-auto">
     <table class="admin-table min-w-full text-sm text-left whitespace-nowrap">
@@ -25,13 +24,13 @@
                 <td class="py-3 px-4 text-sm text-gray-600">{{ $job->employer->name ?? 'Employer' }}</td>
                 <td class="py-3 px-4 text-sm text-gray-600">{{ $job->location }}</td>
                 <td class="py-3 px-4 flex gap-2">
-                    <a href="{{ route('jobseeker.jobs.show', $job->id) }}" title="View" aria-label="View" class="inline-flex items-center justify-center p-2 rounded-md text-blue-600 hover:bg-blue-50 transition">
+                    <a href="{{ route('applicant.jobs.show', $job->id) }}" title="View" aria-label="View" class="inline-flex items-center justify-center p-2 rounded-md text-blue-600 hover:bg-blue-50 transition">
                         <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12s3.75-6.75 9.75-6.75S21.75 12 21.75 12 18 18.75 12 18.75 2.25 12 2.25 12z" />
                             <circle cx="12" cy="12" r="2.75" />
                         </svg>
                     </a>
-                    <form method="POST" action="{{ route('jobseeker.saved.destroy', $job->id) }}">
+                    <form method="POST" action="{{ route('applicant.saved.destroy', $job->id) }}">
                         @csrf
                         @method('DELETE')
                         <button title="Delete" aria-label="Delete" class="inline-flex items-center justify-center p-2 rounded-md text-red-600 hover:bg-red-50 transition">
@@ -55,6 +54,5 @@
 
 <div class="mt-4">
     {{ $jobs->links() }}
-</div>
 </div>
 @endsection

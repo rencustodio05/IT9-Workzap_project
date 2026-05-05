@@ -5,18 +5,18 @@
 
 @section('content')
 @php
-$jobseeker = $application->jobseeker;
-$fullName = trim(($jobseeker->first_name ?? '') . ' ' . ($jobseeker->last_name ?? '')) ?: 'N/A';
+$applicant = $application->applicant;
+$fullName = trim(($applicant->first_name ?? '') . ' ' . ($applicant->last_name ?? '')) ?: 'N/A';
 
 $photoPath = null;
-if (!empty($jobseeker->profile_photo_path)) {
-$photoPath = str_contains($jobseeker->profile_photo_path, '/')
-? asset('storage/' . ltrim($jobseeker->profile_photo_path, '/'))
-: asset('storage/profile/' . $jobseeker->profile_photo_path);
-} elseif (!empty($jobseeker->avatar)) {
-$photoPath = str_starts_with($jobseeker->avatar, 'http://') || str_starts_with($jobseeker->avatar, 'https://')
-? $jobseeker->avatar
-: asset('storage/' . ltrim($jobseeker->avatar, '/'));
+if (!empty($applicant->profile_photo_path)) {
+$photoPath = str_contains($applicant->profile_photo_path, '/')
+? asset('storage/' . ltrim($applicant->profile_photo_path, '/'))
+: asset('storage/profile/' . $applicant->profile_photo_path);
+} elseif (!empty($applicant->avatar)) {
+$photoPath = str_starts_with($applicant->avatar, 'http://') || str_starts_with($applicant->avatar, 'https://')
+? $applicant->avatar
+: asset('storage/' . ltrim($applicant->avatar, '/'));
 }
 
 $defaultAvatar = asset('images/default-avatar.png');
@@ -56,17 +56,17 @@ $interview = $application->interview;
 
                             <div>
                                 <div class="text-[11px] uppercase tracking-[0.12em] text-gray-500 mb-1">Email Address</div>
-                                <div class="text-sm font-medium text-gray-900">{{ $jobseeker->email ?? 'N/A' }}</div>
+                                <div class="text-sm font-medium text-gray-900">{{ $applicant->email ?? 'N/A' }}</div>
                             </div>
 
                             <div>
                                 <div class="text-[11px] uppercase tracking-[0.12em] text-gray-500 mb-1">Contact Number</div>
-                                <div class="text-sm font-medium text-gray-900">{{ $jobseeker->contact_number ?? $jobseeker->phone ?? 'N/A' }}</div>
+                                <div class="text-sm font-medium text-gray-900">{{ $applicant->contact_number ?? $applicant->phone ?? 'N/A' }}</div>
                             </div>
 
                             <div>
                                 <div class="text-[11px] uppercase tracking-[0.12em] text-gray-500 mb-1">Target Position</div>
-                                <div class="text-sm font-medium text-gray-900">{{ $jobseeker->desired_job_title ?? 'N/A' }}</div>
+                                <div class="text-sm font-medium text-gray-900">{{ $applicant->desired_job_title ?? 'N/A' }}</div>
                             </div>
                         </div>
                     </div>

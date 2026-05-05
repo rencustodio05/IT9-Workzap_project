@@ -60,10 +60,10 @@
                             </div>
                             <div class="min-w-0">
                                 <div class="font-bold max-w-[180px] truncate">
-                                    {{ trim(($app->jobseeker->first_name ?? '') . ' ' . ($app->jobseeker->last_name ?? '')) ?: 'N/A' }}
+                                    {{ trim(($app->applicant->first_name ?? '') . ' ' . ($app->applicant->last_name ?? '')) ?: 'N/A' }}
                                 </div>
                                 <div class="text-xs text-gray-500 max-w-[220px] truncate">
-                                    {{ $app->jobseeker->email ?? 'N/A' }}
+                                    {{ $app->applicant->email ?? 'N/A' }}
                                 </div>
                             </div>
                         </div>

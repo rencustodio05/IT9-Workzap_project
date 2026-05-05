@@ -61,7 +61,7 @@
                 @forelse(($recentApplicants ?? collect())->take(3) as $application)
                 <div class="flex justify-between items-center p-2.5 border rounded-lg">
                     <div>
-                        <div class="font-semibold text-sm text-gray-800">{{ $application->jobseeker->name ?? 'N/A' }}</div>
+                        <div class="font-semibold text-sm text-gray-800">{{ $application->applicant->name ?? 'N/A' }}</div>
                         <div class="text-gray-500 text-xs sm:text-sm">{{ $application->job->title ?? 'N/A' }}</div>
                     </div>
                     <span class="px-3 py-1 rounded-full text-xs bg-blue-100 text-blue-800 font-semibold">{{ ucfirst($application->status) }}</span>

@@ -15,7 +15,7 @@ class AdminDashboardController extends Controller
         $stats = [
             'total_users' => User::count(),
             'total_employers' => User::where('role', 'employer')->count(),
-            'total_jobseekers' => User::where('role', 'jobseeker')->count(),
+            'total_applicants' => User::where('role', 'applicant')->count(),
             'total_jobs' => Job::count(),
             'total_job_posts' => Job::count(),
             'total_applications' => class_exists(Application::class) ? Application::count() : 0,

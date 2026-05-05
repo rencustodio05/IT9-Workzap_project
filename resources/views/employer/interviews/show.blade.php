@@ -24,9 +24,9 @@ $hasInterview = $application !== null;
         <div class="mb-5 p-4 rounded border bg-gray-50">
             <div class="text-sm font-semibold text-gray-900">{{ optional(optional($application)->job)->title ?? 'N/A' }}</div>
             <div class="text-sm text-gray-700 mt-1">
-                {{ trim((optional(optional($application)->jobseeker)->first_name ?? '') . ' ' . (optional(optional($application)->jobseeker)->last_name ?? '')) ?: 'N/A' }}
+                {{ trim((optional(optional($application)->applicant)->first_name ?? '') . ' ' . (optional(optional($application)->applicant)->last_name ?? '')) ?: 'N/A' }}
             </div>
-            <div class="text-xs text-gray-500">{{ optional(optional($application)->jobseeker)->email ?? 'N/A' }}</div>
+            <div class="text-xs text-gray-500">{{ optional(optional($application)->applicant)->email ?? 'N/A' }}</div>
         </div>
 
         <form method="POST" action="{{ route('employer.interviews.update', $interview->id) }}" id="rescheduleInterviewForm" class="space-y-4">

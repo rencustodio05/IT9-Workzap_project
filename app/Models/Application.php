@@ -26,7 +26,7 @@ class Application extends Model
         return $this->belongsTo(Job::class);
     }
 
-    public function jobseeker(): BelongsTo
+    public function applicant(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }

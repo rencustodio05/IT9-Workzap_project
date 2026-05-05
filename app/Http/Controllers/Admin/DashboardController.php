@@ -19,7 +19,7 @@ class DashboardController extends Controller
             'total_employers' => Schema::hasTable('employers')
                 ? DB::table('employers')->count()
                 : User::where('role', 'employer')->count(),
-            'total_jobseekers' => User::where('role', 'jobseeker')->count(),
+            'total_applicants' => User::where('role', 'applicant')->count(),
             'total_job_posts' => Schema::hasTable('jobs') ? Job::count() : 0,
             'total_applications' => Schema::hasTable('applications') ? Application::count() : 0,
         ];

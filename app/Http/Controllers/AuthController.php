@@ -37,8 +37,8 @@ class AuthController extends Controller
                 return redirect()->route('employer.dashboard');
             } elseif ($user->role === 'admin') {
                 return redirect()->route('admin.dashboard');
-            } elseif ($user->role === 'jobseeker') {
-                return redirect()->route('jobseeker.dashboard');
+            } elseif ($user->role === 'applicant') {
+                return redirect()->route('applicant.dashboard');
             }
         }
 
@@ -57,7 +57,7 @@ class AuthController extends Controller
             'last_name'  => 'required|string|max:255',
             'email'    => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
-            'role'       => 'required|in:jobseeker,employer',
+            'role'       => 'required|in:applicant,employer',
         ]);
 
         $user = User::create([

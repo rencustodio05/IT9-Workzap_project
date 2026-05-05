@@ -35,7 +35,7 @@
                 <select name="role" class="w-full rounded-lg border px-3 py-2" style="border-color: var(--admin-border);" required>
                     <option value="admin" {{ old('role') === 'admin' ? 'selected' : '' }}>Admin</option>
                     <option value="employer" {{ old('role') === 'employer' ? 'selected' : '' }}>Employer</option>
-                    <option value="jobseeker" {{ old('role') === 'jobseeker' ? 'selected' : '' }}>Applicant</option>
+                    <option value="applicant" {{ old('role') === 'applicant' ? 'selected' : '' }}>Applicant</option>
                 </select>
             </div>
             <div>

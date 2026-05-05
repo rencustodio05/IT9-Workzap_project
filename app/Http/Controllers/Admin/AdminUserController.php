@@ -21,7 +21,7 @@ class AdminUserController extends Controller
             'last_name' => ['required', 'string', 'max:255'],
             'username' => ['nullable', 'string', 'max:255', 'unique:users,username'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
-            'role' => ['required', Rule::in(['admin', 'employer', 'jobseeker'])],
+            'role' => ['required', Rule::in(['admin', 'employer', 'applicant'])],
             'is_active' => ['required', 'boolean'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
@@ -45,7 +45,7 @@ class AdminUserController extends Controller
                         ->orWhere('email', 'like', "%{$search}%");
                 });
             })
-            ->when(in_array($role, ['admin', 'employer', 'jobseeker'], true), fn($query) => $query->where('role', $role))
+            ->when(in_array($role, ['admin', 'employer', 'applicant'], true), fn($query) => $query->where('role', $role))
             ->latest()
             ->paginate(10)
             ->withQueryString();
@@ -66,7 +66,7 @@ class AdminUserController extends Controller
     public function update(Request $request, User $user)
     {
         $validated = $request->validate([
-            'role' => ['required', Rule::in(['admin', 'employer', 'jobseeker'])],
+            'role' => ['required', Rule::in(['admin', 'employer', 'applicant'])],
             'is_active' => ['required', 'boolean'],
         ]);
 

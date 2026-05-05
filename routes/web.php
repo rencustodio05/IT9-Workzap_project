@@ -12,17 +12,17 @@ use App\Http\Controllers\Admin\AdminArchiveController;
 use App\Http\Controllers\Admin\AdminSettingsController;
 use App\Http\Controllers\Admin\AdminSubscriptionController;
 use App\Http\Controllers\Employer\JobController as EmployerJobController;
-use App\Http\Controllers\Jobseeker\JobController as JobseekerJobController;
+use App\Http\Controllers\Applicant\JobController as ApplicantJobController;
 use App\Http\Controllers\Employer\ApplicationController;
 use App\Http\Controllers\Employer\InterviewController;
 use App\Http\Controllers\Employer\DashboardController as EmployerDashboardController;
 use App\Http\Controllers\Employer\ProfileController as EmployerProfileController;
 use App\Http\Controllers\Employer\SubscriptionController as EmployerSubscriptionController;
 use App\Http\Controllers\SubscriptionPaymentController;
-use App\Http\Controllers\Jobseeker\ApplicationController as JobseekerApplicationController;
-use App\Http\Controllers\Jobseeker\DashboardController as JobseekerDashboardController;
-use App\Http\Controllers\Jobseeker\ProfileController as JobseekerProfileController;
-use App\Http\Controllers\Jobseeker\SavedJobController;
+use App\Http\Controllers\Applicant\ApplicationController as ApplicantApplicationController;
+use App\Http\Controllers\Applicant\DashboardController as ApplicantDashboardController;
+use App\Http\Controllers\Applicant\ProfileController as ApplicantProfileController;
+use App\Http\Controllers\Applicant\SavedJobController;
 
 /*
 |--------------------------------------------------------------------------
@@ -84,7 +84,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::put('/profile', [AdminSettingsController::class, 'updateProfile'])->name('profile.update');
     Route::put('/profile/password', [AdminSettingsController::class, 'updatePassword'])->name('profile.password.update');
 
-    Route::post('/logout', [AdminController::class, 'logout'])->name('logout');
+    Route::post('/logout', [AdminController::class, 'logout'])->name('admin_logout');
 });
 
 /*
@@ -93,7 +93,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 |--------------------------------------------------------------------------
 */
 Route::middleware('auth')->group(function () {
-    Route::get('/applications/history', [JobseekerApplicationController::class, 'history'])->name('jobseeker.applications.history');
+    Route::get('/applications/history', [ApplicantApplicationController::class, 'history'])->name('applicant.applications.history');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 
@@ -140,33 +140,33 @@ Route::middleware('auth')->prefix('employer')->name('employer.')->group(function
 
 /*
 |--------------------------------------------------------------------------
-| JOBSEEKER ROUTES (FIXED)
+| APPLICANT ROUTES (FIXED)
 |--------------------------------------------------------------------------
 */
-Route::middleware('auth')->prefix('jobseeker')->group(function () {
+Route::middleware('auth')->prefix('applicant')->group(function () {
 
-    Route::get('/dashboard', [JobseekerDashboardController::class, 'index'])->name('jobseeker.dashboard');
+    Route::get('/dashboard', [ApplicantDashboardController::class, 'index'])->name('applicant.dashboard');
 
     // ✅ USE CONTROLLER (NO MORE STATIC VIEW)
-    Route::get('/jobs', [JobseekerJobController::class, 'index'])->name('jobseeker.jobs.index');
+    Route::get('/jobs', [ApplicantJobController::class, 'index'])->name('applicant.jobs.index');
 
-    Route::get('/jobs/{id}', [JobseekerJobController::class, 'show'])->name('jobseeker.jobs.show');
+    Route::get('/jobs/{id}', [ApplicantJobController::class, 'show'])->name('applicant.jobs.show');
 
-    Route::post('/jobs/{id}/apply', [JobseekerJobController::class, 'apply'])
-        ->name('jobseeker.apply');
+    Route::post('/jobs/{id}/apply', [ApplicantJobController::class, 'apply'])
+        ->name('applicant.apply');
 
-    Route::get('/applications', [JobseekerApplicationController::class, 'index'])->name('jobseeker.applications.index');
-    Route::get('/applications/{id}', [JobseekerApplicationController::class, 'show'])->name('jobseeker.applications.show');
-    Route::put('/applications/{id}', [JobseekerApplicationController::class, 'update'])->name('jobseeker.applications.update');
-    Route::delete('/applications/{id}', [JobseekerApplicationController::class, 'destroy'])->name('jobseeker.applications.destroy');
+    Route::get('/applications', [ApplicantApplicationController::class, 'index'])->name('applicant.applications.index');
+    Route::get('/applications/{id}', [ApplicantApplicationController::class, 'show'])->name('applicant.applications.show');
+    Route::put('/applications/{id}', [ApplicantApplicationController::class, 'update'])->name('applicant.applications.update');
+    Route::delete('/applications/{id}', [ApplicantApplicationController::class, 'destroy'])->name('applicant.applications.destroy');
 
-    Route::get('/saved-jobs', [SavedJobController::class, 'index'])->name('jobseeker.saved.index');
-    Route::post('/saved-jobs/{job}', [SavedJobController::class, 'store'])->name('jobseeker.saved.store');
-    Route::delete('/saved-jobs/{job}', [SavedJobController::class, 'destroy'])->name('jobseeker.saved.destroy');
+    Route::get('/saved-jobs', [SavedJobController::class, 'index'])->name('applicant.saved.index');
+    Route::post('/saved-jobs/{job}', [SavedJobController::class, 'store'])->name('applicant.saved.store');
+    Route::delete('/saved-jobs/{job}', [SavedJobController::class, 'destroy'])->name('applicant.saved.destroy');
 
-    Route::get('/profile', [JobseekerProfileController::class, 'showProfile'])->name('jobseeker.profile');
-    Route::get('/profile/edit', [JobseekerProfileController::class, 'editProfile'])->name('jobseeker.profile.edit');
-    Route::get('/account-security', [JobseekerProfileController::class, 'accountSecurity'])->name('jobseeker.account.security');
-    Route::put('/profile', [JobseekerProfileController::class, 'updateProfile'])->name('jobseeker.profile.update');
-    Route::put('/profile/password', [JobseekerProfileController::class, 'updatePassword'])->name('jobseeker.profile.password');
+    Route::get('/profile', [ApplicantProfileController::class, 'showProfile'])->name('applicant.profile');
+    Route::get('/profile/edit', [ApplicantProfileController::class, 'editProfile'])->name('applicant.profile.edit');
+    Route::get('/account-security', [ApplicantProfileController::class, 'accountSecurity'])->name('applicant.account.security');
+    Route::put('/profile', [ApplicantProfileController::class, 'updateProfile'])->name('applicant.profile.update');
+    Route::put('/profile/password', [ApplicantProfileController::class, 'updatePassword'])->name('applicant.profile.password');
 });

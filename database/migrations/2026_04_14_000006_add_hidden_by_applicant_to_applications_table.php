@@ -9,14 +9,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('applications', function (Blueprint $table) {
-            $table->timestamp('hidden_by_jobseeker_at')->nullable()->after('hidden_by_jobseeker');
+            $table->boolean('hidden_by_applicant')->default(false)->after('status');
         });
     }
 
     public function down(): void
     {
         Schema::table('applications', function (Blueprint $table) {
-            $table->dropColumn('hidden_by_jobseeker_at');
+            $table->dropColumn('hidden_by_applicant');
         });
     }
 };

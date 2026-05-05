@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Jobseeker;
+namespace App\Http\Controllers\Applicant;
 
 use App\Http\Controllers\Controller;
 use App\Models\Job;
@@ -14,7 +14,7 @@ class SavedJobController extends Controller
         /** @var User|null $user */
         $user = Auth::user();
 
-        if (!$user || $user->role !== 'jobseeker') {
+        if (!$user || $user->role !== 'applicant') {
             abort(403, 'Unauthorized');
         }
 
@@ -23,7 +23,7 @@ class SavedJobController extends Controller
             ->latest('saved_jobs.created_at')
             ->paginate(10);
 
-        return view('jobseeker.saved.index', compact('jobs'));
+        return view('applicant.saved.index', compact('jobs'));
     }
 
     public function store(Job $job)
@@ -31,7 +31,7 @@ class SavedJobController extends Controller
         /** @var User|null $user */
         $user = Auth::user();
 
-        if (!$user || $user->role !== 'jobseeker') {
+        if (!$user || $user->role !== 'applicant') {
             abort(403, 'Unauthorized');
         }
 
@@ -45,7 +45,7 @@ class SavedJobController extends Controller
         /** @var User|null $user */
         $user = Auth::user();
 
-        if (!$user || $user->role !== 'jobseeker') {
+        if (!$user || $user->role !== 'applicant') {
             abort(403, 'Unauthorized');
         }
 

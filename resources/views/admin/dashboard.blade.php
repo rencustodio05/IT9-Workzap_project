@@ -28,7 +28,7 @@
             <a href="{{ route('admin.applicants.index') }}" class="block">
                 <div class="flex items-start justify-between gap-4">
                     <div class="text-sm" style="color: var(--admin-muted);">Total Applicants</div>
-                    <div class="text-3xl font-black tracking-tight text-right">{{ number_format($stats['total_jobseekers']) }}</div>
+                    <div class="text-3xl font-black tracking-tight text-right">{{ number_format($stats['total_applicants']) }}</div>
                 </div>
                 <div class="mt-2 text-xs" style="color: var(--admin-muted);">Users with applicant role</div>
             </a>

@@ -1,13 +1,13 @@
-@extends('layouts.jobseeker')
+@extends('layouts.applicant')
 
 @section('title', 'Application Details')
-@section('subtitle', 'Review your application information and status updates')
+@section('subtitle', 'Review your application and hired job history.')
 
 @section('content')
 @php
 $backUrl = url()->previous();
 if ($backUrl === url()->current()) {
-$backUrl = 'javascript:history.back()';
+$backUrl = route('applicant.applications.index');
 }
 @endphp
 
@@ -27,9 +27,7 @@ $backUrl = 'javascript:history.back()';
                         <div class="text-xs uppercase tracking-wide text-gray-500">Job Title</div>
                         <div class="text-base font-semibold text-gray-900 truncate">{{ $hiredApplication->job->title ?? 'N/A' }}</div>
                     </div>
-                    <a href="{{ route('jobseeker.jobs.show', $hiredApplication->job_id) . '?from=applications&application_id=' . $hiredApplication->id }}" class="shrink-0 inline-flex items-center px-3 py-1.5 text-xs font-medium text-blue-700 border border-blue-200 rounded hover:bg-blue-50">
-                        View
-                    </a>
+                    <a href="{{ route('applicant.jobs.show', $hiredApplication->job_id) . '?from=applications&application_id=' . $hiredApplication->id }}" class="shrink-0 inline-flex items-center px-3 py-1.5 text-xs font-medium text-blue-700 border border-blue-200 rounded hover:bg-blue-50">View</a>
                 </div>
 
                 <div>
@@ -49,7 +47,7 @@ $backUrl = 'javascript:history.back()';
 
                 <div>
                     <div class="text-xs uppercase tracking-wide text-gray-500">Employer Email</div>
-                    <a href="mailto:{{ $hiredApplication->job->employer->email }}" class="text-sm font-medium text-blue-600 hover:underline">
+                    <a href="mailto:{{ $hiredApplication->job->employer->email ?? '' }}" class="text-sm font-medium text-blue-600 hover:underline">
                         {{ $hiredApplication->job->employer->email ?? 'N/A' }}
                     </a>
                 </div>
@@ -62,9 +60,8 @@ $backUrl = 'javascript:history.back()';
     @endif
 
     <div class="mt-6 flex gap-2">
-        <a href="{{ route('jobseeker.dashboard') }}" class="px-4 py-2 bg-gray-200 rounded">
-            Back
-        </a>
+        <a href="{{ $backUrl }}" class="px-4 py-2 bg-gray-200 rounded">Back</a>
+        <a href="{{ route('applicant.dashboard') }}" class="px-4 py-2 bg-blue-600 text-white rounded">Dashboard</a>
     </div>
 </div>
 @endsection

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Jobseeker;
+namespace App\Http\Controllers\Applicant;
 
 use App\Http\Controllers\Controller;
 use App\Models\Application;
@@ -17,7 +17,7 @@ class DashboardController extends Controller
         /** @var User|null $user */
         $user = Auth::user();
 
-        if (!$user || $user->role !== 'jobseeker') {
+        if (!$user || $user->role !== 'applicant') {
             abort(403, 'Unauthorized');
         }
 
@@ -98,7 +98,7 @@ class DashboardController extends Controller
             ->take(4)
             ->get();
 
-        return view('jobseeker.dashboard', compact(
+        return view('applicant.dashboard', compact(
             'recommendedJobs',
             'recentApplications',
             'savedJobs',

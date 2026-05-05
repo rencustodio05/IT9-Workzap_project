@@ -1,4 +1,4 @@
-@extends('layouts.jobseeker')
+@extends('layouts.applicant')
 
 @section('title', 'Browse Jobs')
 @section('subtitle', 'Find jobs that match your skills and career goals.')
@@ -7,7 +7,7 @@
 
 <!-- SEARCH -->
 <form method="GET"
-    action="{{ route('jobseeker.jobs.index') }}"
+    action="{{ route('applicant.jobs.index') }}"
     class="admin-surface rounded-xl admin-fade-up p-4 mb-6 flex flex-col md:flex-row gap-3 relative">
 
     <!-- SEARCH INPUT -->
@@ -39,7 +39,7 @@
         Search
     </button>
 
-    <a href="{{ route('jobseeker.jobs.index') }}"
+    <a href="{{ route('applicant.jobs.index') }}"
         class="bg-gray-200 px-4 py-2 rounded text-center">
         Reset
     </a>
@@ -65,7 +65,7 @@
         <div class="relative rounded-xl border border-gray-200 bg-white transition hover:-translate-y-0.5 hover:shadow-lg">
             <div class="absolute top-4 right-4 z-20">
                 @if($isSaved)
-                <form action="{{ route('jobseeker.saved.destroy', $job->id) }}" method="POST">
+                <form action="{{ route('applicant.saved.destroy', $job->id) }}" method="POST">
                     @csrf
                     @method('DELETE')
                     <button type="button"
@@ -78,7 +78,7 @@
                     </button>
                 </form>
                 @else
-                <form action="{{ route('jobseeker.saved.store', $job->id) }}" method="POST">
+                <form action="{{ route('applicant.saved.store', $job->id) }}" method="POST">
                     @csrf
                     <button type="button"
                         onclick="event.preventDefault(); event.stopPropagation(); this.closest('form').submit();"
@@ -92,7 +92,7 @@
                 @endif
             </div>
 
-            <a href="{{ route('jobseeker.jobs.show', $job->id) }}" class="block p-5 space-y-3">
+            <a href="{{ route('applicant.jobs.show', $job->id) }}" class="block p-5 space-y-3">
                 <div>
                     <h3 class="text-base font-bold text-gray-900 leading-tight pr-10">{{ $job->title }}</h3>
                     <div class="text-xs text-gray-500 mt-1">

@@ -30,8 +30,8 @@
                     <div class="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-3">
                         <div class="min-w-0">
                             <div class="text-sm font-semibold text-gray-900 truncate">{{ optional(optional($interview->application)->job)->title ?? 'N/A' }}</div>
-                            <div class="text-gray-700 text-sm mt-1">{{ trim((optional(optional($interview->application)->jobseeker)->first_name ?? '') . ' ' . (optional(optional($interview->application)->jobseeker)->last_name ?? '')) ?: 'N/A' }}</div>
-                            <div class="text-gray-500 text-xs mt-1">{{ optional(optional($interview->application)->jobseeker)->email ?? 'N/A' }}</div>
+                            <div class="text-gray-700 text-sm mt-1">{{ trim((optional(optional($interview->application)->applicant)->first_name ?? '') . ' ' . (optional(optional($interview->application)->applicant)->last_name ?? '')) ?: 'N/A' }}</div>
+                            <div class="text-gray-500 text-xs mt-1">{{ optional(optional($interview->application)->applicant)->email ?? 'N/A' }}</div>
                             <div class="text-gray-400 text-xs mt-1">{{ $interview->interview_date ? \Illuminate\Support\Carbon::parse($interview->interview_date)->format('M d') : '' }} {{ $interview->interview_time ? \Illuminate\Support\Carbon::parse($interview->interview_time)->format('g:i A') : '' }}</div>
                             <span class="inline-flex mt-2 px-3 py-1 rounded-full text-xs font-semibold {{ $interview->status === 'completed' ? 'bg-green-100 text-green-800' : ($interview->status === 'cancelled' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800') }}">{{ ucfirst($interview->status ?? 'scheduled') }}</span>
                         </div>
@@ -65,8 +65,8 @@
                     <div class="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-3">
                         <div class="min-w-0">
                             <div class="text-sm font-semibold text-gray-900 truncate">{{ optional(optional($interview->application)->job)->title ?? 'N/A' }}</div>
-                            <div class="text-gray-700 text-sm mt-1">{{ trim((optional(optional($interview->application)->jobseeker)->first_name ?? '') . ' ' . (optional(optional($interview->application)->jobseeker)->last_name ?? '')) ?: 'N/A' }}</div>
-                            <div class="text-gray-500 text-xs mt-1">{{ optional(optional($interview->application)->jobseeker)->email ?? 'N/A' }}</div>
+                            <div class="text-gray-700 text-sm mt-1">{{ trim((optional(optional($interview->application)->applicant)->first_name ?? '') . ' ' . (optional(optional($interview->application)->applicant)->last_name ?? '')) ?: 'N/A' }}</div>
+                            <div class="text-gray-500 text-xs mt-1">{{ optional(optional($interview->application)->applicant)->email ?? 'N/A' }}</div>
                             <div class="text-gray-400 text-xs mt-1">{{ $interview->interview_date ? \Illuminate\Support\Carbon::parse($interview->interview_date)->format('M d') : '' }} {{ $interview->interview_time ? \Illuminate\Support\Carbon::parse($interview->interview_time)->format('g:i A') : '' }}</div>
                             <span class="inline-flex mt-2 px-3 py-1 rounded-full text-xs font-semibold {{ $interview->status === 'completed' ? 'bg-green-100 text-green-800' : ($interview->status === 'cancelled' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800') }}">{{ ucfirst($interview->status ?? 'scheduled') }}</span>
                         </div>

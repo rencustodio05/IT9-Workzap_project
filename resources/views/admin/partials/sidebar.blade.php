@@ -41,7 +41,7 @@
             </a>
         </div>
 
-        <form method="POST" action="{{ route('logout') }}" class="mt-4">
+        <form method="POST" action="{{ route('admin.admin_logout') }}" class="mt-4">
             @csrf
             <button type="submit" class="admin-nav-link flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-left text-sm text-red-200 hover:bg-red-500/10 hover:text-red-100">
                 <span class="h-2 w-2 rounded-full bg-red-200/70"></span>

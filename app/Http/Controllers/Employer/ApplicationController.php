@@ -14,7 +14,7 @@ class ApplicationController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Application::with(['jobseeker', 'job', 'interview'])
+        $query = Application::with(['applicant', 'job', 'interview'])
             ->whereHas('job', function ($q) {
                 $q->where('user_id', Auth::id());
             });
@@ -22,7 +22,7 @@ class ApplicationController extends Controller
         // Search
         if ($request->filled('q')) {
             $search = $request->input('q');
-            $query->whereHas('jobseeker', function ($q) use ($search) {
+            $query->whereHas('applicant', function ($q) use ($search) {
                 $q->where('first_name', 'like', '%' . $search . '%')
                     ->orWhere('last_name', 'like', '%' . $search . '%')
                     ->orWhere('email', 'like', '%' . $search . '%');
@@ -45,7 +45,7 @@ class ApplicationController extends Controller
     public function show(Application $application)
     {
         // Ensure employer owns the job
-        $application->load(['job', 'jobseeker', 'interview']);
+        $application->load(['job', 'applicant', 'interview']);
 
         if ($application->job->user_id !== Auth::id()) {
             abort(403);
@@ -56,7 +56,7 @@ class ApplicationController extends Controller
 
     public function decision(Application $application)
     {
-        $application->load(['job', 'jobseeker', 'interview']);
+        $application->load(['job', 'applicant', 'interview']);
 
         if ($application->job->user_id !== Auth::id()) {
             abort(403);

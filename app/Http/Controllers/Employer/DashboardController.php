@@ -39,7 +39,7 @@ class DashboardController extends Controller
             $q->where('user_id', Auth::id());
         })->where('status', 'hired')->count();
 
-        $recentApplicants = Application::with(['job', 'jobseeker'])
+        $recentApplicants = Application::with(['job', 'applicant'])
             ->whereIn('job_id', $jobIds)
             ->latest()
             ->take(5)

@@ -24,7 +24,6 @@
             <tr>
                 <th class="py-3 pr-4 text-left">Name</th>
                 <th class="py-3 pr-4 text-left">Email</th>
-                <th class="py-3 pr-4 text-left">Username</th>
                 <th class="py-3 pr-4 text-left">Jobs Posted</th>
                 <th class="py-3 pr-4 text-left">Account</th>
                 <th class="py-3 text-center">Actions</th>
@@ -35,7 +34,6 @@
             <tr>
                 <td class="py-3 pr-4 font-semibold">{{ trim(($employer->first_name ?? '') . ' ' . ($employer->last_name ?? '')) ?: 'N/A' }}</td>
                 <td class="py-3 pr-4">{{ $employer->email }}</td>
-                <td class="py-3 pr-4">{{ $employer->username ?? 'N/A' }}</td>
                 <td class="py-3 pr-4">{{ $employer->jobs_count }}</td>
                 <td class="py-3 pr-4">
                     <span class="rounded-full px-2.5 py-1 text-xs {{ $employer->is_active ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700' }}">

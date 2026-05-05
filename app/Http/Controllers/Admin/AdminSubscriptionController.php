@@ -19,7 +19,7 @@ class AdminSubscriptionController extends Controller
                 $query->where('status', $status);
             })
             ->latest()
-            ->paginate(15)
+            ->paginate(10)
             ->withQueryString();
 
         return view('admin.subscriptions.index', compact('subscriptions', 'status'));

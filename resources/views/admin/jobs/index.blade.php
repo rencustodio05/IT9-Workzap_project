@@ -6,7 +6,7 @@
 @section('content')
 <div class="admin-surface rounded-xl p-5 admin-fade-up">
     <form method="GET" action="{{ route('admin.jobs.index') }}" class="grid grid-cols-1 md:grid-cols-12 gap-3">
-        <div class="md:col-span-6">
+        <div class="md:col-span-5">
             <label for="q" class="block text-xs mb-1" style="color: var(--admin-muted);">Search</label>
             <input id="q" name="q" type="text" value="{{ $search }}" placeholder="Search title, description, location" class="w-full rounded-lg border px-3 py-2" style="border-color: var(--admin-border);">
         </div>
@@ -18,7 +18,7 @@
                 <option value="closed" {{ $status === 'closed' ? 'selected' : '' }}>Closed</option>
             </select>
         </div>
-        <div class="md:col-span-3 flex items-end gap-2">
+        <div class="md:col-span-4 flex flex-wrap items-end justify-end gap-2">
             <button type="submit" class="admin-button-primary text-white rounded-lg px-4 py-2 text-sm font-semibold">Apply</button>
             <a href="{{ route('admin.jobs.index') }}" class="rounded-lg border px-4 py-2 text-sm font-semibold" style="border-color: var(--admin-border);">Reset</a>
             <a href="{{ route('admin.jobs.create') }}" class="rounded-lg bg-slate-900 text-white px-4 py-2 text-sm font-semibold">Create</a>

@@ -1,5 +1,5 @@
 <aside id="admin-sidebar" class="admin-sidebar fixed inset-y-0 left-0 z-50 w-72 p-5 border-r border-slate-800/60 flex flex-col transform -translate-x-full transition-transform duration-300 ease-out lg:translate-x-0">
-    <div class="mb-6 pb-2">
+    <div class="mb-4 pb-2">
         <div class="flex items-center justify-between gap-3">
             <div class="text-2xl font-black tracking-tight text-white">Workzap <span class="text-yellow-400">Admin</span></div>
             <button id="admin-sidebar-close" type="button" class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-white/20 text-white lg:hidden" aria-label="Close sidebar">
@@ -7,7 +7,7 @@
             </button>
         </div>
         <div class="text-xs text-slate-400 mt-1">Control center</div>
-        <div class="mt-2 mb-3 h-px w-full rounded-full bg-white/20 shadow-[0_0_10px_rgba(255,255,255,0.18)] blur-[0.5px]"></div>
+        <div class="mt-2 mb-2 h-px w-full rounded-full bg-white/20 shadow-[0_0_10px_rgba(255,255,255,0.18)] blur-[0.5px]"></div>
     </div>
 
     <nav class="flex h-full flex-col justify-between">
@@ -23,6 +23,9 @@
             </a>
             <a href="{{ route('admin.employers.index') }}" class="admin-nav-link {{ request()->routeIs('admin.employers.*') ? 'active' : '' }} flex items-center gap-3 px-4 py-2.5 rounded-lg">
                 <span>Employers</span>
+            </a>
+            <a href="{{ route('admin.applicants.index') }}" class="admin-nav-link {{ request()->routeIs('admin.applicants.*') ? 'active' : '' }} flex items-center gap-3 px-4 py-2.5 rounded-lg">
+                <span>Applicants</span>
             </a>
             <a href="{{ route('admin.subscriptions.index') }}" class="admin-nav-link {{ request()->routeIs('admin.subscriptions.*') ? 'active' : '' }} flex items-center gap-3 px-4 py-2.5 rounded-lg">
                 <span>Subscriptions</span>

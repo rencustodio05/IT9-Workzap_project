@@ -40,6 +40,15 @@
 
 .admin-sidebar {
     background: linear-gradient(165deg, var(--admin-sidebar) 0%, #0b1224 65%, #101935 100%);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.admin-sidebar::-webkit-scrollbar {
+    width: 0;
+    height: 0;
 }
 
 .admin-surface {

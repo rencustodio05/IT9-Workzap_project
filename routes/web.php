@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\AdminJobController;
 use App\Http\Controllers\Admin\AdminEmployerController;
+use App\Http\Controllers\Admin\AdminApplicantController;
 use App\Http\Controllers\Admin\AdminArchiveController;
 use App\Http\Controllers\Admin\AdminSettingsController;
 use App\Http\Controllers\Admin\AdminSubscriptionController;
@@ -63,6 +64,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/employers', [AdminEmployerController::class, 'index'])->name('employers.index');
     Route::get('/employers/{employer}', [AdminEmployerController::class, 'show'])->name('employers.show');
     Route::patch('/employers/{employer}/toggle-status', [AdminEmployerController::class, 'toggleStatus'])->name('employers.toggle-status');
+
+    Route::get('/applicants', [AdminApplicantController::class, 'index'])->name('applicants.index');
+    Route::get('/applicants/{applicant}', [AdminApplicantController::class, 'show'])->name('applicants.show');
+    Route::patch('/applicants/{applicant}/toggle-status', [AdminApplicantController::class, 'toggleStatus'])->name('applicants.toggle-status');
 
     Route::get('/subscriptions', [AdminSubscriptionController::class, 'index'])->name('subscriptions.index');
 

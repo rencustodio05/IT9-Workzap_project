@@ -15,19 +15,23 @@
         </article>
 
         <article class="admin-surface admin-stat-card rounded-xl p-5 admin-fade-up min-w-0">
-            <div class="flex items-start justify-between gap-4">
-                <div class="text-sm" style="color: var(--admin-muted);">Total Employers</div>
-                <div class="text-3xl font-black tracking-tight text-right">{{ number_format($stats['total_employers']) }}</div>
-            </div>
-            <div class="mt-2 text-xs" style="color: var(--admin-muted);">Users with employer role</div>
+            <a href="{{ route('admin.employers.index') }}" class="block">
+                <div class="flex items-start justify-between gap-4">
+                    <div class="text-sm" style="color: var(--admin-muted);">Total Employers</div>
+                    <div class="text-3xl font-black tracking-tight text-right">{{ number_format($stats['total_employers']) }}</div>
+                </div>
+                <div class="mt-2 text-xs" style="color: var(--admin-muted);">Users with employer role</div>
+            </a>
         </article>
 
         <article class="admin-surface admin-stat-card rounded-xl p-5 admin-fade-up min-w-0">
-            <div class="flex items-start justify-between gap-4">
-                <div class="text-sm" style="color: var(--admin-muted);">Total Applicants</div>
-                <div class="text-3xl font-black tracking-tight text-right">{{ number_format($stats['total_jobseekers']) }}</div>
-            </div>
-            <div class="mt-2 text-xs" style="color: var(--admin-muted);">Users with applicant role</div>
+            <a href="{{ route('admin.applicants.index') }}" class="block">
+                <div class="flex items-start justify-between gap-4">
+                    <div class="text-sm" style="color: var(--admin-muted);">Total Applicants</div>
+                    <div class="text-3xl font-black tracking-tight text-right">{{ number_format($stats['total_jobseekers']) }}</div>
+                </div>
+                <div class="mt-2 text-xs" style="color: var(--admin-muted);">Users with applicant role</div>
+            </a>
         </article>
 
         <article class="admin-surface admin-stat-card rounded-xl p-5 admin-fade-up min-w-0" id="jobs">

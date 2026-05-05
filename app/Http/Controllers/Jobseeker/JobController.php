@@ -51,7 +51,7 @@ class JobController extends Controller
             $jobs->where('salary_max', '<=', $request->max_salary);
         }
 
-        $jobs = $jobs->latest()->get();
+        $jobs = $jobs->latest()->paginate(6)->withQueryString();
 
         $applicationStatuses = Application::where('user_id', Auth::id())
             ->orderByDesc('updated_at')

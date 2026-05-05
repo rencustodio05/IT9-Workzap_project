@@ -125,7 +125,9 @@
     </div>
 
 </div>
-
+<div class="mt-4 w-full">
+    {{ $jobs->links() }}
+</div>
 </div>
 
 @endsection

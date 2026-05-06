@@ -4,25 +4,39 @@
 @section('subtitle', 'Track your submitted applications and current status.')
 
 @section('content')
-@php
-$hiredApplications = ($applications ?? collect())->filter(fn($application) => $application->status === 'hired');
-$firedApplications = ($applications ?? collect())->filter(fn($application) => $application->status === 'fired');
-@endphp
+<form method="GET" action="{{ route('applicant.applications.index') }}" class="admin-surface rounded-xl admin-fade-up p-4 mb-6 grid grid-cols-1 md:grid-cols-12 gap-3 items-end">
+    <div class="md:col-span-7">
+        <label class="block text-xs uppercase tracking-wide text-gray-500 mb-2">Search</label>
+        <input
+            type="text"
+            name="search"
+            value="{{ request('search') }}"
+            placeholder="Search by job title"
+            class="w-full rounded-lg border px-3 py-2">
+    </div>
 
-<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-    <div class="admin-surface rounded-xl admin-fade-up p-4">
-        <div class="text-xs uppercase tracking-wide text-gray-500">Total Hired</div>
-        <div class="mt-2 text-2xl font-black text-green-700">{{ $hiredApplications->count() }}</div>
+    <div class="md:col-span-3">
+        <label class="block text-xs uppercase tracking-wide text-gray-500 mb-2">Status</label>
+        <select name="status" class="w-full rounded-lg border px-3 py-2">
+            <option value="">All Statuses</option>
+            <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Pending</option>
+            <option value="interview" {{ request('status') === 'interview' ? 'selected' : '' }}>Interview</option>
+            <option value="hired" {{ request('status') === 'hired' ? 'selected' : '' }}>Hired</option>
+            <option value="fired" {{ request('status') === 'fired' ? 'selected' : '' }}>Fired</option>
+            <option value="rejected" {{ request('status') === 'rejected' ? 'selected' : '' }}>Rejected</option>
+            <option value="cancelled" {{ request('status') === 'cancelled' ? 'selected' : '' }}>Cancelled</option>
+        </select>
     </div>
-    <div class="admin-surface rounded-xl admin-fade-up p-4">
-        <div class="text-xs uppercase tracking-wide text-gray-500">Total Fired</div>
-        <div class="mt-2 text-2xl font-black text-red-700">{{ $firedApplications->count() }}</div>
+
+    <div class="md:col-span-2 flex gap-2">
+        <button type="submit" class="w-full admin-button-primary text-white px-4 py-2 rounded-lg font-medium">
+            Filter
+        </button>
+        <a href="{{ route('applicant.applications.index') }}" class="w-full text-center bg-gray-200 px-4 py-2 rounded-lg font-medium text-gray-700">
+            Reset
+        </a>
     </div>
-    <div class="admin-surface rounded-xl admin-fade-up p-4">
-        <div class="text-xs uppercase tracking-wide text-gray-500">Active / Pending</div>
-        <div class="mt-2 text-2xl font-black text-blue-700">{{ ($applications ?? collect())->whereIn('status', ['pending', 'interview'])->count() }}</div>
-    </div>
-</div>
+</form>
 
 <div class="admin-surface rounded-xl admin-fade-up overflow-x-auto">
     <table class="admin-table min-w-full text-sm text-left whitespace-nowrap">

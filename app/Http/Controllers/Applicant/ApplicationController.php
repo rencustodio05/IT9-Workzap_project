@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 class ApplicationController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::user();
 
@@ -17,11 +17,25 @@ class ApplicationController extends Controller
             abort(403, 'Unauthorized');
         }
 
+        $search = trim((string) $request->query('search', ''));
+        $status = trim((string) $request->query('status', ''));
+
+        $allowedStatuses = ['pending', 'interview', 'cancelled', 'rejected', 'hired', 'fired'];
+
         $applications = Application::with(['job', 'interview'])
             ->where('user_id', $user->id)
-            ->whereIn('status', ['pending', 'interview', 'cancelled', 'rejected', 'hired', 'fired'])
+            ->whereIn('status', $allowedStatuses)
+            ->when($search !== '', function ($query) use ($search) {
+                $query->whereHas('job', function ($jobQuery) use ($search) {
+                    $jobQuery->where('title', 'like', '%' . $search . '%');
+                });
+            })
+            ->when($status !== '' && in_array($status, $allowedStatuses, true), function ($query) use ($status) {
+                $query->where('status', $status);
+            })
             ->latest()
-            ->paginate(10);
+            ->paginate(10)
+            ->appends($request->only(['search', 'status']));
 
         return view('applicant.applications.index', compact('applications'));
     }

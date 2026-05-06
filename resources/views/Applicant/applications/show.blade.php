@@ -182,6 +182,15 @@ $interview = $application->interview;
         @endif
 
         <div class="pt-2 flex flex-wrap items-center gap-3 border-t border-gray-100">
+            @if(in_array($application->status, ['cancelled', 'rejected']))
+            <form method="POST" action="{{ route('applicant.applications.store') }}" class="inline">
+                @csrf
+                <input type="hidden" name="job_id" value="{{ $application->job_id }}">
+                <button type="submit" class="px-5 py-2.5 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition">
+                    Apply Again
+                </button>
+            </form>
+            @endif
             <a href="{{ route('applicant.applications.index') }}" class="px-5 py-2.5 rounded-lg border border-gray-300 bg-white text-gray-700 font-semibold hover:bg-gray-50 transition">
                 Back to Applications
             </a>

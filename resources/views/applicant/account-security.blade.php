@@ -19,48 +19,89 @@
         @endif
 
         <div class="admin-surface rounded-xl admin-fade-up p-6">
-            <h2 class="text-xl font-semibold text-gray-900 mb-4">Account Security</h2>
+            <div class="max-w-full mx-auto">
+                {{-- Profile header removed per request --}}
 
-            <form method="POST" action="{{ route('applicant.profile.password') }}" class="space-y-4">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium mb-1">First Name</label>
-                        <input name="first_name" type="text" value="{{ $user->first_name }}" class="w-full rounded-lg border px-3 py-2" required>
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">Account Security</h2>
+
+                <form method="POST" action="{{ route('applicant.profile.password') }}" class="space-y-6" id="account-security-form">
+                    @csrf
+                    @method('PUT')
+                    <input type="hidden" name="step" id="form-step" value="">
+
+                    <div class="bg-white rounded-lg border px-5 py-4 shadow-sm">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-1">First Name</label>
+                                <input name="first_name" type="text" value="{{ $user->first_name }}" class="w-full rounded-lg border px-3 py-2" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Last Name</label>
+                                <input name="last_name" type="text" value="{{ $user->last_name }}" class="w-full rounded-lg border px-3 py-2" required>
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <label class="block text-sm font-medium mb-1">Email Address</label>
+                            <input name="email" type="email" value="{{ $user->email }}" class="w-full rounded-lg border px-3 py-2" required>
+                        </div>
+
+                        <div class="pt-4 flex items-center gap-3">
+                            <button type="button" id="edit-profile-btn" class="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700">Edit profile</button>
+                        </div>
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium mb-1">Last Name</label>
-                        <input name="last_name" type="text" value="{{ $user->last_name }}" class="w-full rounded-lg border px-3 py-2" required>
+
+                    <div class="bg-white rounded-lg border px-5 py-4 shadow-sm">
+                        <h3 class="text-sm font-medium mb-3">Change Password</h3>
+
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Current Password</label>
+                            <input name="current_password" type="password" class="w-full rounded-lg border px-3 py-2">
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
+                            <div>
+                                <label class="block text-sm font-medium mb-1">New Password</label>
+                                <input name="password" type="password" class="w-full rounded-lg border px-3 py-2">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Confirm Password</label>
+                                <input name="password_confirmation" type="password" class="w-full rounded-lg border px-3 py-2">
+                            </div>
+                        </div>
+
+                        <div class="pt-4 flex items-center gap-3">
+                            <button type="button" id="verify-password-btn" class="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700">Verify Password</button>
+                        </div>
                     </div>
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium mb-1">Email Address</label>
-                    <input name="email" type="email" value="{{ $user->email }}" class="w-full rounded-lg border px-3 py-2" required>
-                </div>
-                @csrf
-                @method('PUT')
-                <input type="hidden" name="step" value="update">
-
-                <div>
-                    <label class="block text-sm font-medium mb-1">Current Password</label>
-                    <input name="current_password" type="password" class="w-full rounded-lg border px-3 py-2" required>
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium mb-1">New Password</label>
-                    <input name="password" type="password" class="w-full rounded-lg border px-3 py-2" required>
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium mb-1">Confirm Password</label>
-                    <input name="password_confirmation" type="password" class="w-full rounded-lg border px-3 py-2" required>
-                </div>
-
-                <div class="pt-2 flex items-center gap-2">
-                    <button class="px-4 py-2 rounded bg-gray-700 text-white hover:bg-gray-800">Update account</button>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('account-security-form');
+        const stepInput = document.getElementById('form-step');
+        const editBtn = document.getElementById('edit-profile-btn');
+        const verifyBtn = document.getElementById('verify-password-btn');
+
+        if (editBtn) {
+            editBtn.addEventListener('click', function() {
+                stepInput.value = 'profile';
+                form.submit();
+            });
+        }
+
+        if (verifyBtn) {
+            verifyBtn.addEventListener('click', function() {
+                stepInput.value = 'verify';
+                form.submit();
+            });
+        }
+    });
+</script>
+@endpush

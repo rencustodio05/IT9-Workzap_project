@@ -34,7 +34,6 @@ $applyJobId = request()->query('job');
                         <p class="text-sm text-gray-500 mt-1">Review your personal and professional information.</p>
                     </div>
                     <div class="flex gap-2">
-                        <a href="{{ route('applicant.account.security') }}" class="inline-flex items-center justify-center px-4 py-2.5 rounded-lg border border-gray-300 bg-white text-gray-700 text-sm font-medium hover:bg-gray-50 transition">Account Security</a>
                         <a href="{{ route('applicant.profile.edit') }}" class="inline-flex items-center justify-center px-4 py-2.5 rounded-lg admin-button-primary text-white text-sm font-medium hover:brightness-95 transition">Edit Profile</a>
                     </div>
                 </div>

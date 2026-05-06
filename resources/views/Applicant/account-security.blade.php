@@ -21,12 +21,22 @@
         <div class="admin-surface rounded-xl admin-fade-up p-6">
             <h2 class="text-xl font-semibold text-gray-900 mb-4">Account Security</h2>
 
-            <div class="mb-4">
-                <label class="block text-sm font-medium mb-1">Email Address</label>
-                <input name="email" type="email" value="{{ $user->email }}" class="w-full rounded-lg border px-3 py-2 bg-gray-50" readonly>
-            </div>
-
             <form method="POST" action="{{ route('applicant.profile.password') }}" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-1">First Name</label>
+                        <input name="first_name" type="text" value="{{ $user->first_name }}" class="w-full rounded-lg border px-3 py-2" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Last Name</label>
+                        <input name="last_name" type="text" value="{{ $user->last_name }}" class="w-full rounded-lg border px-3 py-2" required>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium mb-1">Email Address</label>
+                    <input name="email" type="email" value="{{ $user->email }}" class="w-full rounded-lg border px-3 py-2" required>
+                </div>
                 @csrf
                 @method('PUT')
                 <input type="hidden" name="step" value="update">
@@ -47,8 +57,7 @@
                 </div>
 
                 <div class="pt-2 flex items-center gap-2">
-                    <button class="px-4 py-2 rounded bg-gray-700 text-white hover:bg-gray-800">Update Password</button>
-                    <a href="{{ route('applicant.profile') }}" class="px-4 py-2 rounded border border-gray-300 bg-white text-gray-700 hover:bg-gray-50">Back to Profile</a>
+                    <button class="px-4 py-2 rounded bg-gray-700 text-white hover:bg-gray-800">Update account</button>
                 </div>
             </form>
         </div>

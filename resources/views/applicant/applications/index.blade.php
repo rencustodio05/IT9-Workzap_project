@@ -55,7 +55,16 @@
                 <td class="py-3 px-4 font-medium">{{ $application->job->title ?? 'N/A' }}</td>
                 <td class="py-3 px-4 text-sm text-gray-600">{{ optional($application->created_at)->format('M d, Y h:i A') }}</td>
                 <td class="py-3 px-4">
-                    <span class="px-2 py-1 text-xs rounded {{ $application->status === 'hired' ? 'bg-green-100 text-green-800' : ($application->status === 'rejected' ? 'bg-red-100 text-red-800' : ($application->status === 'interview' ? 'bg-blue-100 text-blue-800' : 'bg-yellow-100 text-yellow-800')) }}">
+                    @php
+                    $statusColor = match($application->status) {
+                    'hired' => 'bg-green-100 text-green-800',
+                    'interview' => 'bg-blue-100 text-blue-800',
+                    'pending' => 'bg-yellow-100 text-yellow-800',
+                    'rejected', 'fired', 'cancelled' => 'bg-red-100 text-red-800',
+                    default => 'bg-gray-100 text-gray-800'
+                    };
+                    @endphp
+                    <span class="px-2 py-1 text-xs rounded {{ $statusColor }}">
                         {{ ucfirst($application->status) }}
                     </span>
                 </td>
@@ -75,10 +84,6 @@
                         @method('PUT')
                         <button class="px-3 py-1 bg-red-600 text-white rounded text-sm">Cancel</button>
                     </form>
-                    @elseif(in_array($application->status, ['hired', 'fired']))
-                    <span class="inline-flex items-center px-3 py-1 text-xs font-medium rounded bg-gray-100 text-gray-600">
-                        Employment record
-                    </span>
                     @endif
                     <form method="POST" action="{{ route('applicant.applications.destroy', $application->id) }}" onsubmit="return confirm('Delete this application permanently?');">
                         @csrf

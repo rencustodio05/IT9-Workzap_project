@@ -21,7 +21,7 @@ $interview = $application->interview;
     <div class="p-3 rounded-lg border border-red-200 bg-red-50 text-red-800 text-sm">{{ session('error') }}</div>
     @endif
 
-    <div class="admin-surface rounded-xl admin-fade-up p-6 space-y-4">
+    <div class="admin-surface rounded-xl admin-fade-up p-6 space-y-3">
         <div class="flex items-start justify-between gap-4 border-b border-gray-200 pb-4">
             <div class="min-w-0">
                 <h1 class="text-2xl font-black text-gray-900 leading-tight">{{ $application->job->title ?? 'Application Details' }}</h1>
@@ -150,19 +150,19 @@ $interview = $application->interview;
         </div>
 
         <div class="border border-gray-200 bg-white shadow-sm">
-            <div class="px-5 py-4 border-b border-gray-100">
-                <h3 class="text-sm font-semibold uppercase tracking-[0.08em] text-gray-700">Interview Notes</h3>
+            <div class="px-4 py-1 border-b border-gray-100">
+                <h3 class="text-sm font-semibold uppercase tracking-[0.08em] text-gray-700 mb-0">Interview Notes</h3>
             </div>
-            <div class="p-4 text-sm text-gray-800 whitespace-pre-line leading-relaxed">
+            <div class="pt-2 px-4 pb-4 text-sm text-gray-800 whitespace-pre-line leading-relaxed">
                 {{ $interview?->notes ?? 'No interview notes available.' }}
             </div>
         </div>
 
         <div class="border border-gray-200 bg-white shadow-sm">
-            <div class="px-5 py-4 border-b border-gray-100">
-                <h3 class="text-sm font-semibold uppercase tracking-[0.08em] text-gray-700">Job Description</h3>
+            <div class="px-4 py-1 border-b border-gray-100">
+                <h3 class="text-sm font-semibold uppercase tracking-[0.08em] text-gray-700 mb-0">Job Description</h3>
             </div>
-            <div class="p-4 text-sm text-gray-800 whitespace-pre-line leading-relaxed">
+            <div class="pt-2 px-4 pb-4 text-sm text-gray-800 whitespace-pre-line leading-relaxed">
                 {{ $application->job->description ?? 'No job description available.' }}
             </div>
         </div>
@@ -182,6 +182,14 @@ $interview = $application->interview;
         @endif
 
         <div class="pt-2 flex flex-wrap items-center gap-3 border-t border-gray-100">
+            @if(in_array($application->status, ['cancelled', 'rejected']))
+            <form method="POST" action="{{ route('applicant.apply', $application->job_id) }}" class="inline">
+                @csrf
+                <button type="submit" class="px-5 py-2.5 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition">
+                    Apply Again
+                </button>
+            </form>
+            @endif
             <a href="{{ route('applicant.applications.index') }}" class="px-5 py-2.5 rounded-lg border border-gray-300 bg-white text-gray-700 font-semibold hover:bg-gray-50 transition">
                 Back to Applications
             </a>

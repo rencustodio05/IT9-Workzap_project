@@ -4,12 +4,6 @@
 @section('subtitle', 'Review the job details before applying.')
 
 @section('content')
-@php
-$backUrl = url()->previous();
-if ($backUrl === url()->current()) {
-$backUrl = route('applicant.jobs.index');
-}
-@endphp
 
 <div class="max-w-4xl mx-auto space-y-6">
     @if(session('success'))
@@ -29,8 +23,6 @@ $backUrl = route('applicant.jobs.index');
                     <span class="px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700">{{ ucfirst($job->type ?? 'full-time') }}</span>
                 </div>
             </div>
-
-            <a href="{{ $backUrl }}" class="shrink-0 px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition">Back</a>
         </div>
 
         @if($alreadyApplied)

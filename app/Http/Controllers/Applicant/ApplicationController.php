@@ -19,7 +19,7 @@ class ApplicationController extends Controller
 
         $applications = Application::with(['job', 'interview'])
             ->where('user_id', $user->id)
-            ->whereIn('status', ['pending', 'interview', 'cancelled', 'rejected'])
+            ->whereIn('status', ['pending', 'interview', 'cancelled', 'rejected', 'hired', 'fired'])
             ->latest()
             ->paginate(10);
 

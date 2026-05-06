@@ -4,6 +4,26 @@
 @section('subtitle', 'Track your submitted applications and current status.')
 
 @section('content')
+@php
+$hiredApplications = ($applications ?? collect())->filter(fn($application) => $application->status === 'hired');
+$firedApplications = ($applications ?? collect())->filter(fn($application) => $application->status === 'fired');
+@endphp
+
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+    <div class="admin-surface rounded-xl admin-fade-up p-4">
+        <div class="text-xs uppercase tracking-wide text-gray-500">Total Hired</div>
+        <div class="mt-2 text-2xl font-black text-green-700">{{ $hiredApplications->count() }}</div>
+    </div>
+    <div class="admin-surface rounded-xl admin-fade-up p-4">
+        <div class="text-xs uppercase tracking-wide text-gray-500">Total Fired</div>
+        <div class="mt-2 text-2xl font-black text-red-700">{{ $firedApplications->count() }}</div>
+    </div>
+    <div class="admin-surface rounded-xl admin-fade-up p-4">
+        <div class="text-xs uppercase tracking-wide text-gray-500">Active / Pending</div>
+        <div class="mt-2 text-2xl font-black text-blue-700">{{ ($applications ?? collect())->whereIn('status', ['pending', 'interview'])->count() }}</div>
+    </div>
+</div>
+
 <div class="admin-surface rounded-xl admin-fade-up overflow-x-auto">
     <table class="admin-table min-w-full text-sm text-left whitespace-nowrap">
         <thead class="bg-gray-50 border-b text-sm text-gray-600">
@@ -41,6 +61,10 @@
                         @method('PUT')
                         <button class="px-3 py-1 bg-red-600 text-white rounded text-sm">Cancel</button>
                     </form>
+                    @elseif(in_array($application->status, ['hired', 'fired']))
+                    <span class="inline-flex items-center px-3 py-1 text-xs font-medium rounded bg-gray-100 text-gray-600">
+                        Employment record
+                    </span>
                     @endif
                     <form method="POST" action="{{ route('applicant.applications.destroy', $application->id) }}" onsubmit="return confirm('Delete this application permanently?');">
                         @csrf

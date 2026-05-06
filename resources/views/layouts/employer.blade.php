@@ -79,7 +79,7 @@
     <div id="employer-sidebar-overlay" class="fixed inset-0 z-40 bg-black/40 hidden lg:hidden" aria-hidden="true"></div>
 
     <main class="flex-1 min-h-screen w-full min-w-0 p-5 md:p-8 lg:ml-64">
-        <div id="employer-global-topbar" class="admin-surface sticky top-0 z-50 mb-4 flex flex-wrap items-center gap-3 rounded-xl bg-white p-4 shadow-sm sm:flex-nowrap sm:p-5">
+        <div id="employer-global-topbar" class="admin-surface sticky top-0 z-20 mb-4 flex flex-wrap items-center gap-3 rounded-xl bg-white p-4 shadow-sm sm:flex-nowrap sm:p-5>
             <button
                 id="employer-sidebar-toggle"
                 type="button"

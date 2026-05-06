@@ -7,12 +7,7 @@
 @php
 $photoPath = null;
 if (!empty($user->profile_photo_path)) {
-$photoPath = str_contains($user->profile_photo_path, '/')
-? asset('storage/' . $user->profile_photo_path)
-: asset('storage/profile/' . $user->profile_photo_path);
-}
-$defaultAvatar = asset('images/default-avatar.png');
-$applyJobId = request()->query('job');
+$photoPath = asset('storage/' . $user->profile_photo_path);
 @endphp
 
 <div class="w-full">

@@ -107,18 +107,15 @@ class ProfileController extends Controller
 
         if ($request->hasFile('profile_photo')) {
             if (!empty($user->profile_photo_path)) {
-                $oldPath = str_contains($user->profile_photo_path, '/')
-                    ? $user->profile_photo_path
-                    : 'profile/' . $user->profile_photo_path;
-
-                Storage::disk('public')->delete($oldPath);
+                Storage::disk('public')->delete($user->profile_photo_path);
             }
 
             $extension = $request->file('profile_photo')->getClientOriginalExtension();
             $filename = now()->timestamp . '-' . Str::uuid() . '.' . strtolower($extension);
+            $filePath = 'profile/' . $filename;
 
             $request->file('profile_photo')->storeAs('profile', $filename, 'public');
-            $updateData['profile_photo_path'] = $filename;
+            $updateData['profile_photo_path'] = $filePath;
         }
 
         $user->update($updateData);

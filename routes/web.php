@@ -30,7 +30,7 @@ use App\Http\Controllers\Applicant\SavedJobController;
 |--------------------------------------------------------------------------
 */
 
-Route::get('/', fn() => view('welcome'));
+Route::get('/', fn() => redirect('/login'));
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');

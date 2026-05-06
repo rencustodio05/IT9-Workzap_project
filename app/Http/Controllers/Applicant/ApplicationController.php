@@ -48,17 +48,11 @@ class ApplicationController extends Controller
             abort(403, 'Unauthorized');
         }
 
-        $application = Application::with(['job.employer', 'interview'])
+        $application = Application::with(['job.employer', 'interview', 'applicant'])
             ->where('user_id', $user->id)
             ->findOrFail($id);
 
-        $hiredApplications = Application::with('job.employer')
-            ->where('user_id', $user->id)
-            ->where('status', 'hired')
-            ->latest()
-            ->get();
-
-        return view('applicant.applications.show', compact('application', 'hiredApplications'));
+        return view('applicant.applications.show', compact('application'));
     }
 
     public function update(Request $request, $id)

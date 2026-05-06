@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Admin Dashboard')</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/workzap-logo.png') }}">
     @vite(['resources/css/admin.css', 'resources/js/app.js'])
     @stack('styles')
 </head>

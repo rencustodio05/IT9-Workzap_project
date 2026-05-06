@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>@yield('title', 'Applicant Dashboard')</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" href="{{ asset('images/workzap-logo.png') }}">
     @vite(['resources/css/app.css', 'resources/css/admin.css'])
 </head>
 

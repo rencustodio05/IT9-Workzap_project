@@ -9,7 +9,7 @@
     @vite(['resources/css/app.css', 'resources/css/admin.css'])
 </head>
 
-<body class="admin-shell flex min-h-screen text-slate-900">
+<body class="admin-shell flex min-h-screen overflow-x-hidden text-slate-900">
     @php
     $navItems = [
     [
@@ -104,19 +104,19 @@
 
     <div id="applicant-sidebar-overlay" class="fixed inset-0 z-40 bg-black/40 hidden lg:hidden" aria-hidden="true"></div>
 
-    <main class="flex-1 min-h-screen p-5 md:p-8 lg:ml-64">
-        <div id="applicant-global-topbar" class="admin-surface sticky top-0 z-50 mb-4 flex items-center gap-3 rounded-xl bg-white p-4 shadow-sm sm:p-5">
+    <main class="flex-1 min-h-screen w-full min-w-0 p-5 md:p-8 lg:ml-64">
+        <div id="applicant-global-topbar" class="admin-surface sticky top-0 z-50 mb-4 flex flex-wrap items-center gap-3 rounded-xl bg-white p-4 shadow-sm sm:flex-nowrap sm:p-5">
             <button
                 id="applicant-sidebar-toggle"
                 type="button"
-                class="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-700 transition hover:bg-slate-50 lg:hidden"
+                class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-700 transition hover:bg-slate-50 lg:hidden"
                 aria-label="Open sidebar"
                 aria-controls="applicant-sidebar"
                 aria-expanded="false">
                 <span class="text-xl leading-none">☰</span>
             </button>
 
-            <div class="min-w-0">
+            <div class="min-w-0 flex-1">
                 <h1 class="truncate text-xl font-black tracking-tight">@yield('title', 'Applicant Dashboard')</h1>
                 <p class="text-sm text-slate-500">@yield('subtitle', 'Manage your opportunities with confidence.')</p>
             </div>

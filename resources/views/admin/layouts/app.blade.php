@@ -11,13 +11,13 @@
     @stack('styles')
 </head>
 
-<body class="admin-shell h-full">
+<body class="admin-shell h-full overflow-x-hidden">
     <div class="min-h-screen flex">
         @include('admin.partials.sidebar')
 
         <div id="admin-sidebar-overlay" class="fixed inset-0 z-40 bg-black/40 hidden lg:hidden"></div>
 
-        <div class="flex-1 min-w-0 lg:ml-72">
+        <div class="flex-1 min-w-0 w-full lg:ml-72">
             @include('admin.partials.topbar')
 
             <main class="p-4 sm:p-6 lg:p-8 space-y-6">

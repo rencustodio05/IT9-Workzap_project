@@ -20,16 +20,7 @@
 
         <div class="admin-surface rounded-xl admin-fade-up p-6">
             <div class="max-w-full mx-auto">
-                <div class="flex flex-col items-center text-center mb-6">
-                    <div class="w-20 h-20 rounded-full bg-slate-100 flex items-center justify-center mb-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11c1.657 0 3-1.343 3-3S17.657 5 16 5s-3 1.343-3 3 1.343 3 3 3zM6 19v-1a4 4 0 014-4h4a4 4 0 014 4v1" />
-                        </svg>
-                    </div>
-                    <div class="font-bold text-lg">{{ $user->first_name }} {{ $user->last_name }}</div>
-                    <div class="text-sm text-slate-500">{{ $user->role ?? 'Applicant' }}</div>
-                    <div class="text-xs text-slate-400 mt-1">{{ $user->email }}</div>
-                </div>
+                {{-- Profile header removed per request --}}
 
                 <h2 class="text-xl font-semibold text-gray-900 mb-4">Account Security</h2>
 
@@ -92,25 +83,25 @@
 
 @push('scripts')
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('account-security-form');
-    const stepInput = document.getElementById('form-step');
-    const editBtn = document.getElementById('edit-profile-btn');
-    const verifyBtn = document.getElementById('verify-password-btn');
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('account-security-form');
+        const stepInput = document.getElementById('form-step');
+        const editBtn = document.getElementById('edit-profile-btn');
+        const verifyBtn = document.getElementById('verify-password-btn');
 
-    if (editBtn) {
-        editBtn.addEventListener('click', function() {
-            stepInput.value = 'profile';
-            form.submit();
-        });
-    }
+        if (editBtn) {
+            editBtn.addEventListener('click', function() {
+                stepInput.value = 'profile';
+                form.submit();
+            });
+        }
 
-    if (verifyBtn) {
-        verifyBtn.addEventListener('click', function() {
-            stepInput.value = 'verify';
-            form.submit();
-        });
-    }
-});
+        if (verifyBtn) {
+            verifyBtn.addEventListener('click', function() {
+                stepInput.value = 'verify';
+                form.submit();
+            });
+        }
+    });
 </script>
 @endpush

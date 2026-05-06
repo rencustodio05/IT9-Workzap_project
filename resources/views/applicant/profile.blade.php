@@ -8,6 +8,9 @@
 $photoPath = null;
 if (!empty($user->profile_photo_path)) {
 $photoPath = asset('storage/' . $user->profile_photo_path);
+}
+$defaultAvatar = asset('images/default-avatar.png');
+$applyJobId = request()->query('job');
 @endphp
 
 <div class="w-full">

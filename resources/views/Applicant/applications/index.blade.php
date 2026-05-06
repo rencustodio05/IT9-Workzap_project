@@ -84,10 +84,6 @@
                         @method('PUT')
                         <button class="px-3 py-1 bg-red-600 text-white rounded text-sm">Cancel</button>
                     </form>
-                    @elseif(in_array($application->status, ['hired', 'fired']))
-                    <span class="inline-flex items-center px-3 py-1 text-xs font-medium rounded bg-gray-100 text-gray-600">
-                        Employment record
-                    </span>
                     @endif
                     <form method="POST" action="{{ route('applicant.applications.destroy', $application->id) }}" onsubmit="return confirm('Delete this application permanently?');">
                         @csrf

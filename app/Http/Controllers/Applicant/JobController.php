@@ -25,7 +25,11 @@ class JobController extends Controller
         $user = Auth::user();
 
         $jobs = Job::with('employer')
-            ->where('status', 'active');
+            ->where('status', 'active')
+            ->whereDoesntHave('applications', function ($query) {
+                $query->where('user_id', Auth::id())
+                    ->whereIn('status', ['pending', 'interview', 'hired']);
+            });
 
         // 🔍 SEARCH TITLE
         if ($request->search) {

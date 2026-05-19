@@ -18,7 +18,7 @@
     'active' => 'applicant.dashboard',
     ],
     [
-    'label' => 'Browse Jobs (Applicant)',
+    'label' => 'Browse Jobs',
     'route' => 'applicant.jobs.index',
     'active' => 'applicant.jobs.*',
     ],

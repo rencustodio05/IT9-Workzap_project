@@ -44,7 +44,7 @@ Route::middleware('guest')->group(function () {
 | ADMIN ROUTES
 |--------------------------------------------------------------------------
 */
-Route::get('/admin', [AdminController::class, 'showLogin'])->name('admin.login');
+Route::get('/admin', fn() => redirect()->route('login'));
 Route::post('/admin', [AdminController::class, 'login'])->name('admin.login.post');
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {

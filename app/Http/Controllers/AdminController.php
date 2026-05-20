@@ -11,7 +11,7 @@ class AdminController extends Controller
 {
     public function showLogin()
     {
-        return view('admin.login');
+        return redirect()->route('login');
     }
 
     public function login(Request $request)
@@ -76,6 +76,6 @@ class AdminController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('admin.login');
+        return redirect()->route('login');
     }
 }

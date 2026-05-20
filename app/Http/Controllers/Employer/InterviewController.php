@@ -107,7 +107,7 @@ class InterviewController extends Controller
             'status' => 'interview',
         ]);
 
-        return redirect()->route('employer.applications.decision', $application->id)
+        return redirect()->route('employer.interviews.index')
             ->with('success', 'Interview scheduled successfully.');
     }
 
@@ -182,7 +182,7 @@ class InterviewController extends Controller
             ]);
         }
 
-        return redirect()->route('employer.applications.decision', $interview->application_id)
+        return redirect()->route('employer.interviews.index')
             ->with('success', 'Interview rescheduled successfully.');
     }
 }
